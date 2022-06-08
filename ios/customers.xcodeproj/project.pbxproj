@@ -13,6 +13,12 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-customers-customersTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-customers-customersTests.a */; };
+		8076CD3B284F740F00FCFEE6 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8076CD3A284F740F00FCFEE6 /* Inter-Regular.ttf */; };
+		808A46E5284F486F00331F12 /* BebasNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 808A46E4284F486F00331F12 /* BebasNeue-Regular.ttf */; };
+		808A46E7284F48D900331F12 /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 808A46E6284F48D900331F12 /* NotoSans-Regular.ttf */; };
+		808A46E9284F496600331F12 /* NotoSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 808A46E8284F496600331F12 /* NotoSans-SemiBold.ttf */; };
+		808A46EC284F497100331F12 /* NotoSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 808A46EA284F497000331F12 /* NotoSans-Light.ttf */; };
+		808A46ED284F497100331F12 /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 808A46EB284F497100331F12 /* NotoSans-Bold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +47,12 @@
 		5709B34CF0A7D63546082F79 /* Pods-customers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-customers.release.xcconfig"; path = "Target Support Files/Pods-customers/Pods-customers.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-customers-customersTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-customers-customersTests.debug.xcconfig"; path = "Target Support Files/Pods-customers-customersTests/Pods-customers-customersTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-customers.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-customers.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8076CD3A284F740F00FCFEE6 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.ttf"; sourceTree = "<group>"; };
+		808A46E4284F486F00331F12 /* BebasNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BebasNeue-Regular.ttf"; sourceTree = "<group>"; };
+		808A46E6284F48D900331F12 /* NotoSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Regular.ttf"; sourceTree = "<group>"; };
+		808A46E8284F496600331F12 /* NotoSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		808A46EA284F497000331F12 /* NotoSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Light.ttf"; sourceTree = "<group>"; };
+		808A46EB284F497100331F12 /* NotoSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Bold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = customers/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-customers-customersTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-customers-customersTests.release.xcconfig"; path = "Target Support Files/Pods-customers-customersTests/Pods-customers-customersTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -106,6 +118,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		808A46E3284F47F800331F12 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				8076CD3A284F740F00FCFEE6 /* Inter-Regular.ttf */,
+				808A46EB284F497100331F12 /* NotoSans-Bold.ttf */,
+				808A46EA284F497000331F12 /* NotoSans-Light.ttf */,
+				808A46E8284F496600331F12 /* NotoSans-SemiBold.ttf */,
+				808A46E6284F48D900331F12 /* NotoSans-Regular.ttf */,
+				808A46E4284F486F00331F12 /* BebasNeue-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +141,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				808A46E3284F47F800331F12 /* Fonts */,
 				13B07FAE1A68108700A75B9A /* customers */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* customersTests */,
@@ -242,8 +268,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				808A46E7284F48D900331F12 /* NotoSans-Regular.ttf in Resources */,
+				808A46E9284F496600331F12 /* NotoSans-SemiBold.ttf in Resources */,
+				808A46EC284F497100331F12 /* NotoSans-Light.ttf in Resources */,
+				808A46ED284F497100331F12 /* NotoSans-Bold.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				8076CD3B284F740F00FCFEE6 /* Inter-Regular.ttf in Resources */,
+				808A46E5284F486F00331F12 /* BebasNeue-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -495,7 +527,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lealzy;
 				PRODUCT_NAME = customers;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -520,7 +552,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lealzy;
 				PRODUCT_NAME = customers;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
