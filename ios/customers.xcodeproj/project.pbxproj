@@ -20,6 +20,7 @@
 		808A46EC284F497100331F12 /* NotoSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 808A46EA284F497000331F12 /* NotoSans-Light.ttf */; };
 		808A46ED284F497100331F12 /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 808A46EB284F497100331F12 /* NotoSans-Bold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		88AFBAEC285095C1000D5A11 /* Splash.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 88AFBAEB285095C1000D5A11 /* Splash.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		808A46EA284F497000331F12 /* NotoSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Light.ttf"; sourceTree = "<group>"; };
 		808A46EB284F497100331F12 /* NotoSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Bold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = customers/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		88AFBAEB285095C1000D5A11 /* Splash.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Splash.jpg; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-customers-customersTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-customers-customersTests.release.xcconfig"; path = "Target Support Files/Pods-customers-customersTests/Pods-customers-customersTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -141,6 +143,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				88AFBAEB285095C1000D5A11 /* Splash.jpg */,
 				808A46E3284F47F800331F12 /* Fonts */,
 				13B07FAE1A68108700A75B9A /* customers */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -271,6 +274,7 @@
 				808A46E7284F48D900331F12 /* NotoSans-Regular.ttf in Resources */,
 				808A46E9284F496600331F12 /* NotoSans-SemiBold.ttf in Resources */,
 				808A46EC284F497100331F12 /* NotoSans-Light.ttf in Resources */,
+				88AFBAEC285095C1000D5A11 /* Splash.jpg in Resources */,
 				808A46ED284F497100331F12 /* NotoSans-Bold.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,

@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { SafeAreaView, Image } from 'react-native';
+import { SafeAreaView, Image, StatusBar, Platform } from 'react-native';
 import { Text, View, TouchableOpacity, Button } from 'react-native-ui-lib';
 import { Images, Colors } from '../../constants';
 import Input from '../../component/input';
@@ -7,6 +7,7 @@ import Input from '../../component/input';
 const Login = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
+      <StatusBar barStyle={Platform.OS == 'ios' ? 'dark-content' : 'default'} />
       <View margin-24 flex >
         <Image source={Images.logo} style={{ height: 30, width: 30, alignSelf: 'center' }} resizeMode={'contain'} />
         <Text beb30 center marginT-25 black >Log in</Text>
