@@ -3,11 +3,15 @@ import { LogBox } from 'react-native';
 import Router from './src/router';
 import { Typography, ThemeManager } from 'react-native-ui-lib';
 import { Fonts, Colors } from '@constants'
+import FlashMessage from "react-native-flash-message";
 
 const App = () => {
   LogBox.ignoreAllLogs()
   return (
-    <Router />
+    <>
+      <Router />
+      <FlashMessage position="top" duration={3000} />
+    </>
   );
 };
 
