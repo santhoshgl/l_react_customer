@@ -1,9 +1,9 @@
 import React, { memo } from 'react';
 import { TextInput, StyleSheet } from 'react-native';
-import { Colors, Fonts } from '@constants'
-import { Text, View } from 'react-native-ui-lib';
+// import { Colors, Fonts } from '@constants'
+import { Text, View, Colors } from 'react-native-ui-lib';
 
-const Input = ({ value, label, ...props }) => {
+const Input = ({ value, label, error, ...props }) => {
   return (
     <View marginT-16 style={props?.style}>
       {label ? <Text fs14SB gray700 style={{ lineHeight: 20 }}  >{label}</Text> : null}
@@ -12,8 +12,8 @@ const Input = ({ value, label, ...props }) => {
         // onChangeText
         value={value?.toString()}
         placeholderTextColor={Colors.gray500}
-        style={styles.textInput}
         autoCapitalize="none"
+        style={[styles.textInput, { borderColor: (!value && error) ? Colors.red40 : Colors.gray300 }]}
       />
     </View>
   )
@@ -24,7 +24,7 @@ export default memo(Input)
 const styles = StyleSheet.create({
   textInput: {
     height: 44, marginVertical: 6, paddingHorizontal: 8, paddingVertical: 0,
-    borderWidth: 1, borderColor: Colors.gray300, borderRadius: 8,
+    borderWidth: 1, borderRadius: 8,
     backgroundColor: Colors.white,
     shadowColor: 'rgba(16,24,40,0.05)',
     shadowOffset: { width: 1, height: 2 },

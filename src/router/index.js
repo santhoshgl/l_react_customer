@@ -11,9 +11,9 @@ function App() {
   return (
     <NavigationContainer >
       <Stack.Navigator screenOptions={{ headerShown: false }}  >
+        <Stack.Screen name="register" component={Register} />
         <Stack.Screen name="landing" component={Landing} />
         <Stack.Screen name="login" component={Login} />
-        <Stack.Screen name="register" component={Register} />
       </Stack.Navigator>
     </NavigationContainer>
   );

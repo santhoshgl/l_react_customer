@@ -26,9 +26,6 @@ const Login = ({ navigation }) => {
         </TouchableOpacity>
         <Button
           label={'Login'}
-          size={Button.sizes.large}
-          backgroundColor={Colors.primary600}
-          fs16 fw500
           marginT-40
         />
         <Text fs16SB marginT-28 center black >Don’t have an account? <Text primary600 onPress={() => navigation.navigate('register')}>Sign up</Text></Text>
