@@ -3,7 +3,7 @@ import { TextInput, StyleSheet } from 'react-native';
 // import { Colors, Fonts } from '@constants'
 import { Text, View, Colors } from 'react-native-ui-lib';
 
-const Input = ({ value, label, error, ...props }) => {
+const Input = ({ value, label, error, validVal = true, ...props }) => {
   return (
     <View marginT-16 style={props?.style}>
       {label ? <Text fs14SB gray700 style={{ lineHeight: 20 }}  >{label}</Text> : null}
@@ -13,7 +13,7 @@ const Input = ({ value, label, error, ...props }) => {
         value={value?.toString()}
         placeholderTextColor={Colors.gray500}
         autoCapitalize="none"
-        style={[styles.textInput, { borderColor: (!value && error) ? Colors.red40 : Colors.gray300 }]}
+        style={[styles.textInput, { borderColor: ((!value && error) || !validVal) ? Colors.red40 : Colors.gray300 }]}
       />
     </View>
   )

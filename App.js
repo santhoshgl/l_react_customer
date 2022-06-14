@@ -1,17 +1,27 @@
 import React from 'react';
 import { LogBox } from 'react-native';
-import Router from './src/router';
 import { Typography, ThemeManager } from 'react-native-ui-lib';
-import { Fonts, Colors } from '@constants'
+import { Provider } from 'react-redux'
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from 'redux-persist'
 import FlashMessage from "react-native-flash-message";
+import { Fonts, Colors } from '@constants'
+import Router from './src/router';
+import store from './src/redux/store'
+import AppLoader from './src/component/AppLoader';
+
+let persistor = persistStore(store);
 
 const App = () => {
   LogBox.ignoreAllLogs()
   return (
-    <>
-      <Router />
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Router />
+        <AppLoader />
+      </PersistGate>
       <FlashMessage position="top" duration={3000} />
-    </>
+    </Provider>
   );
 };
 
