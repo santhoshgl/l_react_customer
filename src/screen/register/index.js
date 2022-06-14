@@ -1,23 +1,26 @@
 import React, { memo, useState } from 'react';
 import { SafeAreaView, Image, ScrollView, StatusBar, Platform, KeyboardAvoidingView } from 'react-native';
 import { Text, Button } from 'react-native-ui-lib';
-import auth from '@react-native-firebase/auth';
 import { showMessage } from "react-native-flash-message";
+import { useDispatch } from 'react-redux';
+import { unwrapResult } from '@reduxjs/toolkit';
 import { Images, Colors, mailRegex } from '../../constants';
 import Input from '../../component/input';
-import apiRequest from '../services/networkProvider';
+import { registerUser } from '../../redux/reducer/user';
 
 const Register = ({ navigation }) => {
+  const dispatch = useDispatch()
+
   const [firstName, _firstName] = useState('')
   const [lastName, _lastName] = useState('')
-  const [phone, _phone] = useState('')
+  const [phoneNumber, _phoneNumber] = useState('')
   const [email, _email] = useState('')
   const [password, _password] = useState('')
   const [error, _error] = useState(false)
-  const [loading, _loading] = useState(false)
+  const [invalid, _invalid] = useState({})
 
   const signUp = () => {
-    if (!(firstName && lastName && phone && email && password)) {
+    if (!(firstName && lastName && phoneNumber && email && password)) {
       showMessage({ message: 'All fields are required.', type: 'warning' })
       _error(true)
       return
@@ -27,43 +30,20 @@ const Register = ({ navigation }) => {
       return;
     }
     else if (password && password.length < 8) {
-      showMessage({ message: "password length should be 8 character.", type: "warning" });
+      showMessage({ message: "Password length should be 8 character.", type: "warning" });
       return;
     }
-
-    _loading(true)
-    auth().createUserWithEmailAndPassword(email, password).then((res) => {
-      // console.log('User account created & signed in!', res);
-      apiRequest.post('users', {
-        data: {
-          id: res.user?.uid,
-          firstName: firstName,
-          lastName: lastName,
-          phoneNumber: phone,
-          roles: ["customer"],
-          email: email,
-          profilePicture: 'https://cdn.quasar.dev/img/boy-avatar.png',
-        }
-      }).then(res => {
-        // console.log('then --->>', res);
-        showMessage({ message: 'Your account has been created successfully', type: 'success' })
-        _loading(false)
-      }).catch(err => {
-        // console.log('catch =>>', err);
-        showMessage({ message: 'Oh no it looks like there was some problem creating account, please contact support or try again', type: 'danger' })
-        _loading(false)
-        auth().currentUser.delete()
+    const param = {
+      firstName: firstName,
+      lastName: lastName,
+      phoneNumber: phoneNumber,
+      email: email,
+      password
+    }
+    dispatch(registerUser(param)).then(unwrapResult)
+      .then((originalPromiseResult) => {
+        navigation.navigate('dashboard')
       })
-    }).catch(error => {
-      if (error.code === 'auth/email-already-in-use') {
-        showMessage({ message: 'That email address is already in use!', type: 'danger' })
-      }
-      else if (error.code === 'auth/invalid-email') {
-        showMessage({ message: 'That email address is invalid!', type: 'danger' })
-      }
-      else showMessage({ message: error.message, type: 'danger' })
-      _loading(false)
-    });
   }
 
   return (
@@ -78,46 +58,58 @@ const Register = ({ navigation }) => {
             label={'First Name'}
             placeholder={'Enter first name'}
             style={{ marginTop: 24 }}
-            error={error}
+            error={error || invalid?.firstName}
             value={firstName}
             onChangeText={_firstName}
+            onBlur={(e) => { if (!firstName) { _invalid({ ...invalid, firstName: true }) } }}
           />
           <Input
             label={'Last Name'}
             placeholder={'Enter last name'}
-            error={error}
+            error={error || invalid?.lastName}
             value={lastName}
             onChangeText={_lastName}
+            onBlur={(e) => { if (!lastName) { _invalid({ ...invalid, lastName: true }) } }}
           />
           <Input
             label={'Phone Number'}
             placeholder={'Enter your number'}
-            error={error}
-            value={phone}
-            onChangeText={_phone}
+            error={error || invalid?.phoneNumber}
+            value={phoneNumber}
+            onChangeText={_phoneNumber}
             keyboardType='phone-pad'
+            onBlur={(e) => { if (!phoneNumber) { _invalid({ ...invalid, phoneNumber: true }) } }}
           />
           <Input
             label={'Email'}
             placeholder={'Enter your email'}
-            error={error}
+            error={error || invalid?.email}
             value={email}
             onChangeText={_email}
+            validVal={!invalid?.email}
+            onBlur={(e) => {
+              if (!email || !mailRegex.test(email)) { _invalid({ ...invalid, email: true }) }
+              else { _invalid({ ...invalid, email: false }) }
+            }}
           />
           <Input
             label={'Password'}
             placeholder={'Create a password'}
-            error={error}
+            error={error || invalid?.password}
             value={password}
             onChangeText={_password}
             secureTextEntry
+            validVal={!invalid?.password}
+            onBlur={(e) => {
+              if (!password || password.length < 8) { _invalid({ ...invalid, password: true }) }
+              else { _invalid({ ...invalid, password: false }) }
+            }}
           />
           <Text int14 gray500>Must be at least 8 characters.</Text>
           <Button
             label={'Create Account'}
             marginT-40
             onPress={signUp}
-            disabled={loading}
           />
           <Text fs16SB marginT-28 center black >Already have an account? <Text primary600 onPress={() => navigation.navigate('login')}>Log in</Text></Text>
         </ScrollView >

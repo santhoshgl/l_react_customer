@@ -17,22 +17,16 @@ const axiosInstance = axios.create({
   },
   paramsSerializer: params => {
     return qs.stringify(params, { arrayFormat: 'brackets' })
-  },
-  transformResponse: [
-    apiResponse => {
-      if (apiResponse) {
-        const { data, meta, links } = JSON.parse(apiResponse)
-        if (data) {
-          if (meta || links) {
-            return { data, meta, links }
-          }
-          return { data }
-        } else return JSON.parse(apiResponse)
-      }
-      return apiResponse
-    }
-  ]
+  }
 })
+
+axiosInstance.interceptors.response.use((response) => {
+  if (response?.data) {
+    return response?.data
+  }
+  else return response
+});
+
 
 axiosInstance.interceptors.request.use(async config => {
   const token = await auth().currentUser?.getIdToken?.()
@@ -61,7 +55,7 @@ export const formRequest = {
 
 const request = {
   get: async (url, params) => axiosInstance.get(url, { params }),
-  post: async (url, body) => { return await axiosInstance.post(url, body) },
+  post: async (url, body) => axiosInstance.post(url, body),
   put: (url, body) => axiosInstance.put(url, body),
   patch: (url, body) => axiosInstance.patch(url, body),
   del: url => axiosInstance.delete(url),
