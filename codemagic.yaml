@@ -1,0 +1,73 @@
+workflows:
+  build-apk-android-dev:
+    name: build android apk for dev environment
+    max_build_duration: 120
+    instance_type: mac_mini
+    environment:
+      groups:
+        - android-customers-app
+      vars:
+        KEYSTORE_PATH: /tmp/.keystore
+        APP_ENV: dev
+      node: 16.14.2
+    scripts:
+      - &setup_sops_and_svc_acct_pre_prod
+        name: setup sops and service account
+        script: |
+          brew install sops
+          echo $SERVICE_ACCOUNT_PRE_PROD > /tmp/svc-acct.json
+      - &setup_env_var_pre_prod
+        name: Setup environment variables
+        script: |
+          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/svc-acct.json
+          sops -d $CM_BUILD_DIR/docker/env.dev > $CM_BUILD_DIR/.env
+      - &install_node_modules
+        name: Install dependencies
+        script: |
+          npm install
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Set up debug key.properties
+        script: |
+          rm -rf ~/.android/debug.keystore
+          keytool -genkeypair \
+            -alias androiddebugkey \
+            -keypass android \
+            -keystore ~/.android/debug.keystore \
+            -storepass android \
+            -dname 'CN=Android Debug,O=Android,C=US' \
+            -keyalg 'RSA' \
+            -keysize 2048 \
+            -validity 10000
+      - name: Setup keystore
+        script: |
+          echo $CM_KEYSTORE | base64 --decode > $KEYSTORE_PATH
+          cat > $CM_BUILD_DIR/android/key.properties <<EOF
+          storePassword=$CM_KEYSTORE_PASSWORD
+          keyPassword=$CM_KEY_ALIAS_PASSWORD
+          keyAlias=$CM_KEY_ALIAS_USERNAME
+          storeFile=$KEYSTORE_PATH
+          EOF
+      - name: Build Android apk
+        script: |
+          cd $CM_BUILD_DIR/android
+          cp $CM_BUILD_DIR/docker/build.gradle $CM_BUILD_DIR/android/app/build.gradle
+          chmod +x gradlew && ./gradlew assembleRelease
+      - name: Rename artifact
+        script: |
+              mv $CM_BUILD_DIR/android/app/build/outputs/**/*.apk $CM_BUILD_DIR/android/app/build/outputs/apk/release/lealzy-android-dev-$BUILD_NUMBER.apk
+    artifacts:
+      - android/app/build/outputs/**/*.apk
+    publishing:
+      email:
+        recipients:
+          -  sajid.qureshi@project10k.com
+        notify:
+          success: true
+          failure: true
+      slack:
+        channel: '#p-lealzy'
+        notify:
+          success: true
+          failure: true
