@@ -73,7 +73,7 @@ const Login = ({ navigation }) => {
             else { _invalid({ ...invalid, password: false }) }
           }}
         />
-        <TouchableOpacity style={{ marginTop: 4 }} >
+        <TouchableOpacity style={{ marginTop: 4 }} onPress={() => navigation.navigate('forgotPassword')} >
           <Text fs16SB primary700 >Forgot Password?</Text>
         </TouchableOpacity>
         <Button
