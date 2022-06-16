@@ -6,6 +6,7 @@ import Register from '../screen/register';
 import Dashboard from '../screen/dashboard';
 import Landing from '../screen/landing';
 import Onboarding from '../screen/onboarding';
+import ForgotPassword from '../screen/forgotPassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ function App() {
         <Stack.Screen name="register" component={Register} />
         <Stack.Screen name="login" component={Login} />
         <Stack.Screen name="dashboard" component={Dashboard} />
+        <Stack.Screen name="forgotPassword" component={ForgotPassword} />
       </Stack.Navigator>
     </NavigationContainer>
   );
