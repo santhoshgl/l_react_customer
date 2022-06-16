@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { SafeAreaView, Image, StatusBar, Platform } from 'react-native';
 import { Text, View, TouchableOpacity, Button } from 'react-native-ui-lib';
 import { useDispatch } from 'react-redux';
@@ -36,7 +36,7 @@ const Login = ({ navigation }) => {
     }
     dispatch(loginUser(param)).then(unwrapResult)
       .then((originalPromiseResult) => {
-        navigation.navigate('dashboard')
+        navigation.reset({ index: 0, routes: [{ name: 'dashboard' }] })
       })
   }
 

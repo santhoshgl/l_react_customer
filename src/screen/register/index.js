@@ -7,9 +7,11 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { Images, Colors, mailRegex } from '../../constants';
 import Input from '../../component/input';
 import { registerUser } from '../../redux/reducer/user';
+import { useNavigation } from '@react-navigation/native';
 
-const Register = ({ navigation }) => {
+const Register = ({ }) => {
   const dispatch = useDispatch()
+  const navigation = useNavigation()
 
   const [firstName, _firstName] = useState('')
   const [lastName, _lastName] = useState('')
@@ -42,7 +44,7 @@ const Register = ({ navigation }) => {
     }
     dispatch(registerUser(param)).then(unwrapResult)
       .then((originalPromiseResult) => {
-        navigation.navigate('dashboard')
+        navigation.reset({ index: 0, routes: [{ name: 'onboarding' }] })
       })
   }
 
