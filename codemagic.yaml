@@ -56,7 +56,7 @@ workflows:
           chmod +x gradlew && ./gradlew assembleRelease
       - name: Rename artifact
         script: |
-              mv $CM_BUILD_DIR/android/app/build/outputs/**/*.apk $CM_BUILD_DIR/android/app/build/outputs/apk/release/lealzy-android-dev-$BUILD_NUMBER.apk
+          mv $CM_BUILD_DIR/android/app/build/outputs/apk/release/*.apk $CM_BUILD_DIR/android/app/build/outputs/apk/release/lealzy-android-dev-$BUILD_NUMBER.apk
     artifacts:
       - android/app/build/outputs/**/*.apk
     publishing:
@@ -66,6 +66,65 @@ workflows:
         notify:
           success: true
           failure: true
+      slack:
+        channel: '#p-lealzy'
+        notify:
+          success: true
+          failure: true
+
+  build-ios-ipa-dev:
+    name: build ios ipa for dev environment
+    max_build_duration: 120
+    instance_type: mac_mini
+    environment:
+      groups:
+        - android-customers-app
+        - ios-customers-app
+      vars:
+        # Ionic Xcode worskspace and scheme
+        XCODE_WORKSPACE: 'ios/lealzy.xcworkspace'
+        XCODE_SCHEME: 'lealzy'
+        APP_STORE_APP_ID: 1570827873
+      node: 16.14.2
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - *setup_sops_and_svc_acct_pre_prod
+      - *setup_env_var_pre_prod
+      - *install_node_modules
+      - name: Cocoapods installation
+        script: |
+          cd ios && pod install
+      - name: Set up keychain to be used for codesigning
+        script: |
+          keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files com.lealzy.customer --type IOS_APP_STORE --create
+      - name: Add certificates to keychain
+        script: |
+          keychain add-certificates
+      - name: Increment build number
+        script: |
+            #!/bin/sh
+            set -e
+            set -x
+            cd $CM_BUILD_DIR/ios
+            agvtool new-version -all $(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID") + 1))
+      - name: Set up code signing settings on Xcode project
+        script: |
+          xcode-project use-profiles --warn-only
+      - name: Build ipa for distribution
+        script: |
+          xcode-project build-ipa --workspace "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true
       slack:
         channel: '#p-lealzy'
         notify:
