@@ -4,4 +4,13 @@ export default {
   onboarding1: require('../assets/onboarding1.png'),
   onboarding2: require('../assets/onboarding2.png'),
   onboarding3: require('../assets/onboarding3.png'),
+  search: require('../assets/search.png'),
+  business: require('../assets/business.png'),
+  close: require('../assets/close.png'),
+  hub: require('../assets/hub.png'),
+  pin: require('../assets/pin.png'),
+  tag: require('../assets/tag.png'),
+  warning: require('../assets/warning.png'),
+  star: require('../assets/star.png'),
+  briefcase: require('../assets/briefcase.png'),
 }

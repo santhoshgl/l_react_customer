@@ -4,14 +4,13 @@ import { Text, Button } from 'react-native-ui-lib';
 import { showMessage } from "react-native-flash-message";
 import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { Images, Colors, mailRegex } from '../../constants';
-import Input from '../../component/input';
+import { Images, Colors } from '@constants';
+import Input from '@component/input';
 import { registerUser } from '../../redux/reducer/user';
-import { useNavigation } from '@react-navigation/native';
+import { mailRegex } from '@util';
 
-const Register = ({ }) => {
+const Register = ({ navigation }) => {
   const dispatch = useDispatch()
-  const navigation = useNavigation()
 
   const [firstName, _firstName] = useState('')
   const [lastName, _lastName] = useState('')

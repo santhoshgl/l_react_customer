@@ -4,9 +4,10 @@ import { Text, View, TouchableOpacity, Button } from 'react-native-ui-lib';
 import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { showMessage } from 'react-native-flash-message';
-import { Images, Colors, mailRegex } from '../../constants';
-import Input from '../../component/input';
+import { Images, Colors } from '@constants';
+import Input from '@component/input';
 import { loginUser } from '../../redux/reducer/user';
+import { mailRegex } from '@util';
 
 const Login = ({ navigation }) => {
   const dispatch = useDispatch()
@@ -73,9 +74,11 @@ const Login = ({ navigation }) => {
             else { _invalid({ ...invalid, password: false }) }
           }}
         />
-        <TouchableOpacity style={{ marginTop: 4 }} onPress={() => navigation.navigate('forgotPassword')} >
-          <Text fs16SB primary700 >Forgot Password?</Text>
-        </TouchableOpacity>
+        <View style={{ marginTop: 5, alignItems: 'flex-start' }}  >
+          <View>
+            <Text fs16SB primary700 onPress={() => navigation.navigate('forgotPassword')} >Forgot Password?</Text>
+          </View>
+        </View>
         <Button
           label={'Login'}
           marginT-40
