@@ -58,13 +58,13 @@ const Onboarding = ({ navigation }) => {
             else if (currentIndex == 1)
               ref.current.scrollBy(2)
             else if (currentIndex == 2)
-              navigation.reset({ index: 0, routes: [{ name: 'dashboard' }] })
+              navigation.reset({ index: 0, routes: [{ name: 'hub' }] })
           }}
         />
       </SafeAreaView>
       <Text
         fs14 fw500 black
-        onPress={() => navigation.reset({ index: 0, routes: [{ name: 'dashboard' }] })}
+        onPress={() => navigation.reset({ index: 0, routes: [{ name: 'hub' }] })}
         style={styles.skip}
       > Skip
       </Text>

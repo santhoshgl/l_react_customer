@@ -7,6 +7,7 @@ import Dashboard from '../screen/dashboard';
 import Landing from '../screen/landing';
 import Onboarding from '../screen/onboarding';
 import ForgotPassword from '../screen/forgotPassword';
+import Hub from '../screen/hub';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,8 +19,9 @@ function App() {
         <Stack.Screen name="onboarding" component={Onboarding} />
         <Stack.Screen name="register" component={Register} />
         <Stack.Screen name="login" component={Login} />
-        <Stack.Screen name="dashboard" component={Dashboard} />
         <Stack.Screen name="forgotPassword" component={ForgotPassword} />
+        <Stack.Screen name="hub" component={Hub} />
+        <Stack.Screen name="dashboard" component={Dashboard} />
       </Stack.Navigator>
     </NavigationContainer>
   );

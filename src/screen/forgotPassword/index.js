@@ -3,8 +3,9 @@ import { SafeAreaView, Image, StatusBar, Platform } from 'react-native';
 import { Text, View, Button } from 'react-native-ui-lib';
 import auth from '@react-native-firebase/auth';
 import { showMessage } from 'react-native-flash-message';
-import { Images, Colors, mailRegex } from '../../constants';
-import Input from '../../component/input';
+import { Images, Colors } from '@constants';
+import Input from '@component/input';
+import { mailRegex } from '@util';
 
 const ForgotPassword = ({ navigation }) => {
   const [email, _email] = useState('')

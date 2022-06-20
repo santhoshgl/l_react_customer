@@ -30,7 +30,11 @@ export default App;
 
 Typography.loadTypographies({
   ...Fonts,
-  fw500: { fontWeight: '500' }
+  fw500: { fontWeight: '500' },
+  lh32: { lineHeight: 32 },
+  lh20: { lineHeight: 20 },
+  lh18: { lineHeight: 18 },
+
 });
 
 ThemeManager.setComponentForcedTheme('Button', (props, context) => {
