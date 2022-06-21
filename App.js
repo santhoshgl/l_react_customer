@@ -32,6 +32,7 @@ Typography.loadTypographies({
   ...Fonts,
   fw500: { fontWeight: '500' },
   lh32: { lineHeight: 32 },
+  lh24: { lineHeight: 24 },
   lh20: { lineHeight: 20 },
   lh18: { lineHeight: 18 },
 
@@ -41,6 +42,6 @@ ThemeManager.setComponentForcedTheme('Button', (props, context) => {
   return {
     backgroundColor: props?.backgroundColor || Colors.primary600,
     style: [props.style, { height: 48 }],
-    labelStyle: { fontWeight: '500', ...Fonts.fs16 }
+    labelStyle: props.labelStyle ? props.labelStyle : { fontWeight: '500', ...Fonts.fs16 } 
   }
 });

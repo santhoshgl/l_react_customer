@@ -13,4 +13,7 @@ export default {
   warning: require('../assets/warning.png'),
   star: require('../assets/star.png'),
   briefcase: require('../assets/briefcase.png'),
+  bell: require('../assets/bell.png'),
+  down: require('../assets/down.png'),
+  x: require('../assets/x.png'),
 }
