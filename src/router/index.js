@@ -16,10 +16,10 @@ function App() {
     <NavigationContainer >
       <Stack.Navigator screenOptions={{ headerShown: false }}  >
         <Stack.Screen name="landing" component={Landing} />
-        <Stack.Screen name="onboarding" component={Onboarding} />
         <Stack.Screen name="register" component={Register} />
         <Stack.Screen name="login" component={Login} />
         <Stack.Screen name="forgotPassword" component={ForgotPassword} />
+        <Stack.Screen name="onboarding" component={Onboarding} />
         <Stack.Screen name="hub" component={Hub} />
         <Stack.Screen name="dashboard" component={Dashboard} />
       </Stack.Navigator>
