@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { Text, View } from 'react-native-ui-lib';
 import { useDispatch } from 'react-redux';
+import { unwrapResult } from '@reduxjs/toolkit';
 import { Images, Colors } from '@constants';
 import SearchBar from '@component/searchBar';
 import HubCard from '@component/hubCard';
@@ -12,6 +13,7 @@ import { animation } from '@util';
 import Request from '@services/networkProvider'
 import styles from './styles'
 import { setLoading } from '../../redux/reducer/loading';
+import { getUser, updateUser } from '../../redux/reducer/user';
 
 const Hub = ({ navigation }) => {
   const dispatch = useDispatch()
@@ -30,16 +32,25 @@ const Hub = ({ navigation }) => {
     if (searchVal) {
       dispatch(setLoading(true))
       Request.get(`hubs?search=${searchVal}`).then(res => {
-        console.log('res', res);
         _hubs(res?.data || [])
         dispatch(setLoading(false))
       }).catch(err => {
-        console.log('errr', err);
         dispatch(setLoading(false))
       })
     }
     else
       _hubs(undefined)
+  }
+
+  const _onSelectHub = (hubId) => {
+    const selectedHub = { id: hubId, default: true };
+    dispatch(getUser()).then(unwrapResult).then((res) => {
+      let updatedUser = { ...res };
+      updatedUser['hubs'] = [selectedHub];
+      dispatch(updateUser(updatedUser)).then(unwrapResult).then((originalPromiseResult) => {
+        navigation.reset({ index: 0, routes: [{ name: 'dashboard' }] })
+      })
+    })
   }
 
   useEffect(() => {
@@ -69,7 +80,7 @@ const Hub = ({ navigation }) => {
           hubs?.length ?
             <FlatList
               data={hubs}
-              renderItem={({ item }) => <HubCard item={item} onSelect={() => navigation.navigate('dashboard')} />}
+              renderItem={({ item }) => <HubCard item={item} onSelect={(hubId) => _onSelectHub(hubId)} />}
               keyExtractor={(_, index) => index.toString()}
               showsVerticalScrollIndicator={false}
               keyboardDismissMode={'on-drag'}
