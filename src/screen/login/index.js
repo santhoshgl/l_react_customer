@@ -1,6 +1,6 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { SafeAreaView, Image, StatusBar, Platform } from 'react-native';
-import { Text, View, TouchableOpacity, Button } from 'react-native-ui-lib';
+import { Text, View, Button } from 'react-native-ui-lib';
 import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { showMessage } from 'react-native-flash-message';

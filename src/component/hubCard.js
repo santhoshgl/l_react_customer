@@ -33,7 +33,7 @@ const HubCard = ({ item, onSelect = () => { } }) => {
         </View>
       </View>
       <View style={styles.separator} />
-      <Text fs14SB lh20 primary700 center marginV-12 onPress={onSelect} >Select</Text>
+      <Text fs14SB lh20 primary700 center marginV-12 onPress={() => onSelect(item?.id)} >Select</Text>
     </View>
   )
 }

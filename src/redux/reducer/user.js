@@ -6,6 +6,35 @@ import store from "../store";
 import { setLoading } from "./loading";
 
 
+export const getUser = createAsyncThunk('user/getUser', async (param, { getState, requestId }) => {
+  try {
+    store.dispatch(setLoading(true))
+    const userId = await auth().currentUser?.uid;
+    const user = await apiRequest.get(`users/${userId}`)
+    store.dispatch(setLoading(false))
+    return user?.data;
+  } catch (error) {
+    showMessage({ message: error?.message, type: 'danger' })
+    store.dispatch(setLoading(false))
+    throw (error)
+  }
+})
+
+export const updateUser = createAsyncThunk('user/updateUser', async (param, { getState, requestId }) => {
+  try {
+    store.dispatch(setLoading(true))
+    const userId = await auth().currentUser?.uid;
+    const data = {...param}
+    const user = await apiRequest.put(`users/${userId}`, { data })
+    store.dispatch(setLoading(false))
+    return user?.data;
+  } catch (error) {
+    showMessage({ message: error?.message, type: 'danger' })
+    store.dispatch(setLoading(false))
+    throw (error)
+  }
+})
+
 export const loginUser = createAsyncThunk('user/loginUser', async (param, { getState, requestId }) => {
   try {
     store.dispatch(setLoading(true))
@@ -56,7 +85,7 @@ export const registerUser = createAsyncThunk('user/registerUser', async (param, 
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState: {},
+  initialState: { userData: null },
   reducers: {
     logout: (state, { payload }) => {
       state.userData = null
@@ -64,6 +93,12 @@ export const userSlice = createSlice({
   },
   extraReducers: {
     [registerUser.fulfilled]: (state, { payload }) => {
+      state.userData = payload
+    },
+    [loginUser.fulfilled]: (state, { payload }) => {
+      state.userData = payload
+    },
+    [getUser.fulfilled]: (state, { payload }) => {
       state.userData = payload
     }
   }
