@@ -6,7 +6,7 @@ import Qr from '../../component/qr';
 import { Colors } from '@constants';
 import { getUser } from '../../redux/reducer/user';
 
-const Dashboard = ({ navigation }) => {
+const Home = ({ navigation }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -21,4 +21,4 @@ const Dashboard = ({ navigation }) => {
   );
 }
 
-export default memo(Dashboard)
+export default memo(Home)

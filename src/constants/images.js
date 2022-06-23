@@ -16,4 +16,8 @@ export default {
   bell: require('../assets/bell.png'),
   down: require('../assets/down.png'),
   x: require('../assets/x.png'),
+  home: require('../assets/home.png'),
+  offers: require('../assets/offers.png'),
+  points: require('../assets/points.png'),
+  tab_business: require('../assets/tab_business.png'),
 }
