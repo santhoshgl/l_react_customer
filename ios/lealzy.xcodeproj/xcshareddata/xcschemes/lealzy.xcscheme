@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "lealzyTests.xctest"
+               BuildableName = "lealzy.xctest"
                BlueprintName = "lealzyTests"
                ReferencedContainer = "container:lealzy.xcodeproj">
             </BuildableReference>
