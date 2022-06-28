@@ -24,7 +24,7 @@ export const updateUser = createAsyncThunk('user/updateUser', async (param, { ge
   try {
     store.dispatch(setLoading(true))
     const userId = await auth().currentUser?.uid;
-    const data = {...param}
+    const data = { ...param }
     const user = await apiRequest.put(`users/${userId}`, { data })
     store.dispatch(setLoading(false))
     return user?.data;
@@ -85,7 +85,7 @@ export const registerUser = createAsyncThunk('user/registerUser', async (param, 
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState: { userData: null },
+  initialState: { userData: null, defaultHub: {} },
   reducers: {
     logout: (state, { payload }) => {
       state.userData = null
@@ -100,6 +100,7 @@ export const userSlice = createSlice({
     },
     [getUser.fulfilled]: (state, { payload }) => {
       state.userData = payload
+      state.defaultHub = payload?.hubs?.find(hub => hub.default === true);
     }
   }
 })

@@ -70,12 +70,17 @@ const Hub = ({ navigation }) => {
           : null}
         <Text beb36 center marginT-25 black >find your hub!</Text>
         <Text fs16 center marginT-8 black >Lorem ipsum dolor sit amet, consectetur adipiscing elit commodo.</Text>
-        <SearchBar onChangeText={_searchVal} value={searchVal}
+        <SearchBar
+          onChangeText={_searchVal}
+          value={searchVal}
           onSearch={_search}
+          placeholder={'Search for a City'}
           onFocus={() => {
             LayoutAnimation.configureNext(animation);
             _showHubImg(false)
-          }} />
+          }}
+          style={{ marginTop: 24 }}
+        />
         {
           hubs?.length ?
             <FlatList

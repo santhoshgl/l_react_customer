@@ -12,16 +12,20 @@ import Onboarding from '../screen/onboarding';
 import ForgotPassword from '../screen/forgotPassword';
 import Hub from '../screen/hub';
 import BottomTab from './bottomTab';
+import Offers from '../screen/offers';
+import OffersList from '../screen/offersList';
 
 const Stack = createNativeStackNavigator();
+const OffersStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function Offers() {
+const _OffersStack = () => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text> Offers </Text>
-    </View>
-  );
+    <OffersStack.Navigator screenOptions={{ headerShown: false }} >
+      <OffersStack.Screen name="offers" component={Offers} />
+      <OffersStack.Screen name="offersList" component={OffersList} />
+    </OffersStack.Navigator>
+  )
 }
 
 const Dashboard = () => {
@@ -33,10 +37,10 @@ const Dashboard = () => {
       }}
       tabBar={props => <BottomTab {...props} />}
     >
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Offers" component={Offers} />
-      <Tab.Screen name="Businesses" component={Offers} />
-      <Tab.Screen name="Points" component={Offers} />
+      <Tab.Screen name="home" component={Home} />
+      <Tab.Screen name="offers" component={_OffersStack} />
+      <Tab.Screen name="businesses" component={Offers} />
+      <Tab.Screen name="points" component={Offers} />
     </Tab.Navigator>
   )
 }

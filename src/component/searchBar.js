@@ -2,12 +2,12 @@ import React, { memo } from "react";
 import { StyleSheet, Pressable, View, Image, TextInput } from "react-native";
 import { Colors, Images } from "../constants";
 
-const searchBar = ({ onChangeText, value, onSearch = () => { }, onFocus = () => { } }) => {
+const searchBar = ({ onChangeText, value, onSearch = () => { }, onFocus = () => { }, ...props }) => {
   return (
-    <View style={[styles.searchBox, { borderColor: value ? Colors.black : Colors.gray300 }]}>
+    <View style={[styles.searchBox, props?.style, { borderColor: value ? Colors.black : Colors.gray300 }]}>
       <Image source={Images.search} style={[styles.searchIcon, { tintColor: value ? Colors.primary600 : null }]} resizeMode={'contain'} />
       <TextInput
-        placeholder={'Search for a City'}
+        placeholder={props?.placeholder || 'Search'}
         value={value}
         onChangeText={onChangeText}
         placeholderTextColor={Colors.gray500}
@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 2,
     elevation: 1,
-    marginTop: 24
   },
   textBox: {
     flex: 1, color: Colors.black,

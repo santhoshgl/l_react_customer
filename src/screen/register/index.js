@@ -21,25 +21,25 @@ const Register = ({ navigation }) => {
   const [invalid, _invalid] = useState({})
 
   const signUp = () => {
-    if (!(firstName && lastName && phoneNumber && email && password)) {
+    if (!(firstName?.trim() && lastName?.trim() && phoneNumber?.trim() && email?.trim() && password?.trim())) {
       showMessage({ message: 'All fields are required.', type: 'warning' })
       _error(true)
       return
     }
-    else if (email && !mailRegex.test(email)) {
+    else if (email?.trim() && !mailRegex.test(email?.trim())) {
       showMessage({ message: "Enter valid email address.", type: "warning" });
       return;
     }
-    else if (password && password.length < 8) {
+    else if (password?.trim() && password?.trim()?.length < 8) {
       showMessage({ message: "Password length should be 8 character.", type: "warning" });
       return;
     }
     const param = {
-      firstName: firstName,
-      lastName: lastName,
-      phoneNumber: phoneNumber,
-      email: email,
-      password
+      firstName: firstName?.trim(),
+      lastName: lastName?.trim(),
+      phoneNumber: phoneNumber?.trim(),
+      email: email?.trim(),
+      password: password?.trim()
     }
     dispatch(registerUser(param)).then(unwrapResult)
       .then((originalPromiseResult) => {
@@ -62,7 +62,7 @@ const Register = ({ navigation }) => {
             error={error || invalid?.firstName}
             value={firstName}
             onChangeText={_firstName}
-            onBlur={(e) => { if (!firstName) { _invalid({ ...invalid, firstName: true }) } }}
+            onBlur={(e) => { if (!firstName?.trim()) { _invalid({ ...invalid, firstName: true }) } }}
           />
           <Input
             label={'Last Name'}
@@ -70,7 +70,7 @@ const Register = ({ navigation }) => {
             error={error || invalid?.lastName}
             value={lastName}
             onChangeText={_lastName}
-            onBlur={(e) => { if (!lastName) { _invalid({ ...invalid, lastName: true }) } }}
+            onBlur={(e) => { if (!lastName?.trim()) { _invalid({ ...invalid, lastName: true }) } }}
           />
           <Input
             label={'Phone Number'}
@@ -79,7 +79,7 @@ const Register = ({ navigation }) => {
             value={phoneNumber}
             onChangeText={_phoneNumber}
             keyboardType='phone-pad'
-            onBlur={(e) => { if (!phoneNumber) { _invalid({ ...invalid, phoneNumber: true }) } }}
+            onBlur={(e) => { if (!phoneNumber?.trim()) { _invalid({ ...invalid, phoneNumber: true }) } }}
           />
           <Input
             label={'Email'}
@@ -89,7 +89,7 @@ const Register = ({ navigation }) => {
             onChangeText={_email}
             validVal={!invalid?.email}
             onBlur={(e) => {
-              if (!email || !mailRegex.test(email)) { _invalid({ ...invalid, email: true }) }
+              if (!email?.trim() || !mailRegex.test(email?.trim())) { _invalid({ ...invalid, email: true }) }
               else { _invalid({ ...invalid, email: false }) }
             }}
           />
@@ -102,7 +102,7 @@ const Register = ({ navigation }) => {
             secureTextEntry
             validVal={!invalid?.password}
             onBlur={(e) => {
-              if (!password || password.length < 8) { _invalid({ ...invalid, password: true }) }
+              if (!password?.trim() || password?.trim()?.length < 8) { _invalid({ ...invalid, password: true }) }
               else { _invalid({ ...invalid, password: false }) }
             }}
           />

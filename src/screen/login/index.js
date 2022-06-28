@@ -18,7 +18,7 @@ const Login = ({ navigation }) => {
   const [invalid, _invalid] = useState({})
 
   const _login = () => {
-    if (!(email && password)) {
+    if (!(email?.trim() && password?.trim())) {
       showMessage({ message: 'All fields are required.', type: 'warning' })
       _error(true)
       return
@@ -32,8 +32,8 @@ const Login = ({ navigation }) => {
       return;
     }
     const param = {
-      email,
-      password
+      email: email?.trim(),
+      password: password?.trim()
     }
     dispatch(loginUser(param)).then(unwrapResult)
       .then((originalPromiseResult) => {
@@ -57,7 +57,7 @@ const Login = ({ navigation }) => {
           onChangeText={_email}
           validVal={!invalid?.email}
           onBlur={(e) => {
-            if (!email || !mailRegex.test(email)) { _invalid({ ...invalid, email: true }) }
+            if (!email?.trim() || !mailRegex.test(email?.trim())) { _invalid({ ...invalid, email: true }) }
             else { _invalid({ ...invalid, email: false }) }
           }}
         />
@@ -70,7 +70,7 @@ const Login = ({ navigation }) => {
           onChangeText={_password}
           validVal={!invalid?.password}
           onBlur={(e) => {
-            if (!password || password.length < 8) { _invalid({ ...invalid, password: true }) }
+            if (!password?.trim() || password?.trim().length < 8) { _invalid({ ...invalid, password: true }) }
             else { _invalid({ ...invalid, password: false }) }
           }}
         />

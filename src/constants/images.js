@@ -20,4 +20,12 @@ export default {
   offers: require('../assets/offers.png'),
   points: require('../assets/points.png'),
   tab_business: require('../assets/tab_business.png'),
+  filter: require('../assets/filter.png'),
+  hug: require('../assets/hug.png'),
+  check: require('../assets/check.png'),
+  percent: require('../assets/percent.png'),
+  gift: require('../assets/gift.png'),
+  dollarSign: require('../assets/dollar-sign.png'),
+  award: require('../assets/award.png'),
+  back: require('../assets/back.png'),
 }

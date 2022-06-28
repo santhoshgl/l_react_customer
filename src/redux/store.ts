@@ -6,7 +6,7 @@ import FilesystemStorage from 'redux-persist-filesystem-storage';
 const persistConfig = {
   key: 'root',
   storage: FilesystemStorage,
-  whitelist: ['user' ],
+  whitelist: ['user', 'offers'],
   blacklist: [],
 }
 
