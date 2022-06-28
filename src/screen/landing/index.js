@@ -17,7 +17,7 @@ const Landing = ({ navigation }) => {
           <Button
             label={'Log in'}
             backgroundColor={Colors.black}
-            style={{ marginTop: 24 }}
+            style={{ marginTop: 24, marginBottom: 12 }}
             outline
             outlineColor={Colors.white}
             onPress={() => navigation.navigate('login')}

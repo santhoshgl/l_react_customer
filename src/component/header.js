@@ -7,13 +7,12 @@ import { Colors, Images } from '@constants';
 const windowHeight = Dimensions.get('window').height;
 
 const Header = () => {
-  const { userData } = useSelector(s => s.user);
+  const { userData, defaultHub } = useSelector(s => s.user);
   const [showHubs, _showHubs] = useState(false)
 
-  const defaultHub = userData?.hubs?.find(hub => hub.default === true);
   return (
     <>
-      <SafeAreaView style={{ backgroundColor: Colors.white }}>
+      <SafeAreaView style={{ backgroundColor: Colors.white, borderBottomColor: Colors.gray200, borderBottomWidth: 1 }}>
         <View right row centerV marginT-12 marginH-16>
           <Image source={Images.bell} style={{ height: 24, width: 24, marginRight: 27 }} />
           <Image
@@ -44,12 +43,12 @@ const Header = () => {
               <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
                 {userData?.hubs?.map((_hub, i) => {
                   return (
-                  
-                      <View row centerV marginV-8 key={i} >
-                        <Image source={{ uri: _hub?.logo }} style={{ height: 32, width: 32, borderRadius: 32 }} />
-                        <Text beb24 black marginH-12 lh32 numberOfLines={1}>{_hub?.name}</Text>
-                      </View>
-                 
+
+                    <View row centerV marginV-8 key={i} >
+                      <Image source={{ uri: _hub?.logo }} style={{ height: 32, width: 32, borderRadius: 32 }} />
+                      <Text beb24 black marginH-12 lh32 numberOfLines={1}>{_hub?.name}</Text>
+                    </View>
+
                   )
                 })}
               </ScrollView>

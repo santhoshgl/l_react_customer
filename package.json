@@ -35,7 +35,8 @@
     "react-native-ui-lib": "^6.16.1",
     "react-redux": "^8.0.2",
     "redux-persist": "^6.0.0",
-    "redux-persist-filesystem-storage": "^4.1.0"
+    "redux-persist-filesystem-storage": "^4.1.0",
+    "underscore": "^1.13.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

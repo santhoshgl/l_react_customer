@@ -13,7 +13,7 @@ const Input = ({ value, label, error, validVal = true, ...props }) => {
         value={value?.toString()}
         placeholderTextColor={Colors.gray500}
         autoCapitalize="none"
-        style={[styles.textInput, { borderColor: ((!value && error) || !validVal) ? Colors.red40 : Colors.gray300 }]}
+        style={[styles.textInput, { borderColor: ((!value?.trim() && error) || !validVal) ? Colors.red40 : Colors.gray300 }]}
       />
     </View>
   )

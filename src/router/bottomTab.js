@@ -9,13 +9,13 @@ const CustomTabBarScreen = ({ state, navigation }) => {
 
     <SafeAreaView style={styles.mainView}>
       <View style={styles.tabView} >
-        <Pressable hitSlop={15} onPress={() => navigation.navigate('Home')}>
+        <Pressable hitSlop={15} onPress={() => navigation.navigate('home')}>
           <Image source={Images.home} style={[styles.icon, { tintColor: state.index == 0 ? Colors.primary600 : Colors.gray500 }]} />
           <Text fs12 lh18 style={{ color: state.index == 0 ? Colors.black : Colors.gray500 }} >Home</Text>
         </Pressable>
       </View>
       <View style={styles.tabView}  >
-        <Pressable hitSlop={15} onPress={() => navigation.navigate('Offers')}>
+        <Pressable hitSlop={15} onPress={() => navigation.navigate('offers')}>
           <Image source={Images.offers} style={[styles.icon, { tintColor: state.index == 1 ? Colors.primary600 : Colors.gray500 }]} />
           <Text fs12 lh18 style={{ color: state.index == 1 ? Colors.black : Colors.gray500 }} >Offers</Text>
         </Pressable>
