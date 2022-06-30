@@ -21,13 +21,13 @@ const CustomTabBarScreen = ({ state, navigation }) => {
         </Pressable>
       </View>
       <View style={styles.tabView} >
-        <Pressable hitSlop={15} onPress={() => { }}>
+        <Pressable hitSlop={15} onPress={() => navigation.navigate('businesses')}>
           <Image source={Images.tab_business} style={[styles.icon, { tintColor: state.index == 2 ? Colors.primary600 : Colors.gray500 }]} />
           <Text fs12 lh18 style={{ color: state.index == 2 ? Colors.black : Colors.gray500 }} >Businesses</Text>
         </Pressable>
       </View>
       <View style={styles.tabView}  >
-        <Pressable hitSlop={15} onPress={() => { }}>
+        <Pressable hitSlop={15} onPress={() => navigation.navigate('points')}>
           <Image source={Images.points} style={[styles.icon, { tintColor: state.index == 3 ? Colors.primary600 : Colors.gray500 }]} />
           <Text fs12 lh18 style={{ color: state.index == 3 ? Colors.black : Colors.gray500 }} >Points</Text>
         </Pressable>

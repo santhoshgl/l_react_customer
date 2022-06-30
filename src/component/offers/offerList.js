@@ -11,7 +11,7 @@ const Offerlist = ({ title, item }) => {
     <View marginT-8 >
       <View paddingH-16 row spread centerV >
         <Text beb24 lh32 black flex numberOfLines={1} >{title}</Text>
-        <Pressable hitSlop={10} onPress={() => navigation.navigate('offersList', { title, item })}>
+        <Pressable hitSlop={10} onPress={() => navigation.navigate('offersList', { title, item, source: 'offers' })}>
           <Text fs14M lh20 primary700 >See all</Text>
         </Pressable>
       </View>

@@ -12,11 +12,11 @@ import { Colors } from '@constants';
 import { Images } from '../../constants';
 import styles from './styles';
 
-const OffersList = ({ navigation, route }) => {
+const BusinessList = ({ navigation, route }) => {
   const dispatch = useDispatch()
   const { defaultHub } = useSelector(s => s.user)
   const param = useMemo(() => { return route?.params }, [route])
-  const [offersData, _offersData] = useState([])
+  const [businessData, _businessData] = useState([])
   const [nextLink, _nextLink] = useState('')
   const [loading, _loading] = useState(false)
   const [nomore, _nomore] = useState(false)
@@ -26,8 +26,8 @@ const OffersList = ({ navigation, route }) => {
   }
   useEffect(() => {
     dispatch(setLoading(true))
-    apiRequest.get(`hubs/${defaultHub?.id}/offers`).then(res => {
-      _offersData(res?.data || [])
+    apiRequest.get(`hubs/${defaultHub?.id}/business`).then(res => {
+      _businessData(res?.data || [])
       setNextLink(res?.links?.next)
       dispatch(setLoading(false))
     }).catch(() => {
@@ -36,21 +36,26 @@ const OffersList = ({ navigation, route }) => {
   }, [])
 
   const fetchData = async () => {
-    try {
-      _loading(true)
-      const res = await apiRequest.get(nextLink);
-      if (res?.data) {
-        _offersData(old => [...old, ...res?.data])
-        setNextLink(res?.links?.next)
-      } else {
-        _nomore(true)
+    if (nextLink) {
+      try {
+        _loading(true)
+        const res = await apiRequest.get(nextLink);
+        if (res?.data) {
+          _businessData(old => [...old, ...res?.data])
+          setNextLink(res?.links?.next)
+        } else {
+          _nomore(true)
+        }
+        _loading(false)
+      } catch (error) {
+        _loading(false)
       }
-      _loading(false)
-    } catch (error) {
-      _loading(false)
+    }
+    else {
+      _nomore(true)
     }
   }
-  
+
   const navigate = (routeBack) => {
     if (routeBack) {
       navigation.popToTop();
@@ -58,7 +63,6 @@ const OffersList = ({ navigation, route }) => {
     } else
       navigation.goBack();
   }
-
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -77,7 +81,7 @@ const OffersList = ({ navigation, route }) => {
           <Text beb24 lh32 black flex marginL-10 numberOfLines={1} >{param?.title}</Text>
         </View>
         <FlatList
-          data={offersData || []}
+          data={businessData || []}
           renderItem={({ item }) => <Card item={item} />}
           keyExtractor={(_, index) => index.toString()}
           showsVerticalScrollIndicator={false}
@@ -100,43 +104,29 @@ const OffersList = ({ navigation, route }) => {
   );
 }
 
-export default memo(OffersList)
+export default memo(BusinessList)
 
 const Card = ({ item }) => {
-
-  const getCardStyles = useMemo(() => {
-    let icon = Images.award;
-    let color = Colors.blue;
-    if (item?.type == 'discount') {
-      icon = Images.percent;
-      color = Colors.yellow;
-    } else if (item?.type == 'credit') {
-      icon = Images.dollarSign;
-      color = Colors.purple;
-    } else if (item?.type == 'gift') {
-      icon = Images.gift;
-      color = Colors.yellow;
-    }
-    return { icon, color }
-  }, [item])
 
   return (
     <View style={styles.card}>
       <View row >
-        <View style={{ backgroundColor: getCardStyles?.color, height: 32, width: 32, justifyContent: 'center', alignItems: 'center', borderRadius: 32 }}>
-          <Image source={getCardStyles?.icon} style={{ height: 16, width: 16 }} />
-        </View>
-        <View marginL-16 flex>
-          <Text beb24 lh32 black >{item?.title || ''}</Text>
-          <Text fs14 lh20 gray500 numberOfLines={2}>{item?.description || ''}</Text>
-          <View marginT-12 row centerV >
-            <Image source={{ uri: item?.businessLogo }} style={{ height: 24, width: 24, borderRadius: 24 }} />
-            <Text marginL-6 fs12 lh18 gray500>{item?.businessName}</Text>
+        <Image source={{ uri: item?.logo }} style={{ height: 72, width: 72, borderRadius: 72 }} />
+        <View marginL-12 flex>
+          <Text beb24 lh32 black >{item?.name}</Text>
+          <Text fs12 lh18 gray500 numberOfLines={2}>{item?.category}</Text>
+          <View flex row spread marginT-12 >
+            <View style={styles.tag} >
+              <Image source={Images.offers} style={{ height: 12, width: 12 }} />
+              <Text fs14 ln20 gray700 marginL-4 >Offers: <Text fs14SB >{item?.totalOffers || 0}</Text></Text>
+            </View>
+            {/* <View style={styles.following} >
+              <Text fs14 lh20 gray700 >Following</Text>
+            </View> */}
+            <View style={styles.follow} >
+              <Text fs14 lh20 gray700 white>Follow</Text>
+            </View>
           </View>
-        </View>
-        <View style={styles.badge}>
-          <Image source={Images.star} style={{ height: 12, width: 12, tintColor: Colors.gray500 }} />
-          <Text fs14 lh20 gray700 marginL-4>{item?.credit}</Text>
         </View>
       </View>
 

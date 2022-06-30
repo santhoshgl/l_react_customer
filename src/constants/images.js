@@ -28,4 +28,5 @@ export default {
   dollarSign: require('../assets/dollar-sign.png'),
   award: require('../assets/award.png'),
   back: require('../assets/back.png'),
+  heroCard: require('../assets/HeroCard.png'),
 }

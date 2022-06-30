@@ -2,11 +2,13 @@ import { combineReducers } from '@reduxjs/toolkit'
 import user from './user'
 import offers from './offers'
 import loading from './loading'
+import business from './business'
 
 const appReducer = combineReducers({
   user,
   loading,
-  offers
+  offers,
+  business
 })
 
 

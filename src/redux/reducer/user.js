@@ -88,15 +88,18 @@ export const userSlice = createSlice({
   initialState: { userData: null, defaultHub: {} },
   reducers: {
     logout: (state, { payload }) => {
-      state.userData = null
+      state.userData = null;
+      auth().signOut()
     },
   },
   extraReducers: {
     [registerUser.fulfilled]: (state, { payload }) => {
       state.userData = payload
+      state.defaultHub = payload?.hubs?.find(hub => hub.default === true);
     },
     [loginUser.fulfilled]: (state, { payload }) => {
       state.userData = payload
+      state.defaultHub = payload?.hubs?.find(hub => hub.default === true);
     },
     [getUser.fulfilled]: (state, { payload }) => {
       state.userData = payload
@@ -105,6 +108,6 @@ export const userSlice = createSlice({
   }
 })
 
-export const { } = userSlice.actions
+export const { logout } = userSlice.actions
 
 export default userSlice.reducer
