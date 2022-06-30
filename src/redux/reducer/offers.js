@@ -7,20 +7,25 @@ import { setLoading } from "./loading";
 
 export const getOffers = createAsyncThunk('offers/getOffers', async (hubID) => {
   try {
-    store.dispatch(setLoading(true))
+    store.dispatch(setOfferLoading(true))
     const data = await apiRequest.get(`hubs/${hubID}/offers`)
-    store.dispatch(setLoading(false))
+    store.dispatch(setOfferLoading(false))
     return data?.data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
-    store.dispatch(setLoading(false))
+    store.dispatch(setOfferLoading(false))
     throw (error)
   }
 })
 
 export const offersSlice = createSlice({
   name: 'offers',
-  initialState: { userData: null, defaultHub: {} },
+  initialState: { offerData: [], offerLoading: false },
+  reducers: {
+    setOfferLoading: (state, { payload }) => {
+      state.offerLoading = payload
+    },
+  },
   extraReducers: {
     [getOffers.fulfilled]: (state, { payload }) => {
       state.offerData = payload
@@ -28,6 +33,6 @@ export const offersSlice = createSlice({
   }
 })
 
-export const { } = offersSlice.actions
+export const { setOfferLoading } = offersSlice.actions
 
 export default offersSlice.reducer

@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react';
-import { SafeAreaView, Image, Pressable, StyleSheet } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { Colors } from '@constants';
 import { Images } from '../../constants';
@@ -54,8 +54,10 @@ export default memo(OfferCard)
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 16, marginVertical: 16,
-    marginLeft: 16, backgroundColor: Colors.white,
+    borderRadius: 16,
+    marginVertical: 16,
+    marginLeft: 16,
+    backgroundColor: Colors.white,
     width: 240,
     shadowColor: 'rgba(16,24,40,0.05)',
     shadowOffset: { width: 2, height: 2 },

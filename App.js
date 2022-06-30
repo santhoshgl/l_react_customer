@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { LogBox } from 'react-native';
 import { Typography, ThemeManager } from 'react-native-ui-lib';
 import { Provider } from 'react-redux'
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from 'redux-persist'
 import FlashMessage from "react-native-flash-message";
+import SplashScreen from 'react-native-splash-screen'
 import { Fonts, Colors } from '@constants'
 import Router from './src/router';
 import store from './src/redux/store'
@@ -14,6 +15,11 @@ let persistor = persistStore(store);
 
 const App = () => {
   LogBox.ignoreAllLogs()
+  
+  useEffect(() => {
+    SplashScreen.hide();
+  }, [])
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -42,6 +48,6 @@ ThemeManager.setComponentForcedTheme('Button', (props, context) => {
   return {
     backgroundColor: props?.backgroundColor || Colors.primary600,
     style: [props.style, { height: 48 }],
-    labelStyle: props.labelStyle ? props.labelStyle : { fontWeight: '500', ...Fonts.fs16 } 
+    labelStyle: props.labelStyle ? props.labelStyle : { fontWeight: '500', ...Fonts.fs16 }
   }
 });
