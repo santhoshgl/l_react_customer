@@ -11,6 +11,7 @@ import Landing from '../screen/landing';
 import Onboarding from '../screen/onboarding';
 import ForgotPassword from '../screen/forgotPassword';
 import Hub from '../screen/hub';
+import AddHub from '../screen/hub/addHub';
 import BottomTab from './bottomTab';
 import Offers from '../screen/offers';
 import OffersList from '../screen/offersList';
@@ -92,6 +93,7 @@ const App = () => {
         <Stack.Screen name="forgotPassword" component={ForgotPassword} />
         <Stack.Screen name="onboarding" component={Onboarding} />
         <Stack.Screen name="hub" component={Hub} />
+        <Stack.Screen name="addHub" component={AddHub} />
         <Stack.Screen name="dashboard" component={Dashboard} />
       </Stack.Navigator>
     </NavigationContainer>

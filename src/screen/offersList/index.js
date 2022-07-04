@@ -50,7 +50,7 @@ const OffersList = ({ navigation, route }) => {
       _loading(false)
     }
   }
-  
+
   const navigate = (routeBack) => {
     if (routeBack) {
       navigation.popToTop();
@@ -62,7 +62,7 @@ const OffersList = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
-      <Header />
+      <Header navigation={navigation} />
       <View style={{ flex: 1, backgroundColor: Colors.gray50 }}>
         <View style={{ margin: 16, flexDirection: 'row', alignItems: 'center' }}>
           <SearchBar style={{ flex: 1, marginVertical: 0 }} placeholder={'Search for Offers'} />

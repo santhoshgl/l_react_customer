@@ -25,20 +25,25 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(getUser())
+    // dispatch(getOffers(defaultHub?.id))
+    // dispatch(getBusiness(defaultHub?.id))
+  }, [])
+
+  useEffect(() => {
     dispatch(getOffers(defaultHub?.id))
     dispatch(getBusiness(defaultHub?.id))
-  }, [])
+  }, [defaultHub?.id])
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
-      <Header />
+      <Header navigation={navigation} />
       <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}>
         <Qr />
         <View paddingT-24  >
           <View paddingH-16 row spread centerV >
             <Text beb24 lh32 black flex numberOfLines={1} >{'Featured Offers'}<Text primary600 beb32 >{'.'}</Text></Text>
             <Pressable hitSlop={10} onPress={() => {
-              navigation.jumpTo('offers', { screen: 'offersList', params: { title: 'Featured Offers', source: 'home' } });
+              navigation.navigate('offers', { screen: 'offersList', params: { title: 'Featured Offers', source: 'home' } });
             }}>
               <Text fs14M lh20 primary700 >See all</Text>
             </Pressable>

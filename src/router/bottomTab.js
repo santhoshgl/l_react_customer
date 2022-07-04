@@ -6,7 +6,6 @@ import { Images } from '../constants';
 
 const CustomTabBarScreen = ({ state, navigation }) => {
   return (
-
     <SafeAreaView style={styles.mainView}>
       <View style={styles.tabView} >
         <Pressable hitSlop={15} onPress={() => navigation.navigate('home')}>
@@ -46,7 +45,7 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.gray300
   },
   tabView: {
-    marginTop: 18, marginTop: 18,
+    marginTop: 18,
     ...ifIphoneX({
       marginBottom: 0
     }, {
