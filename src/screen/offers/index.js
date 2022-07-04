@@ -10,7 +10,7 @@ import { Colors } from '@constants';
 import { getOffers } from '../../redux/reducer/offers';
 import { Images } from '../../constants';
 
-const Offers = () => {
+const Offers = ({ navigation }) => {
   const dispatch = useDispatch()
   const { defaultHub } = useSelector(s => s.user)
   const { offerData } = useSelector(s => s.offers)
@@ -20,11 +20,11 @@ const Offers = () => {
   }, [])
 
   const offersList = useMemo(() => _.groupBy(offerData, (num) => { return num?.businessCategory }), [offerData])
-  
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
-      <Header />
+      <Header navigation={navigation} />
       <View style={{ flex: 1, backgroundColor: Colors.gray50 }}>
         <View style={{ margin: 16, flexDirection: 'row', alignItems: 'center' }}>
           <SearchBar style={{ flex: 1, marginVertical: 0 }} placeholder={'Search for Offers'} />

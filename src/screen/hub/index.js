@@ -85,7 +85,7 @@ const Hub = ({ navigation }) => {
           hubs?.length ?
             <FlatList
               data={hubs}
-              renderItem={({ item }) => <HubCard item={item} onSelect={(hubId) => _onSelectHub(hubId)} />}
+              renderItem={({ item }) => <HubCard item={item} onSelect={(hub) => _onSelectHub(hub?.id)} />}
               keyExtractor={(_, index) => index.toString()}
               showsVerticalScrollIndicator={false}
               keyboardDismissMode={'on-drag'}

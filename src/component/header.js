@@ -1,14 +1,16 @@
 import React, { memo, useState } from 'react';
-import { SafeAreaView, Image, Pressable, Modal, ScrollView, Dimensions } from 'react-native';
+import { SafeAreaView, Image, Pressable, Modal, ScrollView, Dimensions, ImageBackground } from 'react-native';
 import { Text, View, Button } from 'react-native-ui-lib';
 import { useSelector } from 'react-redux';
 import { Colors, Images } from '@constants';
 
 const windowHeight = Dimensions.get('window').height;
 
-const Header = () => {
+const Header = ({ navigation }) => {
   const { userData, defaultHub } = useSelector(s => s.user);
   const [showHubs, _showHubs] = useState(false)
+  const [showHubAdded, _showHubAdded] = useState(false)
+  const [addedHub, _addedHub] = useState(undefined)
 
   return (
     <>
@@ -55,11 +57,40 @@ const Header = () => {
               <Button
                 label={'Add another Hub'}
                 marginV-24
-                onPress={() => { }}
+                onPress={() => {
+                  _showHubs(false);
+                  navigation.navigate("addHub", {
+                    handleItem: (item, hub) => { _addedHub(hub); _showHubAdded(item) },
+                  });
+                }}
               />
             </View>
           </View>
         </Modal>
+        : null}
+      {showHubAdded && addedHub ?
+        <Modal visible={true} transparent animationType='fade' >
+          <View style={{ flex: 1, padding: 16, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' }} >
+            <View padding-16 marginB-94 bg-white style={{ borderRadius: 16 }} >
+              <ImageBackground
+                source={{ uri: addedHub?.bannerImage }}
+                imageStyle={{ borderTopLeftRadius: 16, borderTopRightRadius: 16, height: 122 }} >
+                <Pressable onPress={() => _showHubAdded(false)} >
+                  <Image source={Images.x} style={{ height: 20, width: 20, position: 'absolute', top: 12, right: 12, tintColor: Colors.white }} />
+                </Pressable>
+                <Image source={{ uri: addedHub?.logo }}
+                  style={{
+                    height: 72, width: 72, borderRadius: 75, marginTop: 86, alignSelf: 'center',
+                    borderWidth: 3, borderColor: Colors.white
+                  }}
+                />
+                <Text beb24 ln32 center marginT-16 marginB-8 black >{`${addedHub?.name} Added!`}</Text>
+                <Text fs14 ln20 center gray500 marginB-8>{addedHub?.description}</Text>
+                <Text fs14SB lh20 primary700 center marginV-8 onPress={() => _showHubAdded(false)} >{'Continue'}</Text>
+              </ImageBackground>
+            </View>
+          </View>
+        </Modal >
         : null}
     </>
   );

@@ -3,7 +3,7 @@ import { StyleSheet, Image } from "react-native";
 import { View, Text } from "react-native-ui-lib";
 import { Colors, Images } from "../constants";
 
-const HubCard = ({ item, onSelect = () => { } }) => {
+const HubCard = ({ item, selectText = 'Select', onSelect = () => { } }) => {
   return (
     <View style={styles.card}>
       <View style={styles.header} >
@@ -33,7 +33,7 @@ const HubCard = ({ item, onSelect = () => { } }) => {
         </View>
       </View>
       <View style={styles.separator} />
-      <Text fs14SB lh20 primary700 center marginV-12 onPress={() => onSelect(item?.id)} >Select</Text>
+      <Text fs14SB lh20 primary700 center marginV-12 onPress={() => onSelect(item)} >{selectText}</Text>
     </View>
   )
 }

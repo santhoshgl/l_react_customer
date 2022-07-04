@@ -1,5 +1,5 @@
-import React, { memo, useState } from 'react';
-import { SafeAreaView, Image, ScrollView, StatusBar, Platform, KeyboardAvoidingView } from 'react-native';
+import React, { memo, useEffect, useState } from 'react';
+import { SafeAreaView, Image, ScrollView, StatusBar, Platform, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { Text, Button } from 'react-native-ui-lib';
 import { showMessage } from "react-native-flash-message";
 import { useDispatch } from 'react-redux';
@@ -20,18 +20,33 @@ const Register = ({ navigation }) => {
   const [error, _error] = useState(false)
   const [invalid, _invalid] = useState({})
 
+  useEffect(() => {
+    const onBackPress = () => {
+      Keyboard.dismiss()
+      return true;
+    };
+
+    Keyboard.addListener('keyboardDidHide', onBackPress);
+
+    return () => Keyboard.removeAllListeners();
+  }, [])
+
   const signUp = () => {
     if (!(firstName?.trim() && lastName?.trim() && phoneNumber?.trim() && email?.trim() && password?.trim())) {
       showMessage({ message: 'All fields are required.', type: 'warning' })
       _error(true)
       return
     }
+    else if (phoneNumber.length < 7 || phoneNumber.length > 15) {
+      showMessage({ message: "Enter valid Phone Number.", type: "warning" });
+      return;
+    }
     else if (email?.trim() && !mailRegex.test(email?.trim())) {
       showMessage({ message: "Enter valid email address.", type: "warning" });
       return;
     }
     else if (password?.trim() && password?.trim()?.length < 8) {
-      showMessage({ message: "Password length should be 8 character.", type: "warning" });
+      showMessage({ message: "Password length should be at least 8 characters.", type: "warning" });
       return;
     }
     const param = {
@@ -48,7 +63,7 @@ const Register = ({ navigation }) => {
   }
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : null} style={{ flex: 1 }}    >
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : null} style={{ flex: 1 }}>
       <StatusBar barStyle={Platform.OS == 'ios' ? 'dark-content' : 'default'} />
       <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
         <ScrollView contentContainerStyle={{ padding: 24, flexGrow: 1 }} >
@@ -79,7 +94,11 @@ const Register = ({ navigation }) => {
             value={phoneNumber}
             onChangeText={_phoneNumber}
             keyboardType='phone-pad'
-            onBlur={(e) => { if (!phoneNumber?.trim()) { _invalid({ ...invalid, phoneNumber: true }) } }}
+            validVal={!invalid?.phoneNumber}
+            onBlur={(e) => {
+              if (!phoneNumber?.trim() || phoneNumber.length < 7 || phoneNumber.length > 15) { _invalid({ ...invalid, phoneNumber: true }) }
+              else { _invalid({ ...invalid, phoneNumber: false }) }
+            }}
           />
           <Input
             label={'Email'}
