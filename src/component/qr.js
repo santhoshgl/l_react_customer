@@ -1,12 +1,14 @@
 import React, { memo, useState, useMemo } from 'react';
 import { SafeAreaView, Image, Pressable, Modal, Dimensions } from 'react-native';
 import { Text, View, Button } from 'react-native-ui-lib';
+import { useSelector } from 'react-redux';
 import QRCode from 'react-native-qrcode-svg';
 import auth from '@react-native-firebase/auth';
 import { Colors, Images, Fonts } from '@constants';
 const { width } = Dimensions.get('screen')
 
 const Qr = ({ }) => {
+  const { walletData } = useSelector(s => s.points)
   const [showQr, _showQr] = useState(false);
   const uid = useMemo(() => auth().currentUser?.uid, [])
   return (
@@ -16,7 +18,7 @@ const Qr = ({ }) => {
           <View style={{ backgroundColor: Colors.white, paddingVertical: 8, paddingHorizontal: 16, flex: 1, borderRadius: 16, marginRight: 6 }}>
             <Text fs12 lh18 gray900>Your Credits</Text>
             <View row centerV>
-              <Text beb24 lh32 gray900>1,200</Text>
+              <Text beb24 lh32 gray900>{walletData?.attributes?.balance || 0}</Text>
               <Image source={Images.star} style={{ marginLeft: 8, height: 20, width: 20 }} />
             </View>
           </View>

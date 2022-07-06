@@ -29,4 +29,5 @@ export default {
   award: require('../assets/award.png'),
   back: require('../assets/back.png'),
   heroCard: require('../assets/HeroCard.png'),
+  arrowRight: require('../assets/arrow-right.png'),
 }
