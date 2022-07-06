@@ -10,7 +10,7 @@ const BusinessCard = ({ item }) => {
       <ImageBackground source={{ uri: item?.bannerImage }} imageStyle={styles.backImg} >
         <Image source={{ uri: item?.logo }} style={styles.logo} />
         <Text beb24 ln32 center marginT-8 black >{item?.name}</Text>
-        <Text fs14 ln20 center gray500 >{item?.category}</Text>
+        <Text fs14 ln20 center gray500 >{item?.category?.label}</Text>
         <View style={styles.tag} >
           <Image source={Images.offers} style={{ height: 12, width: 12 }} />
           <Text fs14 ln20 gray700 marginL-4 >Offers: <Text fs14SB >{item?.totalOffers || 0}</Text></Text>

@@ -37,6 +37,7 @@ export default App;
 Typography.loadTypographies({
   ...Fonts,
   fw500: { fontWeight: '500' },
+  lh60: { lineHeight: 60 },
   lh32: { lineHeight: 32 },
   lh24: { lineHeight: 24 },
   lh20: { lineHeight: 20 },

@@ -1,6 +1,7 @@
 
 export default {
 
+    beb48: { fontSize: 48, fontFamily: 'BebasNeue-Regular' },
     beb36: { fontSize: 36, fontFamily: 'BebasNeue-Regular' },
     beb32: { fontSize: 32, fontFamily: 'BebasNeue-Regular' },
     beb30: { fontSize: 30, fontFamily: 'BebasNeue-Regular' },

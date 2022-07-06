@@ -16,22 +16,18 @@ import BottomTab from './bottomTab';
 import Offers from '../screen/offers';
 import OffersList from '../screen/offersList';
 import BusinessList from '../screen/businessList';
+import History from '../screen/points';
+import RewardDetails from '../screen/points/rewardDetails';
 import { logout } from '../redux/reducer/user';
 
 const Stack = createNativeStackNavigator();
 const OffersStack = createNativeStackNavigator();
 const BusinessStack = createNativeStackNavigator();
+const PointsStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 
-function business() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text> business </Text>
-    </View>
-  );
-}
-function points({ navigation }) {
+function business({ navigation }) {
   const dispatch = useDispatch()
   const _logout = () => {
     dispatch(logout())
@@ -41,6 +37,14 @@ function points({ navigation }) {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Button title='logout' onPress={_logout} />
     </View>
+  );
+}
+function points({ }) {
+  return (
+    <PointsStack.Navigator initialRouteName={'history'} screenOptions={{ headerShown: false }} >
+      <PointsStack.Screen name="history" component={History} />
+      <PointsStack.Screen name="rewardDetails" component={RewardDetails} />
+    </PointsStack.Navigator>
   );
 }
 
