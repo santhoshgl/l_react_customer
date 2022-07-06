@@ -25,8 +25,6 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(getUser())
-    // dispatch(getOffers(defaultHub?.id))
-    // dispatch(getBusiness(defaultHub?.id))
   }, [])
 
   useEffect(() => {
@@ -51,7 +49,7 @@ const Home = ({ navigation }) => {
           {offerLoading ? <OfferCardSkeleton /> :
             <FlatList
               horizontal
-              data={offerData || []}
+              data={offerData['Latest Offers'] || []}
               renderItem={({ item }) => <OfferCard item={item} loading={offerLoading} />}
               keyExtractor={(_, index) => index.toString()}
               showsHorizontalScrollIndicator={false}

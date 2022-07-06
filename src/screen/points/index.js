@@ -64,15 +64,18 @@ const History = ({ navigation }) => {
             )
           })}
         </View>
-        <View row centerV flex style={styles.pagination}>
-          <View style={styles.paginationButton}>
-            <Image source={Images.back} style={{ height: 20, width: 20, }} />
+        {rewards?.length > 0 ?
+          <View row centerV flex style={styles.pagination}>
+            <View style={styles.paginationButton}>
+              <Image source={Images.back} style={{ height: 20, width: 20, }} />
+            </View>
+            <Text fs14 lh20 gray700>Page 1 of {rewards?.meta?.totalPages}</Text>
+            <View style={styles.paginationButton}>
+              <Image source={Images.arrowRight} style={{ height: 20, width: 20 }} />
+            </View>
           </View>
-          <Text fs14 lh20 gray700>Page 1 of {rewards?.meta?.totalPages}</Text>
-          <View style={styles.paginationButton}>
-            <Image source={Images.arrowRight} style={{ height: 20, width: 20 }} />
-          </View>
-        </View>
+          : null
+        }
       </ScrollView>
     </SafeAreaView >
   );

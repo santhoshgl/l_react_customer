@@ -16,11 +16,23 @@ const Offers = ({ navigation }) => {
   const { offerData } = useSelector(s => s.offers)
 
   useEffect(() => {
-    dispatch(getOffers(defaultHub?.id))
+    setTimeout(() => {
+      dispatch(getOffers(defaultHub?.id))
+    }, 1000);
   }, [])
 
-  const offersList = useMemo(() => _.groupBy(offerData, (num) => { return num?.businessCategory }), [offerData])
 
+  // const offersList = useMemo(() => _.groupBy(offerData, (num) => { return num?.businessCategory }), [offerData])
+
+  const offersList = useMemo(() => {
+    let filterData = {};
+    Object.keys(offerData).forEach(item => {
+      if (offerData[item] && offerData[item].length > 0) {
+        filterData = { ...filterData, [item]: offerData[item] }
+      }
+    });
+    return filterData;
+  }, [offerData])
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>

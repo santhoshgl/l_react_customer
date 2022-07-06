@@ -20,22 +20,34 @@ const OffersList = ({ navigation, route }) => {
   const [nextLink, _nextLink] = useState('')
   const [loading, _loading] = useState(false)
   const [nomore, _nomore] = useState(false)
+  const [search, _search] = useState(null)
 
-  const setNextLink = (url) => {
-    _nextLink(url?.replace(Config.API_URL, ''))
-  }
   useEffect(() => {
+    fetchData();
+  }, [])
+
+  useEffect(() => {
+    fetchData();
+  }, [search])
+
+  const fetchData = () => {
     dispatch(setLoading(true))
-    apiRequest.get(`hubs/${defaultHub?.id}/offers`).then(res => {
+    const category = param?.title?.replace(' ', '_');
+    let url = `hubs/${defaultHub?.id}/offers?sortBy=latest/oldest&category=${category}`;
+
+    if (search && search?.length > 0)
+      url = `hubs/${defaultHub?.id}/offers?sortBy=latest/oldest&category=${category}&search=${search}`;
+
+    apiRequest.get(url).then(res => {
       _offersData(res?.data || [])
       setNextLink(res?.links?.next)
       dispatch(setLoading(false))
     }).catch(() => {
       dispatch(setLoading(false))
     })
-  }, [])
+  }
 
-  const fetchData = async () => {
+  const fetchMore = async () => {
     try {
       _loading(true)
       const res = await apiRequest.get(nextLink);
@@ -59,13 +71,21 @@ const OffersList = ({ navigation, route }) => {
       navigation.goBack();
   }
 
+  const setNextLink = (url) => {
+    _nextLink(url?.replace(Config.API_URL, ''))
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <Header navigation={navigation} />
       <View style={{ flex: 1, backgroundColor: Colors.gray50 }}>
         <View style={{ margin: 16, flexDirection: 'row', alignItems: 'center' }}>
-          <SearchBar style={{ flex: 1, marginVertical: 0 }} placeholder={'Search for Offers'} />
+          <SearchBar
+            value={search}
+            style={{ flex: 1, marginVertical: 0 }}
+            onSearch={(val) => _search(val)}
+            placeholder={'Search for Offers'}
+          />
           <Pressable onPress={alert} hitSlop={10}>
             <Image source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
           </Pressable>
@@ -82,7 +102,7 @@ const OffersList = ({ navigation, route }) => {
           keyExtractor={(_, index) => index.toString()}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode={'on-drag'}
-          onEndReached={!nomore && fetchData}
+          onEndReached={!nomore && fetchMore}
           scrollEventThrottle={16}
           onEndReachedThreshold={0.3}
           refreshing={loading}
