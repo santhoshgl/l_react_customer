@@ -1,16 +1,36 @@
 import React, { memo, useState } from 'react';
-import { SafeAreaView, Image, Pressable, Modal, ScrollView, Dimensions, ImageBackground } from 'react-native';
+import { SafeAreaView, Image, Pressable, Modal, ScrollView, Dimensions, ImageBackground, TouchableOpacity } from 'react-native';
 import { Text, View, Button } from 'react-native-ui-lib';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { unwrapResult } from '@reduxjs/toolkit';
 import { Colors, Images } from '@constants';
+import { getUser, updateUser } from '../redux/reducer/user';
 
 const windowHeight = Dimensions.get('window').height;
 
 const Header = ({ navigation }) => {
+  const dispatch = useDispatch()
   const { userData, defaultHub } = useSelector(s => s.user);
   const [showHubs, _showHubs] = useState(false)
   const [showHubAdded, _showHubAdded] = useState(false)
   const [addedHub, _addedHub] = useState(undefined)
+
+  const _onSelectHub = (_hub) => {
+    dispatch(getUser()).then(unwrapResult).then((res) => {
+      var updatedUser = { ...res };
+      var hubs = updatedUser?.hubs?.map(hub => {
+        var temp = Object.assign({}, hub);
+        temp.default = _hub?.id == temp?.id ? true : false
+        return temp;
+      }) || [];
+      updatedUser['hubs'] = hubs;
+      _showHubs(false)
+      dispatch(updateUser(updatedUser)).then(unwrapResult).then((originalPromiseResult) => {
+        dispatch(getUser()).then(unwrapResult).then((response) => {
+        })
+      })
+    })
+  }
 
   return (
     <>
@@ -45,12 +65,12 @@ const Header = ({ navigation }) => {
               <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
                 {userData?.hubs?.map((_hub, i) => {
                   return (
-
-                    <View row centerV marginV-8 key={i} >
-                      <Image source={{ uri: _hub?.logo }} style={{ height: 32, width: 32, borderRadius: 32 }} />
-                      <Text beb24 black marginH-12 lh32 numberOfLines={1}>{_hub?.name}</Text>
-                    </View>
-
+                    <TouchableOpacity onPress={() => _onSelectHub(_hub)}>
+                      <View row centerV marginV-8 key={i} >
+                        <Image source={{ uri: _hub?.logo }} style={{ height: 32, width: 32, borderRadius: 32 }} />
+                        <Text beb24 black marginH-12 lh32 numberOfLines={1}>{_hub?.name}</Text>
+                      </View>
+                    </TouchableOpacity>
                   )
                 })}
               </ScrollView>

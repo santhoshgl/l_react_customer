@@ -12,7 +12,6 @@ import HubCard from '@component/hubCard';
 import { animation } from '@util';
 import Request from '@services/networkProvider'
 import styles from './styles'
-import { setLoading } from '../../redux/reducer/loading';
 import { getUser, updateUser } from '../../redux/reducer/user';
 
 const AddHub = ({ route, navigation }) => {
@@ -29,12 +28,9 @@ const AddHub = ({ route, navigation }) => {
     if (searchVal) {
       url = `hubs?search=${searchVal}`
     }
-    dispatch(setLoading(true))
     Request.get(url).then(res => {
       _hubs(res?.data || [])
-      dispatch(setLoading(false))
     }).catch(err => {
-      dispatch(setLoading(false))
     })
   }
 

@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useMemo } from 'react';
-import { SafeAreaView, FlatList, Pressable, ScrollView, Image, Dimensions, StyleSheet } from 'react-native';
+import { SafeAreaView, ImageBackground, Pressable, ScrollView, Image, Dimensions, StyleSheet } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'underscore';
@@ -15,9 +15,7 @@ const { width } = Dimensions.get('screen')
 const RewardDetails = ({ navigation, route }) => {
   const dispatch = useDispatch()
   const param = useMemo(() => { return route?.params }, [route])
-  const { userData, defaultHub } = useSelector(s => s.user)
   const { rewardDetails } = useSelector(s => s.points)
-  // console.log("rewardDetails------------", JSON.stringify(rewardDetails));
 
   useEffect(() => {
     if (param?.rewardId)
@@ -53,7 +51,13 @@ const RewardDetails = ({ navigation, route }) => {
       </View>
       <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}>
         <View style={{ height: 312 }}>
-
+          <ImageBackground source={Images.rewardDetails} re style={styles.image}>
+            <View center marginT-50>
+              <Image source={Images.star} style={{ height: 26, width: 26, tintColor: "white", marginBottom:10 }} />
+              <Text fs16 lh24 white >{`Credits ${rewardDetails.type == 'rewards' ? 'Rewarded' : 'Redeemed'}!`}</Text>
+              <Text beb48 lh60 white>200</Text>
+            </View>
+          </ImageBackground>
         </View>
         <View style={styles.listContainer}>
           <Text beb24 lh32 black flex numberOfLines={1}>{rewardDetails.type == 'rewards' ? 'Rewarded' : 'Redeemed'}</Text>
@@ -129,5 +133,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray100, borderRadius: 16,
     flexDirection: 'row', alignItems: 'center',
     alignSelf: 'flex-start'
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
+    resizeMode: 'contain'
   },
 })
