@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useDispatch, useSelector } from 'react-redux';
+import { isEmpty } from 'underscore';
 import Login from '../screen/login';
 import Register from '../screen/register';
 import Home from '../screen/home';
@@ -18,6 +19,7 @@ import OffersList from '../screen/offersList';
 import BusinessList from '../screen/businessList';
 import History from '../screen/points';
 import RewardDetails from '../screen/points/rewardDetails';
+import Business from '../screen/business';
 import { logout } from '../redux/reducer/user';
 
 const Stack = createNativeStackNavigator();
@@ -27,25 +29,25 @@ const PointsStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 
-function business({ navigation }) {
-  const dispatch = useDispatch()
-  const _logout = () => {
-    dispatch(logout())
-    navigation.navigate('landing')
-  }
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Button title='logout' onPress={_logout} />
-    </View>
-  );
-}
-function points({ }) {
+// function Business({ navigation }) {
+//   const dispatch = useDispatch()
+//   const _logout = () => {
+//     dispatch(logout())
+//     navigation.navigate('landing')
+//   }
+//   return (
+//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+//       <Button title='logout' onPress={_logout} />
+//     </View>
+//   );
+// }
+const _PointsStack = () => {
   return (
     <PointsStack.Navigator initialRouteName={'history'} screenOptions={{ headerShown: false }} >
       <PointsStack.Screen name="history" component={History} />
       <PointsStack.Screen name="rewardDetails" component={RewardDetails} />
     </PointsStack.Navigator>
-  );
+  )
 }
 
 const _OffersStack = () => {
@@ -60,7 +62,7 @@ const _OffersStack = () => {
 const _BusinessStack = () => {
   return (
     <BusinessStack.Navigator initialRouteName={'businesses'} screenOptions={{ headerShown: false }} >
-      <BusinessStack.Screen name="businesses" component={business} />
+      <BusinessStack.Screen name="businesses" component={Business} />
       <BusinessStack.Screen name="businessList" component={BusinessList} />
     </BusinessStack.Navigator>
   )
@@ -72,22 +74,24 @@ const Dashboard = () => {
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        lazy: false
+        lazy: false,
       }}
       tabBar={props => <BottomTab {...props} />}
     >
-      <Tab.Screen name="home" component={Home} />
-      <Tab.Screen name="offers" component={_OffersStack} />
-      <Tab.Screen name="businesses" component={_BusinessStack} />
-      <Tab.Screen name="points" component={points} />
+      <Tab.Screen name="homeTab" component={Home} />
+      <Tab.Screen name="offersTab" component={_OffersStack} />
+      <Tab.Screen name="businessTab" component={_BusinessStack} />
+      <Tab.Screen name="pointsTab" component={_PointsStack} />
     </Tab.Navigator>
   )
 }
 
 const App = () => {
-  const { userData } = useSelector(s => s.user);
-  const intialPage = userData ? 'dashboard' : 'landing';
-
+  const { userData, defaultHub } = useSelector(s => s.user);
+  let intialPage = userData ? 'dashboard' : 'landing';
+  if (userData && (!defaultHub || isEmpty(defaultHub))) {
+    intialPage = 'hub'
+  }
   return (
     <NavigationContainer >
       <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={intialPage} >

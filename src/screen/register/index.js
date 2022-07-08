@@ -20,17 +20,6 @@ const Register = ({ navigation }) => {
   const [error, _error] = useState(false)
   const [invalid, _invalid] = useState({})
 
-  useEffect(() => {
-    const onBackPress = () => {
-      Keyboard.dismiss()
-      return true;
-    };
-
-    Keyboard.addListener('keyboardDidHide', onBackPress);
-
-    return () => Keyboard.removeAllListeners();
-  }, [])
-
   const signUp = () => {
     if (!(firstName?.trim() && lastName?.trim() && phoneNumber?.trim() && email?.trim() && password?.trim())) {
       showMessage({ message: 'All fields are required.', type: 'warning' })
@@ -66,7 +55,7 @@ const Register = ({ navigation }) => {
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : null} style={{ flex: 1 }}>
       <StatusBar barStyle={Platform.OS == 'ios' ? 'dark-content' : 'default'} />
       <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
-        <ScrollView contentContainerStyle={{ padding: 24, flexGrow: 1 }} >
+        <ScrollView keyboardShouldPersistTaps={'handled'} contentContainerStyle={{ padding: 24, flexGrow: 1 }} >
           <Image source={Images.logo} style={{ height: 30, width: 30, alignSelf: 'center' }} resizeMode={'contain'} />
           <Text beb30 center marginT-25 black  >Create an account</Text>
           <Text fs14 center marginT-4 gray500 >Sign up today and get started with Lealzy!</Text>

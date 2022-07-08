@@ -8,8 +8,8 @@ import apiRequest from '@services/networkProvider';
 import { setLoading } from '../../redux/reducer/loading';
 import Header from '../../component/header';
 import SearchBar from '../../component/searchBar';
-import { Colors } from '@constants';
-import { Images } from '../../constants';
+import { Colors, Images } from '@constants';
+import { fetchBusinessCategory } from '@util'
 import styles from './styles';
 
 const BusinessList = ({ navigation, route }) => {
@@ -20,22 +20,38 @@ const BusinessList = ({ navigation, route }) => {
   const [nextLink, _nextLink] = useState('')
   const [loading, _loading] = useState(false)
   const [nomore, _nomore] = useState(false)
+  const [search, _search] = useState(null)
 
-  const setNextLink = (url) => {
-    _nextLink(url?.replace(Config.API_URL, ''))
-  }
   useEffect(() => {
+    fetchData();
+  }, [])
+
+  useEffect(() => {
+    fetchData();
+  }, [search])
+
+  const fetchData = () => {
     dispatch(setLoading(true))
-    apiRequest.get(`hubs/${defaultHub?.id}/business`).then(res => {
+
+    const category = fetchBusinessCategory(param?.title);
+    let url = `hubs/${defaultHub?.id}/business?category=${category}`;
+    if (search && search?.length > 0)
+      url = `hubs/${defaultHub?.id}/business?category=${category}&search=${search}`;
+    if (param?.title == 'Latest Businesses')
+      url = `hubs/${defaultHub?.id}/business?sortBy=latest`;
+    else if (param?.title == 'Featured businesses')
+      url = `hubs/${defaultHub?.id}/business?featured=true`;
+
+    apiRequest.get(url).then(res => {
       _businessData(res?.data || [])
       setNextLink(res?.links?.next)
       dispatch(setLoading(false))
     }).catch(() => {
       dispatch(setLoading(false))
     })
-  }, [])
+  }
 
-  const fetchData = async () => {
+  const fetchMore = async () => {
     if (nextLink) {
       try {
         _loading(true)
@@ -64,12 +80,16 @@ const BusinessList = ({ navigation, route }) => {
       navigation.goBack();
   }
 
+  const setNextLink = (url) => {
+    _nextLink(url?.replace(Config.API_URL, ''))
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
-      <Header navigation={navigation}/>
+      <Header navigation={navigation} />
       <View style={{ flex: 1, backgroundColor: Colors.gray50 }}>
         <View style={{ margin: 16, flexDirection: 'row', alignItems: 'center' }}>
-          <SearchBar style={{ flex: 1, marginVertical: 0 }} placeholder={'Search for Offers'} />
+          <SearchBar style={{ flex: 1, marginVertical: 0 }} placeholder={'Search for Businesses'} />
           <Pressable onPress={alert} hitSlop={10}>
             <Image source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
           </Pressable>
@@ -86,7 +106,7 @@ const BusinessList = ({ navigation, route }) => {
           keyExtractor={(_, index) => index.toString()}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode={'on-drag'}
-          onEndReached={!nomore && fetchData}
+          onEndReached={!nomore && fetchMore}
           scrollEventThrottle={16}
           onEndReachedThreshold={0.3}
           refreshing={loading}
