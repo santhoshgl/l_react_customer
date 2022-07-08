@@ -2,59 +2,58 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import apiRequest from '@services/networkProvider';
 import auth from '@react-native-firebase/auth';
 import { showMessage } from "react-native-flash-message";
-import store from "../store";
 import { setLoading } from "./loading";
 
 
-export const getUser = createAsyncThunk('user/getUser', async (param, { getState, requestId }) => {
+export const getUser = createAsyncThunk('user/getUser', async (param, { getState, requestId, dispatch }) => {
   try {
-    store.dispatch(setLoading(true))
+    dispatch(setLoading(true))
     const userId = await auth().currentUser?.uid;
     const user = await apiRequest.get(`users/${userId}`)
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     return user?.data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     throw (error)
   }
 })
 
-export const updateUser = createAsyncThunk('user/updateUser', async (param, { getState, requestId }) => {
+export const updateUser = createAsyncThunk('user/updateUser', async (param, { getState, requestId, dispatch }) => {
   try {
-    store.dispatch(setLoading(true))
+    dispatch(setLoading(true))
     const userId = await auth().currentUser?.uid;
     const data = { ...param }
     const user = await apiRequest.put(`users/${userId}`, { data })
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     return user?.data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     throw (error)
   }
 })
 
-export const loginUser = createAsyncThunk('user/loginUser', async (param, { getState, requestId }) => {
+export const loginUser = createAsyncThunk('user/loginUser', async (param, { getState, requestId, dispatch }) => {
   try {
-    store.dispatch(setLoading(true))
+    dispatch(setLoading(true))
     const res = await auth().signInWithEmailAndPassword(param?.email, param?.password);
     const userId = res.user?.uid;
     const user = await apiRequest.get(`users/${userId}`)
     showMessage({ message: 'Login successfully.', type: 'success' })
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     return user?.data;
   } catch (error) {
     showMessage({ message: error?.userInfo?.code ? error?.userInfo?.message : error?.message, type: 'danger' })
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     await auth().signOut();
     throw (error)
   }
 })
 
-export const registerUser = createAsyncThunk('user/registerUser', async (param, { getState, requestId }) => {
+export const registerUser = createAsyncThunk('user/registerUser', async (param, { getState, requestId, dispatch }) => {
   try {
-    store.dispatch(setLoading(true))
+    dispatch(setLoading(true))
     const res = await auth().createUserWithEmailAndPassword(param?.email, param?.password);
     const data = {
       id: res.user?.uid,
@@ -67,7 +66,7 @@ export const registerUser = createAsyncThunk('user/registerUser', async (param, 
     }
     const user = await apiRequest.post('users', { data })
     showMessage({ message: 'Your account has been created successfully.', type: 'success' })
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     return user?.data
   } catch (error) {
     if (error?.code === 'auth/email-already-in-use') {
@@ -77,7 +76,7 @@ export const registerUser = createAsyncThunk('user/registerUser', async (param, 
       showMessage({ message: 'That email address is invalid!', type: 'danger' })
     }
     else showMessage({ message: 'Oh no it looks like there was some problem creating account, please contact support or try again', type: 'danger' })
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     auth()?.currentUser?.delete()
     throw (error)
   }

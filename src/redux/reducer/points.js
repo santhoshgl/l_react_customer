@@ -1,45 +1,44 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import apiRequest from '@services/networkProvider';
 import { showMessage } from "react-native-flash-message";
-import store from "../store";
 import { setLoading } from "./loading";
 
 
-export const getRewardWallet = createAsyncThunk('points/getRewardWallet', async (params) => {
+export const getRewardWallet = createAsyncThunk('points/getRewardWallet', async (params, { dispatch }) => {
   try {
-    store.dispatch(setLoading(true))
+    dispatch(setLoading(true))
     const data = await apiRequest.get(`rewardWallet?id=${params?.userID}&hubID=${params?.hubID}&userType=customer`)
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     return data?.data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     throw (error)
   }
 })
 
-export const getRewards = createAsyncThunk('points/getRewards', async (params) => {
+export const getRewards = createAsyncThunk('points/getRewards', async (params, { dispatch }) => {
   try {
-    store.dispatch(setLoading(true))
+    dispatch(setLoading(true))
     const data = await apiRequest.get(`rewards?customerID=${params?.userID}&hubID=${params?.hubID}`)
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     return data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     throw (error)
   }
 })
 
-export const getRewardDetails = createAsyncThunk('points/getRewardDetails', async (rewardID) => {
+export const getRewardDetails = createAsyncThunk('points/getRewardDetails', async (rewardID, { dispatch }) => {
   try {
-    store.dispatch(setLoading(true))
+    dispatch(setLoading(true))
     const data = await apiRequest.get(`rewards/${rewardID}`)
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     return data?.data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
-    store.dispatch(setLoading(false))
+    dispatch(setLoading(false))
     throw (error)
   }
 })

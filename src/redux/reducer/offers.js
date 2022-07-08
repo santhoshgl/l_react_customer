@@ -1,38 +1,49 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import apiRequest from '@services/networkProvider';
 import { showMessage } from "react-native-flash-message";
-import store from "../store";
-import { setLoading } from "./loading";
 
 
 export const getOffers = createAsyncThunk('offers/getOffers', async (hubID) => {
   try {
-    store.dispatch(setOfferLoading(true))
     const data = await apiRequest.get(`hubs/${hubID}/offers`)
-    store.dispatch(setOfferLoading(false))
     return data?.data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
-    store.dispatch(setOfferLoading(false))
+    throw (error)
+  }
+})
+
+export const getFeaturedOffers = createAsyncThunk('offers/getFeaturedOffers', async (hubID) => {
+  try {
+    const data = await apiRequest.get(`hubs/${hubID}/offers?featured=true`)
+    return data?.data;
+  } catch (error) {
+    showMessage({ message: error?.message, type: 'danger' })
     throw (error)
   }
 })
 
 export const offersSlice = createSlice({
   name: 'offers',
-  initialState: { offerData: [], offerLoading: false },
-  reducers: {
-    setOfferLoading: (state, { payload }) => {
-      state.offerLoading = payload
-    },
-  },
+  initialState: { offerData: [], featuredOfferData: [], offerLoading: false },
+  reducers: {},
   extraReducers: {
+    [getFeaturedOffers.pending]: (state, { payload }) => {
+      state.offerLoading = true
+    },
+    [getFeaturedOffers.fulfilled]: (state, { payload }) => {
+      state.featuredOfferData = payload
+      state.offerLoading = false
+    },
+    [getFeaturedOffers.rejected]: (state, { payload }) => {
+      state.offerLoading = false
+    },
     [getOffers.fulfilled]: (state, { payload }) => {
       state.offerData = payload
-    }
+    },
   }
 })
 
-export const { setOfferLoading } = offersSlice.actions
+export const { } = offersSlice.actions
 
 export default offersSlice.reducer

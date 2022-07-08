@@ -8,25 +8,25 @@ const CustomTabBarScreen = ({ state, navigation }) => {
   return (
     <SafeAreaView style={styles.mainView}>
       <View style={styles.tabView} >
-        <Pressable hitSlop={15} onPress={() => navigation.navigate('home')}>
+        <Pressable hitSlop={15} onPress={() => navigation.navigate('homeTab')}>
           <Image source={Images.home} style={[styles.icon, { tintColor: state.index == 0 ? Colors.primary600 : Colors.gray500 }]} />
           <Text fs12 lh18 style={{ color: state.index == 0 ? Colors.black : Colors.gray500 }} >Home</Text>
         </Pressable>
       </View>
       <View style={styles.tabView}  >
-        <Pressable hitSlop={15} onPress={() => navigation.navigate('offers')}>
+        <Pressable hitSlop={15} onPress={() => navigation.navigate('offersTab')}>
           <Image source={Images.offers} style={[styles.icon, { tintColor: state.index == 1 ? Colors.primary600 : Colors.gray500 }]} />
           <Text fs12 lh18 style={{ color: state.index == 1 ? Colors.black : Colors.gray500 }} >Offers</Text>
         </Pressable>
       </View>
       <View style={styles.tabView} >
-        <Pressable hitSlop={15} onPress={() => navigation.navigate('businesses')}>
+        <Pressable hitSlop={15} onPress={() => navigation.navigate('businessTab')}>
           <Image source={Images.tab_business} style={[styles.icon, { tintColor: state.index == 2 ? Colors.primary600 : Colors.gray500 }]} />
           <Text fs12 lh18 style={{ color: state.index == 2 ? Colors.black : Colors.gray500 }} >Businesses</Text>
         </Pressable>
       </View>
       <View style={styles.tabView}  >
-        <Pressable hitSlop={15} onPress={() => navigation.navigate('points')}>
+        <Pressable hitSlop={15} onPress={() => navigation.navigate('pointsTab')}>
           <Image source={Images.points} style={[styles.icon, { tintColor: state.index == 3 ? Colors.primary600 : Colors.gray500 }]} />
           <Text fs12 lh18 style={{ color: state.index == 3 ? Colors.black : Colors.gray500 }} >Points</Text>
         </Pressable>

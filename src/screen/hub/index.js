@@ -30,12 +30,9 @@ const Hub = ({ navigation }) => {
 
   const _search = () => {
     if (searchVal) {
-      dispatch(setLoading(true))
       Request.get(`hubs?search=${searchVal}`).then(res => {
         _hubs(res?.data || [])
-        dispatch(setLoading(false))
       }).catch(err => {
-        dispatch(setLoading(false))
       })
     }
     else

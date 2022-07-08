@@ -8,8 +8,8 @@ import apiRequest from '@services/networkProvider';
 import { setLoading } from '../../redux/reducer/loading';
 import Header from '../../component/header';
 import SearchBar from '../../component/searchBar';
-import { Colors } from '@constants';
-import { Images } from '../../constants';
+import { Colors, Images } from '@constants';
+import { fetchBusinessCategory } from '@util'
 import styles from './styles';
 
 const OffersList = ({ navigation, route }) => {
@@ -32,11 +32,14 @@ const OffersList = ({ navigation, route }) => {
 
   const fetchData = () => {
     dispatch(setLoading(true))
-    const category = param?.title?.replace(' ', '_');
-    let url = `hubs/${defaultHub?.id}/offers?sortBy=latest/oldest&category=${category}`;
-
+    const category = fetchBusinessCategory(param?.title);
+    let url = `hubs/${defaultHub?.id}/offers?category=${category}`;
     if (search && search?.length > 0)
-      url = `hubs/${defaultHub?.id}/offers?sortBy=latest/oldest&category=${category}&search=${search}`;
+      url = `hubs/${defaultHub?.id}/offers?category=${category}&search=${search}`;
+    if (param?.title == 'Latest Offers')
+      url = `hubs/${defaultHub?.id}/business?sortBy=latest`;
+    else if (param?.title == 'Featured Offers')
+      url = `hubs/${defaultHub?.id}/offers?featured=true`;
 
     apiRequest.get(url).then(res => {
       _offersData(res?.data || [])

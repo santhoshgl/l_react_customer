@@ -16,13 +16,10 @@ const Offers = ({ navigation }) => {
   const { offerData } = useSelector(s => s.offers)
 
   useEffect(() => {
-    setTimeout(() => {
+    if (defaultHub?.id) {
       dispatch(getOffers(defaultHub?.id))
-    }, 1000);
-  }, [])
-
-
-  // const offersList = useMemo(() => _.groupBy(offerData, (num) => { return num?.businessCategory }), [offerData])
+    }
+  }, [defaultHub])
 
   const offersList = useMemo(() => {
     let filterData = {};
