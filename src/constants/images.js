@@ -31,4 +31,12 @@ export default {
   heroCard: require('../assets/HeroCard.png'),
   arrowRight: require('../assets/arrow-right.png'),
   rewardDetails: require('../assets/rewardDetails.png'),
+  account: require('../assets/account.png'),
+  chevron_right: require('../assets/chevron-right.png'),
+  user: require('../assets/user.png'),
+  key: require('../assets/key.png'),
+  info: require('../assets/info.png'),
+  send: require('../assets/send.png'),
+  support: require('../assets/life-buoy.png'),
+  x_close: require('../assets/x-circle.png'),
 }

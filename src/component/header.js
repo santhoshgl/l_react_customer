@@ -37,10 +37,11 @@ const Header = ({ navigation }) => {
       <SafeAreaView style={{ backgroundColor: Colors.white, borderBottomColor: Colors.gray200, borderBottomWidth: 1 }}>
         <View right row centerV marginT-12 marginH-16>
           <Image source={Images.bell} style={{ height: 24, width: 24, marginRight: 27 }} />
-          <Image
-            onPress={() => { }}
-            source={{ uri: userData?.profilePicture }}
-            style={{ height: 32, width: 32, borderRadius: 32 }} />
+          <Pressable onPress={() => navigation.navigate('account')}>
+            <Image
+              source={{ uri: userData?.profilePicture }}
+              style={{ height: 32, width: 32, borderRadius: 32 }} />
+          </Pressable>
         </View>
         <View row centerV marginV-12 marginH-16>
           <Image source={{ uri: defaultHub?.logo }} style={{ height: 40, width: 40, borderRadius: 40 }} />
