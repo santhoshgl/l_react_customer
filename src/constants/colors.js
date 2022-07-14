@@ -10,6 +10,7 @@ const Colors = {
   gray500: '#667085',
   gray700: '#344054',
   gray900: '#101828',
+  primary50: "#FFECED",
   primary600: '#FF4048',
   primary700: '#CC333A',
   purple: '#D5B4FF',

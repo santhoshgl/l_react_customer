@@ -38,9 +38,15 @@ const Header = ({ navigation }) => {
         <View right row centerV marginT-12 marginH-16>
           <Image source={Images.bell} style={{ height: 24, width: 24, marginRight: 27 }} />
           <Pressable onPress={() => navigation.navigate('account')}>
-            <Image
-              source={{ uri: userData?.profilePicture }}
-              style={{ height: 32, width: 32, borderRadius: 32 }} />
+            {userData?.profilePicture ?
+              <Image source={{ uri: userData?.profilePicture }}
+                style={{ height: 32, width: 32, borderRadius: 32 }}
+              />
+              :
+              <View center style={{ height: 32, width: 32, borderRadius: 32, backgroundColor: Colors.primary50 }}>
+                <Image source={Images.user} style={{ height: 20, width: 20, tintColor: Colors.primary600 }} />
+              </View>
+            }
           </Pressable>
         </View>
         <View row centerV marginV-12 marginH-16>

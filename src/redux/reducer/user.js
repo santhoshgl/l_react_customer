@@ -1,6 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, unwrapResult } from '@reduxjs/toolkit';
 import apiRequest from '@services/networkProvider';
 import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
 import { showMessage } from "react-native-flash-message";
 import { setLoading } from "./loading";
 
@@ -29,6 +30,37 @@ export const updateUser = createAsyncThunk('user/updateUser', async (param, { ge
     return user?.data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
+    dispatch(setLoading(false))
+    throw (error)
+  }
+})
+
+export const updateImageProfile = createAsyncThunk('user/profileUpload', async (param, { getState, requestId, dispatch }) => {
+  dispatch(setLoading(true))
+  let updatedUser = { ...param.user };
+  try {
+    await storage().ref(`images/${updatedUser?.id}/${param?.image.name}`)
+      .putFile(param?.image?.uri).then(async response => {
+        const storageRef = await storage().ref()
+        await storageRef.child(response.metadata.fullPath).getDownloadURL().then(async res => {
+          updatedUser.profilePicture = res
+          await dispatch(updateUser(updatedUser)).then(unwrapResult).then(async (result) => {
+            await dispatch(getUser()).then(unwrapResult).then((response) => {
+              dispatch(setLoading(false))
+              return response
+            })
+          })
+        }).catch(error => {
+          dispatch(setLoading(false))
+          throw (error)
+        })
+      }).catch(error => {
+        showMessage({ message: error?.userInfo?.code ? error?.userInfo?.message : error?.message, type: 'danger' })
+        dispatch(setLoading(false))
+        throw (error)
+      })
+  } catch (error) {
+    showMessage({ message: error?.userInfo?.code ? error?.userInfo?.message : error?.message, type: 'danger' })
     dispatch(setLoading(false))
     throw (error)
   }

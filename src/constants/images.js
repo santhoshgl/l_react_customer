@@ -39,4 +39,7 @@ export default {
   send: require('../assets/send.png'),
   support: require('../assets/life-buoy.png'),
   x_close: require('../assets/x-circle.png'),
+  camera: require('../assets/camera.png'),
+  delete: require('../assets/delete.png'),
+  select_pic: require('../assets/selectPic.png'),
 }
