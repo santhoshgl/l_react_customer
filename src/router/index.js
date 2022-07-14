@@ -22,6 +22,7 @@ import RewardDetails from '../screen/points/rewardDetails';
 import Business from '../screen/business';
 import { logout } from '../redux/reducer/user';
 import Account from '../screen/account';
+import personalDetails from '../screen/personalDetails';
 
 const Stack = createNativeStackNavigator();
 const OffersStack = createNativeStackNavigator();
@@ -105,6 +106,7 @@ const App = () => {
         <Stack.Screen name="addHub" component={AddHub} />
         <Stack.Screen name="dashboard" component={Dashboard} />
         <Stack.Screen name="account" component={Account} />
+        <Stack.Screen name="personalDetails" component={personalDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

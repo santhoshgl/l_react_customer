@@ -35,7 +35,9 @@ export default styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: Colors.white,
     borderBottomWidth: 1,
-    borderColor: "#E4E7EC"
+    borderColor: "#E4E7EC",
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   image: {
     flex: 1,
