@@ -113,41 +113,41 @@ const Account = ({ navigation }) => {
             <Text beb24 lh32 black flex numberOfLines={1}>Hi {userData?.firstName}</Text>
           </View>
 
-          <View center style={styles.detailContainer}>
+          <TouchableOpacity style={styles.detailContainer} onPress={() => navigation.navigate('personalDetails')} >
             <Image source={Images.user} style={styles.featureIcon} />
             <Text fs16 lh24 flex black> Personal Details </Text>
             <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />
-          </View>
-          <View center style={styles.detailContainer}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.detailContainer}>
             <Image source={Images.key} style={styles.featureIcon} />
             <Text onPress={() => { }} fs16 lh24 flex black> Account Settings </Text>
             <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />
-          </View>
-          <View center style={styles.detailContainer}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.detailContainer}>
             <Image source={Images.bell} style={styles.featureIcon} />
             <Text fs16 lh24 flex black> Notifications </Text>
             <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />
-          </View>
-          <View center style={styles.detailContainer}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.detailContainer}>
             <Image source={Images.info} style={styles.featureIcon} />
             <Text fs16 lh24 flex black> About Lealzy </Text>
             <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />
-          </View>
-          <View center style={styles.detailContainer}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.detailContainer}>
             <Image source={Images.send} style={styles.featureIcon} />
             <Text fs16 lh24 flex black> Invite friends </Text>
             <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />
-          </View>
-          <View center style={styles.detailContainer}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.detailContainer}>
             <Image source={Images.support} style={styles.featureIcon} />
             <Text fs16 lh24 flex black> Support </Text>
             <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />
-          </View>
-          <View center style={styles.detailContainer}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.detailContainer}>
             <Image source={Images.x_close} style={styles.featureIcon} />
             <Text fs16 lh24 flex black> Delete Account </Text>
             <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />
-          </View>
+          </TouchableOpacity>
           <View style={styles.logoutBtn}>
             <Text style={styles.sampleStyle} black marginB-60 fs16 lh20 onPress={_logout}>Log out</Text>
           </View>
