@@ -66,11 +66,11 @@ workflows:
         notify:
           success: true
           failure: true
-      slack:
-        channel: '#p-lealzy'
-        notify:
-          success: true
-          failure: true
+      # slack:
+      #   channel: '#p-lealzy'
+      #   notify:
+      #     success: true
+      #     failure: true
 
   build-ios-ipa-dev:
     name: build ios ipa for dev environment
