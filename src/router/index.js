@@ -1,9 +1,8 @@
 import React from 'react';
-import { Image, View, Text, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { isEmpty } from 'underscore';
 import Login from '../screen/login';
 import Register from '../screen/register';
@@ -20,9 +19,9 @@ import BusinessList from '../screen/businessList';
 import History from '../screen/points';
 import RewardDetails from '../screen/points/rewardDetails';
 import Business from '../screen/business';
-import { logout } from '../redux/reducer/user';
 import Account from '../screen/account';
 import personalDetails from '../screen/personalDetails';
+import AccountSettings from '../screen/accountSettings';
 
 const Stack = createNativeStackNavigator();
 const OffersStack = createNativeStackNavigator();
@@ -30,19 +29,6 @@ const BusinessStack = createNativeStackNavigator();
 const PointsStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
-// function Business({ navigation }) {
-//   const dispatch = useDispatch()
-//   const _logout = () => {
-//     dispatch(logout())
-//     navigation.navigate('landing')
-//   }
-//   return (
-//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//       <Button title='logout' onPress={_logout} />
-//     </View>
-//   );
-// }
 const _PointsStack = () => {
   return (
     <PointsStack.Navigator initialRouteName={'history'} screenOptions={{ headerShown: false }} >
@@ -107,6 +93,7 @@ const App = () => {
         <Stack.Screen name="dashboard" component={Dashboard} />
         <Stack.Screen name="account" component={Account} />
         <Stack.Screen name="personalDetails" component={personalDetails} />
+        <Stack.Screen name="accountSettings" component={AccountSettings} />
       </Stack.Navigator>
     </NavigationContainer>
   );
