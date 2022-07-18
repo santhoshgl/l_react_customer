@@ -37,7 +37,7 @@ const OffersList = ({ navigation, route }) => {
     if (search && search?.length > 0)
       url = `hubs/${defaultHub?.id}/offers?category=${category}&search=${search}`;
     if (param?.title == 'Latest Offers')
-      url = `hubs/${defaultHub?.id}/business?sortBy=latest`;
+      url = `hubs/${defaultHub?.id}/offers?sortBy=latest`;
     else if (param?.title == 'Featured Offers')
       url = `hubs/${defaultHub?.id}/offers?featured=true`;
 
@@ -51,18 +51,22 @@ const OffersList = ({ navigation, route }) => {
   }
 
   const fetchMore = async () => {
-    try {
-      _loading(true)
-      const res = await apiRequest.get(nextLink);
-      if (res?.data) {
-        _offersData(old => [...old, ...res?.data])
-        setNextLink(res?.links?.next)
-      } else {
-        _nomore(true)
+    if (nextLink) {
+      try {
+        _loading(true)
+        const res = await apiRequest.get(nextLink);
+        if (res?.data) {
+          _offersData(old => [...old, ...res?.data])
+          setNextLink(res?.links?.next)
+        } else {
+          _nomore(true)
+        }
+        _loading(false)
+      } catch (error) {
+        _loading(false)
       }
-      _loading(false)
-    } catch (error) {
-      _loading(false)
+    } else {
+      _nomore(true)
     }
   }
 
@@ -89,7 +93,7 @@ const OffersList = ({ navigation, route }) => {
             onSearch={(val) => _search(val)}
             placeholder={'Search for Offers'}
           />
-          <Pressable onPress={alert} hitSlop={10}>
+          <Pressable onPress={() => { }} hitSlop={10}>
             <Image source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
           </Pressable>
         </View>

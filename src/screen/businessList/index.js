@@ -90,7 +90,7 @@ const BusinessList = ({ navigation, route }) => {
       <View style={{ flex: 1, backgroundColor: Colors.gray50 }}>
         <View style={{ margin: 16, flexDirection: 'row', alignItems: 'center' }}>
           <SearchBar style={{ flex: 1, marginVertical: 0 }} placeholder={'Search for Businesses'} />
-          <Pressable onPress={alert} hitSlop={10}>
+          <Pressable onPress={() => { }} hitSlop={10}>
             <Image source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
           </Pressable>
         </View>
