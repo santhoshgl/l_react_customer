@@ -1,40 +1,41 @@
 {
   "project_info": {
-    "project_number": "1015706292862",
-    "project_id": "lealzy-pre-prod",
-    "storage_bucket": "lealzy-pre-prod.appspot.com"
+    "project_number": "767577416347",
+    "project_id": "lealzy",
+    "storage_bucket": "lealzy.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1015706292862:android:d345f85b86ae8a616d7e2f",
+        "mobilesdk_app_id": "1:767577416347:android:eaba8187317f7044015c3e",
         "android_client_info": {
           "package_name": "com.lealzy.business"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1015706292862-q787cf35831vlcdg2ln5d01mu912dr57.apps.googleusercontent.com",
+          "client_id": "767577416347-4keb3n84u5p7dudioij4m7e2hjcqclrj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBeEBSdrShOe3mwVfGoKnmcqERG-Xp1wec"
+          "current_key": "AIzaSyCK5KrH6VUMCUFRvlhZ4nxFkRpRv4C3Etk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1015706292862-q787cf35831vlcdg2ln5d01mu912dr57.apps.googleusercontent.com",
+              "client_id": "767577416347-4keb3n84u5p7dudioij4m7e2hjcqclrj.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "1015706292862-2b3poic2t2odime3hol80otil207mida.apps.googleusercontent.com",
+              "client_id": "767577416347-gjogb374go2080rc48gh1ocv631fsukf.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.lealzy.customer"
+                "bundle_id": "com.lealzy.business",
+                "app_store_id": "1570965617"
               }
             }
           ]
@@ -43,34 +44,35 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1015706292862:android:60114bc923c9ba8f6d7e2f",
+        "mobilesdk_app_id": "1:767577416347:android:7198da1d067be4ff015c3e",
         "android_client_info": {
           "package_name": "com.lealzy.customer"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1015706292862-q787cf35831vlcdg2ln5d01mu912dr57.apps.googleusercontent.com",
+          "client_id": "767577416347-4keb3n84u5p7dudioij4m7e2hjcqclrj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBeEBSdrShOe3mwVfGoKnmcqERG-Xp1wec"
+          "current_key": "AIzaSyCK5KrH6VUMCUFRvlhZ4nxFkRpRv4C3Etk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1015706292862-q787cf35831vlcdg2ln5d01mu912dr57.apps.googleusercontent.com",
+              "client_id": "767577416347-4keb3n84u5p7dudioij4m7e2hjcqclrj.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "1015706292862-2b3poic2t2odime3hol80otil207mida.apps.googleusercontent.com",
+              "client_id": "767577416347-gjogb374go2080rc48gh1ocv631fsukf.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.lealzy.customer"
+                "bundle_id": "com.lealzy.business",
+                "app_store_id": "1570965617"
               }
             }
           ]

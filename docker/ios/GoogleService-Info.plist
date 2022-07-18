@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1015706292862-2b3poic2t2odime3hol80otil207mida.apps.googleusercontent.com</string>
+	<string>767577416347-tpemlc04ch6svbr929hra1o2kvcs68eu.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1015706292862-2b3poic2t2odime3hol80otil207mida</string>
+	<string>com.googleusercontent.apps.767577416347-tpemlc04ch6svbr929hra1o2kvcs68eu</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBuoHISMne5nE9m64lEJztifkArKX0OiyU</string>
+	<string>AIzaSyDdheJBFZ3ZpEKFFe0U4iB8NQcO3jhIpwo</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1015706292862</string>
+	<string>767577416347</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.lealzy.customer</string>
 	<key>PROJECT_ID</key>
-	<string>lealzy-pre-prod</string>
+	<string>lealzy</string>
 	<key>STORAGE_BUCKET</key>
-	<string>lealzy-pre-prod.appspot.com</string>
+	<string>lealzy.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1015706292862:ios:2d58b837b428026a6d7e2f</string>
+	<string>1:767577416347:ios:497552918fdcecfb015c3e</string>
 </dict>
 </plist>
