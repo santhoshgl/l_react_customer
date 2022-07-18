@@ -167,10 +167,7 @@ workflows:
         script: |
           export GOOGLE_APPLICATION_CREDENTIALS=/tmp/svc-acct.json
           sops -d $CM_BUILD_DIR/docker/env.production > $CM_BUILD_DIR/.env
-      - &install_node_modules
-        name: Install dependencies
-        script: |
-          npm install
+      - *install_node_modules
       - name: Set Android SDK location
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
