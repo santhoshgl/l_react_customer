@@ -134,13 +134,13 @@ const Card = ({ item }) => {
   const getCardStyles = useMemo(() => {
     let icon = Images.award;
     let color = Colors.blue;
-    if (item?.type == 'discount') {
+    if (item?.type == 'Percentage') {
       icon = Images.percent;
       color = Colors.yellow;
-    } else if (item?.type == 'credit') {
+    } else if (item?.type == 'Half Price') {
       icon = Images.dollarSign;
       color = Colors.purple;
-    } else if (item?.type == 'gift') {
+    } else if (item?.type == 'Free Gift') {
       icon = Images.gift;
       color = Colors.yellow;
     }
@@ -157,7 +157,7 @@ const Card = ({ item }) => {
           <Text beb24 lh32 black >{item?.title || ''}</Text>
           <Text fs14 lh20 gray500 numberOfLines={2}>{item?.description || ''}</Text>
           <View marginT-12 row centerV >
-            <Image source={{ uri: item?.businessLogo }} style={{ height: 24, width: 24, borderRadius: 24 }} />
+            <Image source={item?.businessLogo ? { uri: item?.businessLogo } : Images.defaultBusinessSmall} style={{ height: 24, width: 24, borderRadius: 24 }} />
             <Text marginL-6 fs12 lh18 gray500>{item?.businessName}</Text>
           </View>
         </View>

@@ -25,13 +25,13 @@ const RewardDetails = ({ navigation, route }) => {
   const getCardStyles = useMemo(() => {
     let icon = Images.award;
     let color = Colors.blue;
-    if (rewardDetails?.attributes?.offer?.type == 'discount') {
+    if (rewardDetails?.attributes?.offer?.type == 'Percentage') {
       icon = Images.percent;
       color = Colors.yellow;
-    } else if (rewardDetails?.attributes?.offer?.type == 'credit') {
+    } else if (rewardDetails?.attributes?.offer?.type == 'Half Price') {
       icon = Images.dollarSign;
       color = Colors.purple;
-    } else if (rewardDetails?.attributes?.offer?.type == 'gift') {
+    } else if (rewardDetails?.attributes?.offer?.type == 'Free Gift') {
       icon = Images.gift;
       color = Colors.yellow;
     }

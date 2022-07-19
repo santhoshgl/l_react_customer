@@ -42,4 +42,6 @@ export default {
   camera: require('../assets/camera.png'),
   delete: require('../assets/delete.png'),
   select_pic: require('../assets/selectPic.png'),
+  defaultBusiness: require('../assets/defaultBusiness.png'),
+  defaultBusinessSmall: require('../assets/defaultBusinessSmall.png'),
 }

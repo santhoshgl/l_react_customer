@@ -131,7 +131,7 @@ const Card = ({ item }) => {
   return (
     <View style={styles.card}>
       <View row >
-        <Image source={{ uri: item?.logo }} style={{ height: 72, width: 72, borderRadius: 72 }} />
+        <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={{ height: 72, width: 72, borderRadius: 72 }} />
         <View marginL-12 flex>
           <Text beb24 lh32 black >{item?.name}</Text>
           <Text fs12 lh18 gray500 numberOfLines={2}>{item?.category?.description}</Text>
