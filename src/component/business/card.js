@@ -8,7 +8,7 @@ const BusinessCard = ({ item }) => {
   return (
     <View style={styles.card}>
       <ImageBackground source={{ uri: item?.bannerImage }} imageStyle={styles.backImg} >
-        <Image source={{ uri: item?.logo }} style={styles.logo} />
+        <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={styles.logo} />
         <Text beb24 ln32 center marginT-8 black >{item?.name}</Text>
         <Text fs14 ln20 center gray500 >{item?.category?.label}</Text>
         <View style={styles.tag} >
@@ -33,7 +33,10 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 1,
   },
-  backImg: { borderTopLeftRadius: 16, borderTopRightRadius: 16, height: 120, width: 240 },
+  backImg: {
+    borderTopLeftRadius: 16, borderTopRightRadius: 16,
+    height: 120, width: 240, backgroundColor: Colors.yellow
+  },
   logo: { height: 80, width: 80, borderRadius: 80, marginTop: 78, alignSelf: 'center' },
   tag: {
     flexDirection: 'row', alignItems: 'center',
