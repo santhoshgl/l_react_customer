@@ -50,11 +50,11 @@ const Header = ({ navigation }) => {
           </Pressable>
         </View>
         <View row centerV marginV-12 marginH-16>
-          <Image source={{ uri: defaultHub?.logo }} style={{ height: 40, width: 40, borderRadius: 40 }} />
-          <Text beb30 black marginH-12 numberOfLines={1}>{defaultHub?.name}</Text>
-          <Pressable onPress={() => _showHubs(true)}>
+          <TouchableOpacity onPress={() => _showHubs(true)} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            <Image source={{ uri: defaultHub?.logo }} style={{ height: 40, width: 40, borderRadius: 40 }} />
+            <Text beb30 black marginH-12 numberOfLines={1}>{defaultHub?.name}</Text>
             <Image source={Images.down} style={{ height: 24, width: 24, borderRadius: 24 }} />
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
       {showHubs ?

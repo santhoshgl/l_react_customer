@@ -133,7 +133,7 @@ const Account = ({ navigation }) => {
             <Text fs16 lh24 flex black> About Lealzy </Text>
             <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.detailContainer}>
+          <TouchableOpacity style={styles.detailContainer} onPress={() => navigation.navigate('inviteFriends')}>
             <Image source={Images.send} style={styles.featureIcon} />
             <Text fs16 lh24 flex black> Invite friends </Text>
             <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />

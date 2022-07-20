@@ -39,57 +39,63 @@ const Home = ({ navigation }) => {
       <Header navigation={navigation} />
       <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}>
         <Qr />
-        <View paddingT-24  >
-          <View paddingH-16 row spread centerV >
-            <Text beb24 lh32 black flex numberOfLines={1} >{'Featured Offers'}<Text primary600 beb32 >{'.'}</Text></Text>
-            <Pressable hitSlop={10} onPress={() => {
-              navigation.navigate('offersTab', { screen: 'offersList', params: { title: 'Featured Offers', source: 'homeTab' } });
-            }}>
-              {
-                featuredOfferData?.length == 1 ?
-                  <Text></Text> : <Text fs14M lh20 primary700 >See all</Text>
+        {
+          featuredOfferData?.length > 0 ?
+            <View paddingT-24 >
+              <View paddingH-16 row spread centerV >
+                <Text beb24 lh32 black flex numberOfLines={1} >{'Featured Offers'}<Text primary600 beb32 >{'.'}</Text></Text>
+                <Pressable hitSlop={10} onPress={() => {
+                  navigation.navigate('offersTab', { screen: 'offersList', params: { title: 'Featured Offers', source: 'homeTab' } });
+                }}>
+                  {featuredOfferData?.length == 1 ? <Text></Text> : <Text fs14M lh20 primary700 >See all</Text>}
+                </Pressable>
+              </View>
+              {offerLoading ? <OfferCardSkeleton /> :
+                <FlatList
+                  horizontal
+                  data={featuredOfferData || []}
+                  renderItem={({ item }) => <OfferCard item={item} loading={offerLoading} />}
+                  keyExtractor={(_, index) => index.toString()}
+                  showsHorizontalScrollIndicator={false}
+                  keyboardDismissMode={'on-drag'}
+                />
               }
-            </Pressable>
-          </View>
-          {offerLoading ? <OfferCardSkeleton /> :
-            <FlatList
-              horizontal
-              data={featuredOfferData || []}
-              renderItem={({ item }) => <OfferCard item={item} loading={offerLoading} />}
-              keyExtractor={(_, index) => index.toString()}
-              showsHorizontalScrollIndicator={false}
-              keyboardDismissMode={'on-drag'}
-            />
-          }
-          <View style={styles.separator} />
-        </View>
-
-        <View paddingT-24  >
-          <View paddingH-16 row spread centerV >
-            <Text beb24 lh32 black flex numberOfLines={1} >{'Featured Businesses'}<Text primary600 beb32 >{'.'}</Text></Text>
-            <Pressable hitSlop={10} onPress={() => {
-              navigation.navigate('businessTab', { screen: 'businessList', params: { title: 'Featured businesses', source: 'homeTab' } });
-            }}>
-              {
-                featuredBusinessData?.length == 1 ?
-                  <Text></Text> : <Text fs14M lh20 primary700 >See all</Text>
+              <View style={styles.separator} />
+            </View>
+            : null
+        }
+        {
+          featuredBusinessData?.length > 0 ?
+            <View paddingT-24 >
+              <View paddingH-16 row spread centerV >
+                <Text beb24 lh32 black flex numberOfLines={1} >{'Featured Businesses'}<Text primary600 beb32 >{'.'}</Text></Text>
+                <Pressable hitSlop={10} onPress={() => {
+                  navigation.navigate('businessTab', { screen: 'businessList', params: { title: 'Featured businesses', source: 'homeTab' } });
+                }}>
+                  {
+                    featuredBusinessData?.length == 1 ?
+                      <Text></Text> : <Text fs14M lh20 primary700 >See all</Text>
+                  }
+                </Pressable>
+              </View>
+              {businessLoading ? <BusinessCardSkeleton /> :
+                <FlatList
+                  horizontal
+                  data={featuredBusinessData || []}
+                  renderItem={({ item }) => <BusinessCard item={item} />}
+                  keyExtractor={(_, index) => index.toString()}
+                  showsHorizontalScrollIndicator={false}
+                  keyboardDismissMode={'on-drag'}
+                />
               }
-            </Pressable>
-          </View>
-          {businessLoading ? <BusinessCardSkeleton /> :
-            <FlatList
-              horizontal
-              data={featuredBusinessData || []}
-              renderItem={({ item }) => <BusinessCard item={item} />}
-              keyExtractor={(_, index) => index.toString()}
-              showsHorizontalScrollIndicator={false}
-              keyboardDismissMode={'on-drag'}
-            />
-          }
-          <View style={styles.separator} />
-        </View>
-        <Image source={Images.heroCard}
-          style={{ width: width - 32, height: width - 32, marginTop: 60, marginBottom: 30, alignSelf: 'center' }} />
+              <View style={styles.separator} />
+            </View>
+            : null
+        }
+        <Image
+          source={Images.heroCard}
+          style={{ width: width - 32, height: width - 32, marginVertical: 30, alignSelf: 'center' }}
+        />
       </ScrollView>
     </SafeAreaView >
   );
