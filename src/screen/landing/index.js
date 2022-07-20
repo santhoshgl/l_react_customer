@@ -1,9 +1,55 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { SafeAreaView, ImageBackground, StatusBar, Platform } from 'react-native';
-import { View, Button } from 'react-native-ui-lib';
+import { Button } from 'react-native-ui-lib';
 import { Images, Colors } from '../../constants';
+import { onGetDeviceToken } from '../../redux/reducer/user';
+import { useDispatch } from 'react-redux';
+import { getToken, onMessage, registerForRemoteMessages, requestPermissions } from '../../services/IOSNotificationServices';
+import PushNotification from 'react-native-push-notification';
+
 
 const Landing = ({ navigation }) => {
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {      
+
+
+      PushNotification.configure({
+        onRegister: function (tokenData) {
+          let deviceToken = {
+            deviceType: Platform.OS,
+            token: tokenData?.token
+          };
+          dispatch(onGetDeviceToken(deviceToken))
+        },
+        onNotification: function (notification) {
+          // const { data } = notification;
+        },
+        permissions: {
+          alert: true,
+          badge: true,
+          sound: true,
+        },
+        popInitialNotification: true,
+        requestPermissions: true,
+          largeIcon: "ic_launcher_round",
+          smallIcon: "notification",
+          color: '#00000000'
+      });
+    }
+    if (Platform.OS === 'ios') {
+      requestPermissions().then(status=>{
+        if(status === 1){
+          getToken().then(deviceToken => {
+            dispatch(onGetDeviceToken(deviceToken))
+          })
+        } 
+      })
+      onMessage()
+    }
+  }, [])
   return (
     <>
       <StatusBar barStyle={Platform.OS == 'ios' ? 'light-content' : 'default'} />

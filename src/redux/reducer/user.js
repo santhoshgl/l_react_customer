@@ -114,10 +114,33 @@ export const registerUser = createAsyncThunk('user/registerUser', async (param, 
   }
 })
 
+
+export const registerNotificationToken = createAsyncThunk('user/registerNotificationToken', async (param, { getState, requestId, dispatch }) => {
+  const userId = await auth().currentUser?.uid;
+  const data = {
+    pushNotificationTokens: param
+  }
+  try {
+    dispatch(setLoading(true))
+    const userNotificationToken = await apiRequest.patch(`users/${userId}`, { data });
+    dispatch(setLoading(false))
+    return userNotificationToken?.data;
+  } catch (error) {
+    dispatch(setLoading(false))
+    throw (error)
+  }
+})
+
+
+
+
 export const userSlice = createSlice({
   name: 'user',
-  initialState: { userData: null, defaultHub: {} },
+  initialState: { userData: null, defaultHub: {}, deviceToken: {} },
   reducers: {
+    onGetDeviceToken: (state, { payload }) => {
+      state.deviceToken = payload
+    },
     logout: (state, { payload }) => {
       state.userData = null;
       auth().signOut()
@@ -135,10 +158,15 @@ export const userSlice = createSlice({
     [getUser.fulfilled]: (state, { payload }) => {
       state.userData = payload
       state.defaultHub = payload?.hubs?.find(hub => hub.default === true);
+    },
+    [registerNotificationToken.fulfilled]: (state, { payload }) => {
+      // console.log()
+      state.userData = payload
+      state.defaultHub = payload?.hubs?.find(hub => hub.default === true);
     }
   }
 })
 
-export const { logout } = userSlice.actions
+export const { onGetDeviceToken, logout } = userSlice.actions
 
 export default userSlice.reducer

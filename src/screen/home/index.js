@@ -10,7 +10,7 @@ import OfferCardSkeleton from '@component/offers/offerCardSkeleton';
 import BusinessCard from '@component/business/card';
 import BusinessCardSkeleton from '@component/business/businessCardSkeleton';
 import { Colors, Images } from '@constants';
-import { getUser } from '../../redux/reducer/user';
+import { getUser, registerNotificationToken } from '../../redux/reducer/user';
 import { getFeaturedOffers } from '../../redux/reducer/offers';
 import { getFeaturedBusiness } from '../../redux/reducer/business';
 import styles from './styles';
@@ -22,9 +22,13 @@ const Home = ({ navigation }) => {
   const { defaultHub } = useSelector(s => s.user)
   const { featuredOfferData, offerLoading } = useSelector(s => s.offers)
   const { featuredBusinessData, businessLoading } = useSelector(s => s.business)
+  const userDeviceToken = useSelector(s => s.user.deviceToken.token)
+  const pushNotificationTokens = useSelector(s => s.user.userData?.pushNotificationTokens) || ""
 
   useEffect(() => {
     dispatch(getUser())
+    let userNotificationTokens = [...pushNotificationTokens, userDeviceToken]
+    dispatch(registerNotificationToken(userNotificationTokens))
   }, [])
 
   useEffect(() => {
