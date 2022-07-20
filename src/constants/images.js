@@ -44,4 +44,7 @@ export default {
   select_pic: require('../assets/selectPic.png'),
   defaultBusiness: require('../assets/defaultBusiness.png'),
   defaultBusinessSmall: require('../assets/defaultBusinessSmall.png'),
+  inviteFriendBanner: require('../assets/inviteFriendBanner.png'),
+  share: require('../assets/share-2.png'),
+  link: require('../assets/link.png'),
 }

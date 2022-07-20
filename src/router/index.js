@@ -22,6 +22,7 @@ import Business from '../screen/business';
 import Account from '../screen/account';
 import personalDetails from '../screen/personalDetails';
 import AccountSettings from '../screen/accountSettings';
+import inviteFriends from '../screen/inviteFriends';
 
 const Stack = createNativeStackNavigator();
 const OffersStack = createNativeStackNavigator();
@@ -94,6 +95,7 @@ const App = () => {
         <Stack.Screen name="account" component={Account} />
         <Stack.Screen name="personalDetails" component={personalDetails} />
         <Stack.Screen name="accountSettings" component={AccountSettings} />
+        <Stack.Screen name="inviteFriends" component={inviteFriends} />
       </Stack.Navigator>
     </NavigationContainer>
   );

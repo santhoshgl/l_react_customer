@@ -2,14 +2,14 @@ import React, { memo, useEffect, useMemo, useState } from 'react';
 import { SafeAreaView, Image, Pressable, FlatList, ActivityIndicator } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
-import Config from "react-native-config"
+import Config from "react-native-config";
 import _ from 'underscore';
 import apiRequest from '@services/networkProvider';
 import { setLoading } from '../../redux/reducer/loading';
 import Header from '../../component/header';
 import SearchBar from '../../component/searchBar';
 import { Colors, Images } from '@constants';
-import { fetchBusinessCategory } from '@util'
+import { fetchBusinessCategory } from '@util';
 import styles from './styles';
 
 const OffersList = ({ navigation, route }) => {
