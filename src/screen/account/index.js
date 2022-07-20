@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import _ from 'underscore';
 import { Colors, Images } from '@constants';
-import { getUser, logout, updateImageProfile, updateUser } from '../../redux/reducer/user';
+import { getUser, logout, registerNotificationToken, updateImageProfile, updateUser } from '../../redux/reducer/user';
 import styles from './styles';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { setLoading } from '../../redux/reducer/loading';
@@ -17,10 +17,22 @@ const Account = ({ navigation }) => {
   const dispatch = useDispatch()
   const [pictureModal, _pictureModel] = useState(false);
   const [picture, _picture] = useState(userData?.profilePicture);
+  const userDeviceToken = useSelector(s => s.user.deviceToken.token)
 
   const _logout = () => {
-    dispatch(logout())
-    navigation.navigate('landing')
+    var pushNotificationTokens = []
+    dispatch(getUser()).then(unwrapResult).then((res) => {
+      pushNotificationTokens = [...res?.pushNotificationTokens]
+      const index = pushNotificationTokens.indexOf(userDeviceToken);
+      if (index > -1) { // only splice array when item is found
+        pushNotificationTokens.splice(index, 1); // 2nd parameter means remove one item only
+      }
+      dispatch(registerNotificationToken(pushNotificationTokens)).then(unwrapResult)
+        .then((originalPromiseResult) => {
+          dispatch(logout())
+          navigation.navigate('landing')
+        })
+    })
   }
 
   const takePhotoHandler = async () => {

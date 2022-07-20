@@ -17,6 +17,9 @@ PODS:
     - FirebaseAuth (~> 8.15.0)
   - Firebase/CoreOnly (8.15.0):
     - FirebaseCore (= 8.15.0)
+  - Firebase/Messaging (8.15.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 8.15.0)
   - Firebase/Storage (8.15.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 8.15.0)
@@ -33,6 +36,20 @@ PODS:
     - GoogleDataTransport (~> 9.1)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
+    - nanopb (~> 2.30908.0)
+  - FirebaseInstallations (8.15.0):
+    - FirebaseCore (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - FirebaseMessaging (8.15.0):
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - GoogleDataTransport (~> 9.1)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/Reachability (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
     - nanopb (~> 2.30908.0)
   - FirebaseStorage (8.15.0):
     - FirebaseCore (~> 8.0)
@@ -118,6 +135,8 @@ PODS:
     - GoogleUtilities/Reachability
   - "GoogleUtilities/NSData+zlib (7.7.0)"
   - GoogleUtilities/Reachability (7.7.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.7.0):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.7.2)
   - libevent (2.1.12)
@@ -422,11 +441,17 @@ PODS:
     - React-Core
   - RNCPicker (2.4.2):
     - React-Core
+  - RNCPushNotificationIOS (1.10.1):
+    - React-Core
   - RNFBApp (14.11.1):
     - Firebase/CoreOnly (= 8.15.0)
     - React-Core
   - RNFBAuth (14.11.1):
     - Firebase/Auth (= 8.15.0)
+    - React-Core
+    - RNFBApp
+  - RNFBMessaging (15.1.1):
+    - Firebase/Messaging (= 8.15.0)
     - React-Core
     - RNFBApp
   - RNFBStorage (15.1.1):
@@ -538,8 +563,10 @@ DEPENDENCIES:
   - ReactNativeUiLib (from `../node_modules/react-native-ui-lib/lib`)
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
+  - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
+  - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -555,6 +582,8 @@ SPEC REPOS:
     - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseInstallations
+    - FirebaseMessaging
     - FirebaseStorage
     - Flipper
     - Flipper-Boost-iOSX
@@ -655,10 +684,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/clipboard"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
+  RNCPushNotificationIOS:
+    :path: "../node_modules/@react-native-community/push-notification-ios"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBAuth:
     :path: "../node_modules/@react-native-firebase/auth"
+  RNFBMessaging:
+    :path: "../node_modules/@react-native-firebase/messaging"
   RNFBStorage:
     :path: "../node_modules/@react-native-firebase/storage"
   RNGestureHandler:
@@ -685,6 +718,8 @@ SPEC CHECKSUMS:
   FirebaseAuth: 3e73bf8abf4fbb40f8b421f361f4cc48ee57388c
   FirebaseCore: 5743c5785c074a794d35f2fff7ecc254a91e08b1
   FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
+  FirebaseInstallations: 40bd9054049b2eae9a2c38ef1c3dd213df3605cd
+  FirebaseMessaging: 5e5118a2383b3531e730d974680954c679ca0a13
   FirebaseStorage: 8019af461599b2c3bc61c6a5dbdfa3d2de66a4d9
   Flipper: 26fc4b7382499f1281eb8cb921e5c3ad6de91fe0
   Flipper-Boost-iOSX: fd1e2b8cbef7e662a122412d7ac5f5bea715403c
@@ -737,8 +772,10 @@ SPEC CHECKSUMS:
   ReactNativeUiLib: 5f0e87e2098d54c5a80159fff16d8c4d63b7f17a
   RNCClipboard: 5e299c6df8e0c98f3d7416b86ae563d3a9f768a3
   RNCPicker: 0250e95ad170569a96f5b0555cdd5e65b9084dca
+  RNCPushNotificationIOS: 089da3b657e1e3d464f38195fd2e3069608ef5af
   RNFBApp: 9646e09d041ea159b84584865212e4cf33acd179
   RNFBAuth: af943e3ba071b5f4d18896c31e6cba3a77b1fa08
+  RNFBMessaging: e67ce2a6aee26741b89dd61d08d578beb4e95e32
   RNFBStorage: 267b385cda52423dd1bb09b93a437a47cc163cb9
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   RNReanimated: 5c8c17e26787fd8984cd5accdc70fef2ca70aafd
@@ -751,4 +788,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: d1990b494a0d3299e7cfafa08305bd336041bb8e
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.11.2
