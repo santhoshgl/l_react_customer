@@ -23,6 +23,7 @@ import Account from '../screen/account';
 import personalDetails from '../screen/personalDetails';
 import AccountSettings from '../screen/accountSettings';
 import inviteFriends from '../screen/inviteFriends';
+import accountNotifications from '../screen/accountNotifications';
 
 const Stack = createNativeStackNavigator();
 const OffersStack = createNativeStackNavigator();
@@ -96,6 +97,7 @@ const App = () => {
         <Stack.Screen name="personalDetails" component={personalDetails} />
         <Stack.Screen name="accountSettings" component={AccountSettings} />
         <Stack.Screen name="inviteFriends" component={inviteFriends} />
+        <Stack.Screen name="accountNotification" component={accountNotifications} />
       </Stack.Navigator>
     </NavigationContainer>
   );

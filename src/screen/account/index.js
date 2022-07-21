@@ -135,7 +135,7 @@ const Account = ({ navigation }) => {
             <Text fs16 lh24 flex black> Account Settings </Text>
             <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.detailContainer}>
+          <TouchableOpacity style={styles.detailContainer} onPress={() => navigation.navigate("accountNotification")}>
             <Image source={Images.bell} style={styles.featureIcon} />
             <Text fs16 lh24 flex black> Notifications </Text>
             <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />
