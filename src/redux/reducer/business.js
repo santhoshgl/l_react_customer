@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import apiRequest from '@services/networkProvider';
 import { showMessage } from "react-native-flash-message";
+import auth from '@react-native-firebase/auth';
 
 export const getBusiness = createAsyncThunk('business/getBusiness', async (hubID) => {
   try {
@@ -22,9 +23,16 @@ export const getFeaturedBusiness = createAsyncThunk('business/getFeaturedBusines
   }
 })
 
+export const onFollowBusiness = createAsyncThunk('followers/business', async (param) => {
+  const userId = await auth().currentUser?.uid;
+  let data = { ...param, userId }
+  const response = await apiRequest.post('followers/business', { data })
+  return response?.data;
+})
+
 export const businessSlice = createSlice({
   name: 'business',
-  initialState: { businessData: [],featuredBusinessData:[], businessLoading: false },
+  initialState: { businessData: [], featuredBusinessData: [], businessLoading: false },
   reducers: {},
   extraReducers: {
     [getFeaturedBusiness.pending]: (state, { payload }) => {

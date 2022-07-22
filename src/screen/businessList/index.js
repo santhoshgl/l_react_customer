@@ -1,5 +1,5 @@
-import React, { memo, useEffect, useMemo, useState } from 'react';
-import { SafeAreaView, Image, Pressable, FlatList, ActivityIndicator } from 'react-native';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { SafeAreaView, Image, Pressable, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import Config from "react-native-config"
@@ -11,6 +11,9 @@ import SearchBar from '../../component/searchBar';
 import { Colors, Images } from '@constants';
 import { fetchBusinessCategory } from '@util'
 import styles from './styles';
+import { onFollowBusiness } from '../../redux/reducer/business';
+import { cloneDeep } from 'lodash';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const BusinessList = ({ navigation, route }) => {
   const dispatch = useDispatch()
@@ -21,6 +24,7 @@ const BusinessList = ({ navigation, route }) => {
   const [loading, _loading] = useState(false)
   const [nomore, _nomore] = useState(false)
   const [search, _search] = useState(null)
+  const hubId = useSelector(s => s?.user?.defaultHub?.id)
 
   useEffect(() => {
     fetchData();
@@ -32,7 +36,6 @@ const BusinessList = ({ navigation, route }) => {
 
   const fetchData = () => {
     dispatch(setLoading(true))
-
     const category = fetchBusinessCategory(param?.title);
     let url = `hubs/${defaultHub?.id}/business?category=${category}`;
     if (search && search?.length > 0)
@@ -84,6 +87,64 @@ const BusinessList = ({ navigation, route }) => {
     _nextLink(url?.replace(Config.API_URL, ''))
   }
 
+
+
+  const onPressFollow = (business) => {
+    dispatch(setLoading(true))
+    let updatedBusinessData = []
+    updatedBusinessData = businessData
+    updatedBusinessData.map(data => {
+      if (data.id == business.id) {
+        return data.following = true
+      }
+    })
+    let requestData = {
+      hubID: hubId,
+      businessID: business?.id
+    }
+    dispatch(onFollowBusiness(requestData)).then(unwrapResult)
+      .then((data) => {
+        data?.created && _businessData(cloneDeep(updatedBusinessData))
+      })
+    setTimeout(() => dispatch(setLoading(false)), 1000)
+  }
+
+
+  const Card = ({ item }) => {
+    return (
+      <View style={styles.card}>
+        <View row >
+          <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={{ height: 72, width: 72, borderRadius: 72 }} />
+          <View marginL-12 flex>
+            <Text beb24 lh32 black >{item?.name}</Text>
+            <Text fs12 lh18 gray500 numberOfLines={2}>{item?.category?.description}</Text>
+            <View flex row spread marginT-12 >
+              <View style={styles.tag} >
+                <Image source={Images.offers} style={{ height: 12, width: 12 }} />
+                <Text fs14 ln20 gray700 marginL-4 >Offers: <Text fs14SB >{item?.totalOffers || 0}</Text></Text>
+              </View>
+              {/* <View style={styles.following} >
+                <Text fs14 lh20 gray700 >Following</Text>
+              </View> */}
+              <TouchableOpacity
+                disabled={item?.following}
+                activeOpacity={0.7}
+                style={[styles.follow, item?.following ? styles.grayBorder : styles.redbackGround]}
+                onPress={() => onPressFollow(item)}>
+                <Text style={item?.following ? styles.followingText : styles.followText}>
+                  {item?.following ? "Following" : "Follow"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+      </View >
+    );
+  }
+
+
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <Header navigation={navigation} />
@@ -124,32 +185,5 @@ const BusinessList = ({ navigation, route }) => {
   );
 }
 
-export default memo(BusinessList)
+export default BusinessList
 
-const Card = ({ item }) => {
-
-  return (
-    <View style={styles.card}>
-      <View row >
-        <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={{ height: 72, width: 72, borderRadius: 72 }} />
-        <View marginL-12 flex>
-          <Text beb24 lh32 black >{item?.name}</Text>
-          <Text fs12 lh18 gray500 numberOfLines={2}>{item?.category?.description}</Text>
-          <View flex row spread marginT-12 >
-            <View style={styles.tag} >
-              <Image source={Images.offers} style={{ height: 12, width: 12 }} />
-              <Text fs14 ln20 gray700 marginL-4 >Offers: <Text fs14SB >{item?.totalOffers || 0}</Text></Text>
-            </View>
-            {/* <View style={styles.following} >
-              <Text fs14 lh20 gray700 >Following</Text>
-            </View> */}
-            <View style={styles.follow} >
-              <Text fs14 lh20 gray700 white>Follow</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-
-    </View >
-  );
-}
