@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Colors } from '@constants';
+import { Colors, Fonts } from '@constants';
 
 export default styles = StyleSheet.create({
   card: {
@@ -23,7 +23,28 @@ export default styles = StyleSheet.create({
     borderRadius: 16
   },
   follow: {
-    paddingHorizontal: 12, paddingVertical: 4,
-    borderRadius: 16,backgroundColor:Colors.primary600
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 16,
+    justifyContent: 'center'
+  },
+  followText: {
+    textAlign: 'center',
+    alignSelf: 'center',
+    color: Colors.white,
+    fontSize: 14
+  },
+  followingText: {
+    textAlign: 'center',
+    alignSelf: 'center',
+    color: Colors.gray700,
+    fontSize: 14
+  },
+  redbackGround: {
+    backgroundColor: Colors.primary600,
+  },
+  grayBorder: {
+    borderWidth: 1,
+    borderColor: Colors.gray200
   }
 })
