@@ -160,9 +160,7 @@ export const userSlice = createSlice({
       state.defaultHub = payload?.hubs?.find(hub => hub.default === true);
     },
     [registerNotificationToken.fulfilled]: (state, { payload }) => {
-      // console.log()
       state.userData = payload
-      state.defaultHub = payload?.hubs?.find(hub => hub.default === true);
     }
   }
 })

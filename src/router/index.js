@@ -24,6 +24,9 @@ import personalDetails from '../screen/personalDetails';
 import AccountSettings from '../screen/accountSettings';
 import inviteFriends from '../screen/inviteFriends';
 import accountNotifications from '../screen/accountNotifications';
+import aboutAccount from '../screen/aboutAccount';
+import termsAccount from '../screen/termsAccount';
+import privacyPolicyAccount from '../screen/privacyPolicyAccount';
 
 const Stack = createNativeStackNavigator();
 const OffersStack = createNativeStackNavigator();
@@ -98,6 +101,9 @@ const App = () => {
         <Stack.Screen name="accountSettings" component={AccountSettings} />
         <Stack.Screen name="inviteFriends" component={inviteFriends} />
         <Stack.Screen name="accountNotification" component={accountNotifications} />
+        <Stack.Screen name="aboutAccount" component={aboutAccount} />
+        <Stack.Screen name="termsAccount" component={termsAccount} />
+        <Stack.Screen name="privacyPolicyAccount" component={privacyPolicyAccount} />
       </Stack.Navigator>
     </NavigationContainer>
   );
