@@ -124,7 +124,7 @@ const Account = ({ navigation }) => {
           <View style={styles.listContainer}>
             <Text beb24 lh32 black flex numberOfLines={1}>Hi {userData?.firstName}</Text>
           </View>
-
+          
           <TouchableOpacity style={styles.detailContainer} onPress={() => navigation.navigate('personalDetails')} >
             <Image source={Images.user} style={styles.featureIcon} />
             <Text fs16 lh24 flex black> Personal Details </Text>
@@ -140,7 +140,7 @@ const Account = ({ navigation }) => {
             <Text fs16 lh24 flex black> Notifications </Text>
             <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.detailContainer}>
+          <TouchableOpacity style={styles.detailContainer} onPress={() => navigation.navigate('aboutAccount')}>
             <Image source={Images.info} style={styles.featureIcon} />
             <Text fs16 lh24 flex black> About Lealzy </Text>
             <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />

@@ -47,4 +47,7 @@ export default {
   inviteFriendBanner: require('../assets/inviteFriendBanner.png'),
   share: require('../assets/share-2.png'),
   link: require('../assets/link.png'),
+  aboutBanner: require('../assets/aboutBanner.png'),
+  lock: require('../assets/lock.png'),
+  terms: require('../assets/terms.png'),
 }
