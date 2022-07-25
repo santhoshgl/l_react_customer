@@ -5,7 +5,8 @@ import { Colors, Images } from "../constants";
 const searchBar = ({ onChangeText = () => { }, value, onSearch = () => { }, onFocus = () => { }, ...props }) => {
   return (
     <View style={[styles.searchBox, props?.style, { borderColor: value ? Colors.black : Colors.gray300 }]}>
-      <Image source={Images.search} style={[styles.searchIcon, { tintColor: value ? Colors.primary600 : null }]} resizeMode={'contain'} />
+      <Image source={props?.fromFollowingBusiness ? Images.searchRed : Images.search}
+        style={[styles.searchIcon, { tintColor: value ? Colors.primary600 : null }]} resizeMode={'contain'} />
       <TextInput
         placeholder={props?.placeholder || 'Search'}
         value={value}
