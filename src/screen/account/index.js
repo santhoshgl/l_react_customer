@@ -17,7 +17,7 @@ const Account = ({ navigation }) => {
   const dispatch = useDispatch()
   const [pictureModal, _pictureModel] = useState(false);
   const [picture, _picture] = useState(userData?.profilePicture);
-  const userDeviceToken = useSelector(s => s.user.deviceToken.token)
+  const userDeviceToken = useSelector(s => s.user?.deviceToken?.token)
 
   const _logout = () => {
     var pushNotificationTokens = []

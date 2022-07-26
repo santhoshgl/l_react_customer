@@ -24,7 +24,7 @@ const Home = ({ navigation }) => {
   const { defaultHub } = useSelector(s => s.user)
   const { featuredOfferData, offerLoading } = useSelector(s => s.offers)
   const { featuredBusinessData, businessLoading } = useSelector(s => s.business)
-  const userDeviceToken = useSelector(s => s.user.deviceToken.token)
+  const userDeviceToken = useSelector(s => s.user?.deviceToken?.token)
 
   useEffect(() => {
     var pushNotificationTokens = []

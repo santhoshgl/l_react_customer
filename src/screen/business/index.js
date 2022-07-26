@@ -22,7 +22,7 @@ const Business = ({ navigation }) => {
 
   const businessList = useMemo(() => {
     let filterData = {};
-    Object.keys(businessData).forEach(item => {
+    Object.keys(businessData || {}).forEach(item => {
       if (businessData[item] && businessData[item].length > 0) {
         filterData = { ...filterData, [item]: businessData[item] }
       }

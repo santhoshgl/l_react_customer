@@ -4,13 +4,8 @@ import { View, Text } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'underscore';
 import moment from 'moment';
-import Header from '@component/header';
 import { Colors, Images } from '@constants';
-import apiRequest from '@services/networkProvider';
-import { setLoading } from '../../redux/reducer/loading';
 import { getRewardDetails } from '../../redux/reducer/points';
-
-const { width } = Dimensions.get('screen')
 
 const RewardDetails = ({ navigation, route }) => {
   const dispatch = useDispatch()
@@ -53,26 +48,26 @@ const RewardDetails = ({ navigation, route }) => {
         <View style={{ height: 312 }}>
           <ImageBackground source={Images.rewardDetails} re style={styles.image}>
             <View center marginT-50>
-              <Image source={Images.star} style={{ height: 26, width: 26, tintColor: "white", marginBottom:10 }} />
-              <Text fs16 lh24 white >{`Credits ${rewardDetails.type == 'rewards' ? 'Rewarded' : 'Redeemed'}!`}</Text>
-              <Text beb48 lh60 white>200</Text>
+              <Image source={rewardDetails.attributes?.rewardType == 'credit' ? Images.star : Images.gift} style={{ height: 26, width: 26, tintColor: "white", marginBottom: 10 }} />
+              <Text fs16 lh24 white >{`Credits ${rewardDetails.attributes?.rewardType == 'credit' ? 'Rewarded' : 'Redeemed'}!`}</Text>
+              <Text beb48 lh60 white>{rewardDetails.attributes?.credits}</Text>
             </View>
           </ImageBackground>
         </View>
         <View style={styles.listContainer}>
-          <Text beb24 lh32 black flex numberOfLines={1}>{rewardDetails.type == 'rewards' ? 'Rewarded' : 'Redeemed'}</Text>
+          <Text beb24 lh32 black flex numberOfLines={1}>{rewardDetails.attributes?.rewardType == 'credit' ? 'Rewarded' : 'Redeemed'}</Text>
           <Text fs14 lh20 gray500>{`${moment(rewardDetails?.attributes?.createdAt).format('ll')}  ·  ${moment(rewardDetails?.attributes?.createdAt).format('LT')}`}</Text>
         </View>
         <View style={{ margin: 16 }}>
           <Text fs14 lh20 gray700>Business</Text>
           <View style={styles.card}>
             <View row >
-              <Image source={{ uri: rewardDetails?.attributes?.business?.logo }}
+              <Image source={rewardDetails?.attributes?.business?.logo?.length ? { uri: rewardDetails?.attributes?.business?.logo } : Images.defaultBusiness}
                 style={{ height: 50, width: 50, borderRadius: 25 }}
               />
               <View marginL-12 flex>
                 <Text beb24 lh32 black >{rewardDetails?.attributes?.business?.name}</Text>
-                <Text fs12 lh18 gray500 numberOfLines={2}>{'Description'}</Text>
+                <Text fs12 lh18 gray500 numberOfLines={2}>{rewardDetails?.attributes?.business?.category}</Text>
               </View>
             </View>
 
@@ -87,12 +82,12 @@ const RewardDetails = ({ navigation, route }) => {
                 <Image source={getCardStyles?.icon} style={{ height: 16, width: 16 }} />
               </View>
               <View marginL-16 flex>
-                <Text beb24 lh32 black >{'title' || ''}</Text>
+                <Text beb24 lh32 black >{rewardDetails?.attributes?.offer?.title}</Text>
                 <Text fs14 lh20 gray500 numberOfLines={2}>{rewardDetails?.attributes?.offer?.description || ''}</Text>
               </View>
               <View style={styles.badge}>
                 <Image source={Images.star} style={{ height: 12, width: 12, tintColor: Colors.gray500 }} />
-                <Text fs14 lh20 gray700 marginL-4>{200}</Text>
+                <Text fs14 lh20 gray700 marginL-4>{rewardDetails?.attributes?.offer?.credit}</Text>
               </View>
             </View>
           </View>

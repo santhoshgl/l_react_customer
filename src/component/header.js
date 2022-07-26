@@ -36,7 +36,9 @@ const Header = ({ navigation }) => {
     <>
       <SafeAreaView style={{ backgroundColor: Colors.white, borderBottomColor: Colors.gray200, borderBottomWidth: 1 }}>
         <View right row centerV marginT-12 marginH-16>
+        <Pressable onPress={() => navigation.navigate('userNotification')}>
           <Image source={Images.bell} style={{ height: 24, width: 24, marginRight: 27 }} />
+        </Pressable>
           <Pressable onPress={() => navigation.navigate('account')}>
             {userData?.profilePicture ?
               <Image source={{ uri: userData?.profilePicture }}

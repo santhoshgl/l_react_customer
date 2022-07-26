@@ -11,12 +11,15 @@ const Colors = {
   gray700: '#344054',
   gray800 :'#E5E5E5',
   gray900: '#101828',
+  primary25: '#FFF5F6',
   primary50: "#FFECED",
   primary600: '#FF4048',
   primary700: '#CC333A',
   purple: '#D5B4FF',
   blue: '#23E7FF',
-  yellow: '#F8CD5C'
+  yellow: '#F8CD5C',
+  success700: "#027A48",
+  blue700: "#175CD3"
 }
 
 export default Colors

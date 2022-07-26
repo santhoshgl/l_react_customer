@@ -117,7 +117,7 @@ const BusinessList = ({ navigation, route }) => {
           <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={{ height: 72, width: 72, borderRadius: 72 }} />
           <View marginL-12 flex>
             <Text beb24 lh32 black >{item?.name}</Text>
-            <Text fs12 lh18 gray500 numberOfLines={2}>{item?.category?.description}</Text>
+            <Text fs12 lh18 gray500 numberOfLines={2}>{item?.category?.label}</Text>
             <View flex row spread marginT-12 >
               <View style={styles.tag} >
                 <Image source={Images.offers} style={{ height: 12, width: 12 }} />
