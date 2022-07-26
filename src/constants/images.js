@@ -52,4 +52,8 @@ export default {
   aboutBanner: require('../assets/aboutBanner.png'),
   lock: require('../assets/lock.png'),
   terms: require('../assets/terms.png'),
+  notificationStar: require('../assets/notificationStar.png'),
+  notificationOffer: require('../assets/notificationOffer.png'),
+  redeem: require('../assets/redeem.png'),
+  externalLink: require('../assets/external-link.png'),
 }

@@ -114,7 +114,6 @@ export const registerUser = createAsyncThunk('user/registerUser', async (param, 
   }
 })
 
-
 export const registerNotificationToken = createAsyncThunk('user/registerNotificationToken', async (param, { getState, requestId, dispatch }) => {
   const userId = await auth().currentUser?.uid;
   const data = {
@@ -123,8 +122,23 @@ export const registerNotificationToken = createAsyncThunk('user/registerNotifica
   try {
     dispatch(setLoading(true))
     const userNotificationToken = await apiRequest.patch(`users/${userId}`, { data });
+    const user = await apiRequest.get(`users/${userId}`)
     dispatch(setLoading(false))
-    return userNotificationToken?.data;
+    return user?.data;
+  } catch (error) {
+    dispatch(setLoading(false))
+    throw (error)
+  }
+})
+
+export const getNotification = createAsyncThunk('user/getNotification', async (param, { getState, requestId, dispatch }) => {
+  const userId = await auth().currentUser?.uid;
+
+  try {
+    dispatch(setLoading(true))
+    const notifications = await apiRequest.get(`notifications?uid=${userId}`);
+    dispatch(setLoading(false))    
+    return notifications?.data;
   } catch (error) {
     dispatch(setLoading(false))
     throw (error)
@@ -132,11 +146,9 @@ export const registerNotificationToken = createAsyncThunk('user/registerNotifica
 })
 
 
-
-
 export const userSlice = createSlice({
   name: 'user',
-  initialState: { userData: null, defaultHub: {}, deviceToken: {} },
+  initialState: { userData: null, defaultHub: {}, deviceToken: {}, userNotification: null },
   reducers: {
     onGetDeviceToken: (state, { payload }) => {
       state.deviceToken = payload
@@ -161,6 +173,9 @@ export const userSlice = createSlice({
     },
     [registerNotificationToken.fulfilled]: (state, { payload }) => {
       state.userData = payload
+    },
+    [getNotification.fulfilled]: (state, { payload }) => {
+      state.userNotification = payload
     }
   }
 })

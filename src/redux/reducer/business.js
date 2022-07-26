@@ -5,7 +5,7 @@ import auth from '@react-native-firebase/auth';
 
 export const getBusiness = createAsyncThunk('business/getBusiness', async (hubID) => {
   try {
-    const data = await apiRequest.get(`hubs/${hubID}/business`)
+    const data = await apiRequest.get(`hubs/${hubID}/business?sortBy=category`)
     return data?.data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })

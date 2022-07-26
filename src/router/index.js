@@ -29,6 +29,7 @@ import followingBusiness from '../screen/followingBusiness';
 import aboutAccount from '../screen/aboutAccount';
 import termsAccount from '../screen/termsAccount';
 import privacyPolicyAccount from '../screen/privacyPolicyAccount';
+import userNotification from '../screen/userNotification';
 
 const Stack = createNativeStackNavigator();
 const OffersStack = createNativeStackNavigator();
@@ -107,6 +108,7 @@ const App = () => {
         <Stack.Screen name="aboutAccount" component={aboutAccount} />
         <Stack.Screen name="termsAccount" component={termsAccount} />
         <Stack.Screen name="privacyPolicyAccount" component={privacyPolicyAccount} />
+        <Stack.Screen name="userNotification" component={userNotification} />
       </Stack.Navigator>
     </NavigationContainer>
   );
