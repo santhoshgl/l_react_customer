@@ -18,7 +18,7 @@ const RewardDetails = ({ navigation, route }) => {
   }, [param])
 
   const getCardStyles = useMemo(() => {
-    let icon = Images.award;
+    let icon = Images.offers;
     let color = Colors.blue;
     if (rewardDetails?.attributes?.offer?.type == 'Percentage') {
       icon = Images.percent;
@@ -29,6 +29,15 @@ const RewardDetails = ({ navigation, route }) => {
     } else if (rewardDetails?.attributes?.offer?.type == 'Free Gift') {
       icon = Images.gift;
       color = Colors.yellow;
+    } else if (rewardDetails?.attributes?.offer?.type == "Buy 1 get 1") {
+      icon = Images.award;
+      color = Colors.blue;
+    } else if (rewardDetails?.attributes?.offer?.type == "Points") {
+      icon = Images.star;
+      color = Colors.purple;
+    } else {
+      icon = Images.offers;
+      color = Colors.blue;
     }
     return { icon, color }
   }, [rewardDetails])
@@ -79,10 +88,10 @@ const RewardDetails = ({ navigation, route }) => {
                 backgroundColor: getCardStyles?.color, height: 32, width: 32, justifyContent: 'center',
                 alignItems: 'center', borderRadius: 32
               }}>
-                <Image source={getCardStyles?.icon} style={{ height: 16, width: 16 }} />
+                <Image source={getCardStyles?.icon} style={{ height: 16, width: 16, tintColor: "black" }} />
               </View>
               <View marginL-16 flex>
-                <Text beb24 lh32 black >{rewardDetails?.attributes?.offer?.title}</Text>
+                <Text beb24 lh32 black numberOfLines={1} ellipsizeMode='tail'>{rewardDetails?.attributes?.offer?.title}</Text>
                 <Text fs14 lh20 gray500 numberOfLines={2}>{rewardDetails?.attributes?.offer?.description || ''}</Text>
               </View>
               <View style={styles.badge}>

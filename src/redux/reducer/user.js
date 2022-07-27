@@ -5,7 +5,6 @@ import storage from '@react-native-firebase/storage';
 import { showMessage } from "react-native-flash-message";
 import { setLoading } from "./loading";
 
-
 export const getUser = createAsyncThunk('user/getUser', async (param, { getState, requestId, dispatch }) => {
   try {
     dispatch(setLoading(true))
@@ -91,7 +90,7 @@ export const registerUser = createAsyncThunk('user/registerUser', async (param, 
       id: res.user?.uid,
       firstName: param?.firstName,
       lastName: param?.lastName,
-      phoneNumber: param?.phone,
+      phoneNumber: param?.phoneNumber,
       roles: ["customer"],
       email: param?.email,
       profilePicture: 'https://cdn.quasar.dev/img/boy-avatar.png',
