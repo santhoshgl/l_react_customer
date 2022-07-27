@@ -26,13 +26,13 @@ const BusinessList = ({ navigation, route }) => {
   const [search, _search] = useState(null)
   const hubId = useSelector(s => s?.user?.defaultHub?.id)
 
-  useEffect(() => {
-    fetchData();
-  }, [])
+  // useEffect(() => {
+  //   fetchData();
+  // }, [])
 
   useEffect(() => {
     fetchData();
-  }, [search])
+  }, [search, defaultHub?.id])
 
   const fetchData = () => {
     dispatch(setLoading(true))

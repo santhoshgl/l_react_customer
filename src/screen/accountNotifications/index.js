@@ -16,7 +16,6 @@ const AccountNotification = ({ navigation }) => {
 
   const [typeNotifiction, _typeNotifiction] = useState({
     inApp: false,
-    sms: false,
     email: false,
   })
   const [activityNotication, _activityNotication] = useState({
@@ -94,17 +93,6 @@ const AccountNotification = ({ navigation }) => {
                 />
               </View>
               <Text fs16 lh24 flex gray700 > In App </Text>
-            </View>
-            <View paddingV-16 style={styles.notificationContainer}>
-              <View marginR-12>
-                <Switch
-                  onColor={Colors.primary600}
-                  offColor={Colors.gray200}
-                  value={typeNotifiction?.sms}
-                  onValueChange={(val) => notifictionChangeHandler(val, "sms", "typeNotification")}
-                />
-              </View>
-              <Text fs16 lh24 flex gray700 > SMS </Text>
             </View>
             <View paddingV-16 style={styles.notificationContainer}>
               <View marginR-12>

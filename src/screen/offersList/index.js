@@ -22,13 +22,13 @@ const OffersList = ({ navigation, route }) => {
   const [nomore, _nomore] = useState(false)
   const [search, _search] = useState(null)
 
-  useEffect(() => {
-    fetchData();
-  }, [])
+  // useEffect(() => {
+  //   fetchData();
+  // }, [])
 
   useEffect(() => {
     fetchData();
-  }, [search])
+  }, [search, defaultHub?.id])
 
   const fetchData = () => {
     dispatch(setLoading(true))
@@ -45,7 +45,7 @@ const OffersList = ({ navigation, route }) => {
       _offersData(res?.data || [])
       setNextLink(res?.links?.next)
       dispatch(setLoading(false))
-    }).catch(() => {
+    }).catch((err) => {
       dispatch(setLoading(false))
     })
   }
@@ -132,7 +132,7 @@ export default memo(OffersList)
 const Card = ({ item }) => {
 
   const getCardStyles = useMemo(() => {
-    let icon = Images.award;
+    let icon = Images.offers;
     let color = Colors.blue;
     if (item?.type == 'Percentage') {
       icon = Images.percent;
@@ -143,6 +143,15 @@ const Card = ({ item }) => {
     } else if (item?.type == 'Free Gift') {
       icon = Images.gift;
       color = Colors.yellow;
+    } else if (item?.type == "Buy 1 get 1") {
+      icon = Images.award;
+      color = Colors.blue;
+    } else if (item?.type == "Points") {
+      icon = Images.star;
+      color = Colors.purple;
+    } else {
+      icon = Images.offers;
+      color = Colors.blue;
     }
     return { icon, color }
   }, [item])
@@ -151,10 +160,10 @@ const Card = ({ item }) => {
     <View style={styles.card}>
       <View row >
         <View style={{ backgroundColor: getCardStyles?.color, height: 32, width: 32, justifyContent: 'center', alignItems: 'center', borderRadius: 32 }}>
-          <Image source={getCardStyles?.icon} style={{ height: 16, width: 16 }} />
+          <Image source={getCardStyles?.icon} style={{ height: 16, width: 16, tintColor: "black" }} />
         </View>
         <View marginL-16 flex>
-          <Text beb24 lh32 black >{item?.title || ''}</Text>
+          <Text beb24 lh32 black numberOfLines={1} ellipsizeMode='tail'>{item?.title || ''}</Text>
           <Text fs14 lh20 gray500 numberOfLines={2}>{item?.description || ''}</Text>
           <View marginT-12 row centerV >
             <Image source={item?.businessLogo ? { uri: item?.businessLogo } : Images.defaultBusinessSmall} style={{ height: 24, width: 24, borderRadius: 24 }} />

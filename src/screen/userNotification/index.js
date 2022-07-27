@@ -118,7 +118,7 @@ const UserNotification = ({ navigation }) => {
   }, [])
 
   useEffect(() => {
-    if (userNotification.length > 0) {
+    if (userNotification?.length > 0) {
       const updated = [
         { title: "New", data: [] },
         { title: "Today", data: [] },
@@ -126,7 +126,7 @@ const UserNotification = ({ navigation }) => {
         { title: "This Month", data: [] },
         { title: "Earlier", data: [] },
       ]
-      userNotification.forEach(item => {
+      userNotification?.forEach(item => {
         if (moment(item.created).isSame(moment(), 'day') && item?.read == false) {
           updated[0]?.data?.push(item)
         } else if (moment(item.created).isSame(moment(), 'day') && item?.read == true) {
