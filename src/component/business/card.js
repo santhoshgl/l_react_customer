@@ -4,9 +4,9 @@ import { View, Text } from 'react-native-ui-lib';
 import { Colors } from '@constants';
 import { Images } from '../../constants';
 
-const BusinessCard = ({ item }) => {
+const BusinessCard = ({ item, onPressBusiness }) => {
   return (
-    <View style={styles.card}>
+    <Pressable onPress={() => onPressBusiness(item)} style={styles.card}>
       <ImageBackground source={{ uri: item?.bannerImage }} imageStyle={styles.backImg} >
         <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={styles.logo} />
         <Text beb24 ln32 center marginT-8 black >{item?.name}</Text>
@@ -16,7 +16,7 @@ const BusinessCard = ({ item }) => {
           <Text fs14 ln20 gray700 marginL-4 >Offers: <Text fs14SB >{item?.totalOffers || 0}</Text></Text>
         </View>
       </ImageBackground>
-    </View>
+    </Pressable>
   );
 }
 

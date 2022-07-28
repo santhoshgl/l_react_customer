@@ -5,7 +5,7 @@ import { Colors } from '@constants';
 import BusinessCard from './card';
 import { useNavigation } from '@react-navigation/native';
 
-const BusinessList = ({ title, item }) => {
+const BusinessList = ({ title, item, onPressBusiness }) => {
   const navigation = useNavigation()
   return (
     <View marginT-8 >
@@ -20,7 +20,7 @@ const BusinessList = ({ title, item }) => {
       <FlatList
         horizontal
         data={item || []}
-        renderItem={({ item }) => <BusinessCard item={item} />}
+        renderItem={({ item }) => <BusinessCard item={item} onPressBusiness={onPressBusiness} />}
         keyExtractor={(_, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         keyboardDismissMode={'on-drag'}

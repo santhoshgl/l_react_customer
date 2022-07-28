@@ -56,4 +56,12 @@ export default {
   notificationOffer: require('../assets/notificationOffer.png'),
   redeem: require('../assets/redeem.png'),
   externalLink: require('../assets/external-link.png'),
+  map: require('../assets/map.png'),
+  website: require('../assets/website.png'),
+  direction: require('../assets/direction.png'),
+  phone: require('../assets/phone.png'),
+  fbIcon: require('../assets/fbIcon.png'),
+  twiterIcon: require('../assets/twiterIcon.png'),
+  instaIcon: require('../assets/instaIcon.png'),
+
 }

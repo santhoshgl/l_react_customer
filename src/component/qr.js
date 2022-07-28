@@ -1,4 +1,4 @@
-import React, { memo, useState, useMemo } from 'react';
+import React, { memo, useState, useMemo, useEffect } from 'react';
 import { SafeAreaView, Image, Pressable, Modal, Dimensions, TouchableOpacity } from 'react-native';
 import { Text, View, Button } from 'react-native-ui-lib';
 import { useSelector } from 'react-redux';
@@ -7,12 +7,25 @@ import auth from '@react-native-firebase/auth';
 import { Colors, Images, Fonts } from '@constants';
 import { useNavigation } from '@react-navigation/native';
 const { width } = Dimensions.get('screen')
+import apiRequest from '@services/networkProvider';
 
 const Qr = ({ }) => {
   const { walletData } = useSelector(s => s.points)
   const [showQr, _showQr] = useState(false);
   const uid = useMemo(() => auth().currentUser?.uid, [])
   const navigation = useNavigation()
+  const hubId = useSelector(s => s?.user?.defaultHub?.id)
+  const [followingBusiness, setFollowingBusiness] = useState()
+
+
+
+  useEffect(() => {
+    let businessInfoUrl = `hubs/${hubId}`;
+    apiRequest.get(businessInfoUrl).then(res => {
+      setFollowingBusiness(res?.data?.totalBusinessesFollowing)
+    })
+  }, [hubId])
+
   return (
     <>
       <View style={{ backgroundColor: Colors.gray200, padding: 16 }} >
@@ -29,7 +42,7 @@ const Qr = ({ }) => {
             style={{ backgroundColor: Colors.white, paddingVertical: 8, paddingHorizontal: 16, flex: 1, borderRadius: 16, marginLeft: 6 }}>
             <Text fs12 lh18 gray900>Following</Text>
             <View row centerV>
-              <Text beb24 lh32 gray900>10</Text>
+              <Text beb24 lh32 gray900>{followingBusiness || 0}</Text>
               <Image source={Images.briefcase} style={{ marginLeft: 8, height: 20, width: 20 }} />
             </View>
           </TouchableOpacity>

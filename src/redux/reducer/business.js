@@ -24,8 +24,8 @@ export const getFeaturedBusiness = createAsyncThunk('business/getFeaturedBusines
 })
 
 export const onFollowBusiness = createAsyncThunk('followers/business', async (param) => {
-  const userId = await auth().currentUser?.uid;
-  let data = { ...param, userId }
+  const userID = await auth().currentUser?.uid;
+  let data = { ...param, userID }
   const response = await apiRequest.post('followers/business', { data })
   return response?.data;
 })
