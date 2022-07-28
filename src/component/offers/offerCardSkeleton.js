@@ -3,10 +3,10 @@ import { FlatList, StyleSheet } from 'react-native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { Colors } from '@constants';
 
-const OfferCardSkeleton = () => {
+const OfferCardSkeleton = ({isHorizontal = true, skeletonStyle={}}) => {
   return (
     <FlatList
-      horizontal
+      horizontal={isHorizontal}
       data={[1, 2, 3, 4, 5, 6]}
       renderItem={({ item }) => {
         return (
@@ -15,7 +15,7 @@ const OfferCardSkeleton = () => {
               flex: 1,
               borderRadius: 16, marginVertical: 16,
               marginLeft: 16, backgroundColor: Colors.white,
-              width: 240,
+              width: skeletonStyle?.containerWidth || 240,
               height: 250,
               shadowColor: 'rgba(16,24,40,0.05)',
               shadowOffset: { width: 2, height: 2 },
@@ -25,7 +25,7 @@ const OfferCardSkeleton = () => {
             }}
             isLoading={true}
             layout={[
-              { key: 'header', width: 240, height: 56, marginBottom: 16, borderTopLeftRadius: 16, borderTopRightRadius: 16 },
+              { key: 'header', width: skeletonStyle?.layoutHeaderWidth || 240, height: 56, marginBottom: 16, borderTopLeftRadius: 16, borderTopRightRadius: 16 },
               { key: 'someOtherId', width: 180, height: 20, marginBottom: 6 },
               { key: 'name', width: 120, height: 20, marginBottom: 6 },
               { key: 'someId', width: 220, height: 50, marginBottom: 6 },

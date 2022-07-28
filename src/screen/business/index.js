@@ -30,6 +30,11 @@ const Business = ({ navigation }) => {
     return filterData;
   }, [businessData])
 
+  const onPressBusiness = (business) => {
+    navigation.navigate('BusinessInfo', businessInfo = { business })
+  }
+
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <Header navigation={navigation} />
@@ -43,7 +48,11 @@ const Business = ({ navigation }) => {
           </View>
           <FlatList
             data={Object.keys(businessList) || []}
-            renderItem={({ item }) => <BusinessList item={businessList?.[item]} title={item} />}
+            renderItem={({ item }) => <BusinessList
+              item={businessList?.[item]}
+              title={item}
+              onPressBusiness={onPressBusiness}
+            />}
             keyExtractor={(_, index) => index.toString()}
             showsHorizontalScrollIndicator={false}
             keyboardDismissMode={'on-drag'}

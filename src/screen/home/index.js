@@ -44,6 +44,11 @@ const Home = ({ navigation }) => {
     }
   }, [defaultHub?.id])
 
+  const onPressBusiness = (business) =>{
+    navigation.navigate('BusinessInfo', businessInfo={business})
+  }
+
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <Header navigation={navigation} />
@@ -92,7 +97,7 @@ const Home = ({ navigation }) => {
                 <FlatList
                   horizontal
                   data={featuredBusinessData || []}
-                  renderItem={({ item }) => <BusinessCard item={item} />}
+                  renderItem={({ item }) => <BusinessCard item={item} onPressBusiness={onPressBusiness} />}
                   keyExtractor={(_, index) => index.toString()}
                   showsHorizontalScrollIndicator={false}
                   keyboardDismissMode={'on-drag'}

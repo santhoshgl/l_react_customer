@@ -109,10 +109,14 @@ const BusinessList = ({ navigation, route }) => {
     setTimeout(() => dispatch(setLoading(false)), 1000)
   }
 
+  const onPressBusiness = (business) =>{
+    navigation.navigate('BusinessInfo', businessInfo={business})
+  }
+
 
   const Card = ({ item }) => {
     return (
-      <View style={styles.card}>
+      <Pressable style={styles.card} onPress={()=>onPressBusiness(item)}>
         <View row >
           <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={{ height: 72, width: 72, borderRadius: 72 }} />
           <View marginL-12 flex>
@@ -139,7 +143,7 @@ const BusinessList = ({ navigation, route }) => {
           </View>
         </View>
 
-      </View >
+      </Pressable >
     );
   }
 

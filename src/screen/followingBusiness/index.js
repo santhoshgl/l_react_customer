@@ -10,6 +10,7 @@ import apiRequest from '@services/networkProvider';
 import auth from '@react-native-firebase/auth';
 import styles from './styles';
 import Config from "react-native-config"
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 
 const FollowingBusiness = ({ navigation, route }) => {
@@ -34,12 +35,16 @@ const FollowingBusiness = ({ navigation, route }) => {
         dispatch(setLoading(true))
         let url = `followers/business?hubID=${hubID}&userID=${userId}`;
         apiRequest.get(url).then(res => {
-            _businessData( res?.data || [])
+            _businessData(res?.data || [])
             setNextLink(res?.links?.next)
             dispatch(setLoading(false))
         }).catch(() => {
             dispatch(setLoading(false))
         })
+    }
+
+    const onPressBusiness = (business) => {
+        navigation.navigate('BusinessInfo', businessInfo = { business })
     }
 
 
@@ -66,11 +71,11 @@ const FollowingBusiness = ({ navigation, route }) => {
 
     const setNextLink = (url) => {
         _nextLink(url?.replace(Config.API_URL, ''))
-      }
+    }
 
-      const Card = ({ item }) => {
+    const Card = ({ item }) => {
         return (
-            <View style={styles.card}>
+            <Pressable style={styles.card} onPress={() => onPressBusiness(item)}>
                 <View row >
                     <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={{ height: 72, width: 72, borderRadius: 72 }} />
                     <View marginL-12 flex>
@@ -96,7 +101,7 @@ const FollowingBusiness = ({ navigation, route }) => {
                     </View>
                 </View>
 
-            </View >
+            </Pressable >
         );
     }
 
@@ -113,11 +118,9 @@ const FollowingBusiness = ({ navigation, route }) => {
             </View>
 
             <View style={{ backgroundColor: Colors.gray50, flex: 1 }}>
-
-                    <View style={{ margin: 16, flexDirection: 'row', alignItems: 'center', top: -40 }}>
-                        <SearchBar style={{ flex: 1, marginVertical: 0 }} placeholder={'Search for Business'} fromFollowingBusiness />
-                    </View>
-
+                <View style={{ margin: 16, flexDirection: 'row', alignItems: 'center', top: -40 }}>
+                    <SearchBar style={{ flex: 1, marginVertical: 0 }} placeholder={'Search for Business'} fromFollowingBusiness />
+                </View>
                 <FlatList
                     data={businessData || []}
                     renderItem={({ item }) => <Card item={item} />}
@@ -138,8 +141,6 @@ const FollowingBusiness = ({ navigation, route }) => {
                         </View>
                     )}
                 />
-
-
             </View>
 
         </View>

@@ -30,6 +30,9 @@ import aboutAccount from '../screen/aboutAccount';
 import termsAccount from '../screen/termsAccount';
 import privacyPolicyAccount from '../screen/privacyPolicyAccount';
 import userNotification from '../screen/userNotification';
+import BusinessInfo from '../screen/businessInfo';
+
+
 
 const Stack = createNativeStackNavigator();
 const OffersStack = createNativeStackNavigator();
@@ -60,6 +63,7 @@ const _BusinessStack = () => {
     <BusinessStack.Navigator initialRouteName={'businesses'} screenOptions={{ headerShown: false }} >
       <BusinessStack.Screen name="businesses" component={Business} />
       <BusinessStack.Screen name="businessList" component={BusinessList} />
+      <BusinessStack.Screen name="businessInfo" component={BusinessInfo} />
     </BusinessStack.Navigator>
   )
 }
@@ -109,6 +113,7 @@ const App = () => {
         <Stack.Screen name="termsAccount" component={termsAccount} />
         <Stack.Screen name="privacyPolicyAccount" component={privacyPolicyAccount} />
         <Stack.Screen name="userNotification" component={userNotification} />
+        <Stack.Screen name="BusinessInfo" component={BusinessInfo} />
       </Stack.Navigator>
     </NavigationContainer>
   );
