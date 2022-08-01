@@ -5,9 +5,10 @@ import { useSelector } from 'react-redux';
 import QRCode from 'react-native-qrcode-svg';
 import auth from '@react-native-firebase/auth';
 import { Colors, Images, Fonts } from '@constants';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 const { width } = Dimensions.get('screen')
 import apiRequest from '@services/networkProvider';
+
 
 const Qr = ({ }) => {
   const { walletData } = useSelector(s => s.points)
@@ -16,15 +17,14 @@ const Qr = ({ }) => {
   const navigation = useNavigation()
   const hubId = useSelector(s => s?.user?.defaultHub?.id)
   const [followingBusiness, setFollowingBusiness] = useState()
-
-
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     let businessInfoUrl = `hubs/${hubId}`;
     apiRequest.get(businessInfoUrl).then(res => {
       setFollowingBusiness(res?.data?.totalBusinessesFollowing)
     })
-  }, [hubId])
+  }, [hubId, isFocused])
 
   return (
     <>
