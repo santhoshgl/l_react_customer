@@ -10,6 +10,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Linking,
+  Platform,
 } from "react-native";
 import { View, Text } from "react-native-ui-lib";
 import { Colors } from "@constants";
@@ -46,6 +47,8 @@ const BusinessInfo = () => {
   useEffect(() => {
     fetchData();
   }, [id]);
+
+  console.log("isss", id)
 
   const fetchData = () => {
     let businessInfoUrl = `business/${id}`;
@@ -124,15 +127,26 @@ const BusinessInfo = () => {
   const AvtarView = useCallback(() => {
     return (
       <View style={styles.avatarView}>
-        <Image
-          source={
-            businessInfo?.logo?.length > 0
-              ? { url: businessInfo?.logo }
-              : Images.defaultBusiness
-          }
-          style={styles.avatarImg}
-          resizeMode={"stretch"}
-        />
+        {Platform.OS === 'android' ?
+          <Image
+            source={
+              businessInfo?.logo?.length > 0
+                ? { uri: businessInfo?.logo }
+                : Images.defaultBusiness
+            }
+            style={styles.avatarImg}
+            resizeMode={"stretch"}
+          />
+          :
+          <Image
+            source={
+              businessInfo?.logo?.length > 0
+                ? { url: businessInfo?.logo }
+                : Images.defaultBusiness
+            }
+            style={styles.avatarImg}
+            resizeMode={"stretch"}
+          />}
       </View>
     );
   }, [businessInfo]);
@@ -356,12 +370,12 @@ const BusinessInfo = () => {
                   >
                     {businessInfo?.openHours[schedule]?.status !== "closed"
                       ? convert24hourTo12HourFormat(
-                          businessInfo?.openHours[schedule]?.startTime
-                        ) +
-                        " - " +
-                        convert24hourTo12HourFormat(
-                          businessInfo?.openHours[schedule]?.endTime
-                        )
+                        businessInfo?.openHours[schedule]?.startTime
+                      ) +
+                      " - " +
+                      convert24hourTo12HourFormat(
+                        businessInfo?.openHours[schedule]?.endTime
+                      )
                       : capitalize(businessInfo?.openHours[schedule]?.status)}
                   </Text>
                 </View>
@@ -434,7 +448,7 @@ const BusinessInfo = () => {
   const BusinessTitle = () => {
     return (
       <>
-        <Text beb30 style={styles.titleText}>
+        <Text beb30 black style={styles.titleText}>
           {businessInfo?.name}
         </Text>
 
@@ -447,11 +461,17 @@ const BusinessInfo = () => {
 
   const BannerImage = () => {
     return businessInfo?.bannerImage?.length > 0 ? (
-      <Image
-        source={{ url: businessInfo?.bannerImage }}
-        style={styles.bannerImage}
-        resizeMode={"stretch"}
-      />
+      Platform.OS === 'android' ?
+        <Image
+          source={{ uri: businessInfo?.bannerImage }}
+          style={styles.bannerImage}
+          resizeMode={"stretch"}
+        /> :
+        <Image
+          source={{ url: businessInfo?.bannerImage }}
+          style={styles.bannerImage}
+          resizeMode={"stretch"}
+        />
     ) : (
       <View style={styles.bannerImageView} />
     );
@@ -581,10 +601,20 @@ const BusinessInfo = () => {
     dispatch(setLoading(false));
   };
 
+  const NoOffersFound = () => {
+    return (
+      <View center marginT-20>
+        <Text gray700 marginB-50>
+          No offers found
+        </Text>
+      </View>
+    )
+  }
+
   const Offers = useCallback(() => {
     return (
       <View style={styles.offerView}>
-        <Text beb30 style={styles.offerText}>
+        <Text beb30 black style={styles.offerText}>
           OFFERS
         </Text>
         {offerLoading ? (
@@ -605,6 +635,7 @@ const BusinessInfo = () => {
               renderItem={({ item }) => (
                 <OfferCard item={item} businessDetails={businessInfo} />
               )}
+              ListEmptyComponent={NoOffersFound}
               keyExtractor={(_, index) => index.toString()}
               showsVerticalScrollIndicator={false}
               keyboardDismissMode={"on-drag"}

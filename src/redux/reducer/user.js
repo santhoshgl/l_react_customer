@@ -136,7 +136,7 @@ export const getNotification = createAsyncThunk('user/getNotification', async (p
   try {
     dispatch(setLoading(true))
     const notifications = await apiRequest.get(`notifications?uid=${userId}`);
-    dispatch(setLoading(false))    
+    dispatch(setLoading(false))
     return notifications?.data;
   } catch (error) {
     dispatch(setLoading(false))
@@ -144,6 +144,29 @@ export const getNotification = createAsyncThunk('user/getNotification', async (p
   }
 })
 
+
+export const onDeleteUser = createAsyncThunk('user/deleteUser', async (param, { getState, requestId, dispatch }) => {
+  const userEmail = await auth()?.currentUser?.email;
+  const loginObject = {
+    email: userEmail?.trim(),
+    password: param?.password?.trim()
+  }
+  let data = {
+    cancellationReason: param?.reason
+  }
+  try {
+    dispatch(setLoading(true))
+    const userData = await auth().signInWithEmailAndPassword(loginObject?.email, loginObject?.password);
+    userData?.user?.uid && auth()?.currentUser?.delete()
+    const response = await apiRequest.post('users/delete', { data })
+    dispatch(setLoading(false))
+    return response?.data
+  } catch (error) {
+    showMessage({ message: error.message, type: 'danger' })
+    dispatch(setLoading(false))
+    throw (error)
+  }
+})
 
 export const userSlice = createSlice({
   name: 'user',
