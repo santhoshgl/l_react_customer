@@ -53,7 +53,9 @@ workflows:
         script: |
           cd $CM_BUILD_DIR/android
           cp $CM_BUILD_DIR/docker/build.gradle $CM_BUILD_DIR/android/app/build.gradle
-          chmod +x gradlew && ./gradlew assembleRelease
+          npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
+          chmod +x gradlew && ./gradlew clean
+          ./gradlew assembleRelease
       - name: Rename artifact
         script: |
           mv $CM_BUILD_DIR/android/app/build/outputs/apk/release/*.apk $CM_BUILD_DIR/android/app/build/outputs/apk/release/lealzy-android-dev-$BUILD_NUMBER.apk
@@ -197,7 +199,9 @@ workflows:
           cd $CM_BUILD_DIR/android
           export GIT_TAG_VERSION=`echo $FCI_TAG | cut -f3 -d'-'`
           cp $CM_BUILD_DIR/docker/build.gradle $CM_BUILD_DIR/android/app/build.gradle
-          chmod +x gradlew && ./gradlew assembleRelease
+          npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
+          chmod +x gradlew && ./gradlew clean
+          ./gradlew assembleRelease
           ./gradlew bundleRelease
       - name: Rename artifact
         script: |
