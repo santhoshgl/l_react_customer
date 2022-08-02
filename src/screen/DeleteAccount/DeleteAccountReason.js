@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, TextInput } from "react-native";
+import { SafeAreaView, ScrollView, TextInput } from "react-native";
 import style from "./style";
 import {
   Text,
@@ -46,73 +46,89 @@ const DeleteAccountReason = ({ navigation }) => {
 
   return (
     <SafeAreaView style={style.mainWrapper}>
-    <View style={style.mainWrapper}>
-      <View style={style.headerContainer}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image source={Images.back} style={style.backIcon} />
-        </TouchableOpacity>
-        <View style={style.deletAccountText}>
+      <View style={style.mainWrapper}>
+        <View
+          marginV-16
+          marginH-16
+          row
+          style={{ justifyContent: "space-between" }}
+        >
+          <TouchableOpacity
+            hitSlop={10}
+            onPress={() => {
+              navigation.goBack();
+            }}
+          >
+            <Image source={Images.back} style={{ height: 24, width: 24 }} />
+          </TouchableOpacity>
           <Text fs16 lh24 center black style={style.fontWeight500}>
             Delete Account
           </Text>
+          <View style={{ height: 24, width: 24 }} />
         </View>
-      </View>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={style.deleteReason}>
+            <Text fs16 lh24 black marginL-16 style={style.fontWeight500}>
+              Why are you deleting your account
+            </Text>
 
-      <View style={style.deleteReason}>
-        <Text fs16 lh24 black marginL-16 style={style.fontWeight500}>
-          Why are you deleting your account
-        </Text>
-        <RadioButton radioItem={radioItem} handleRadioItem={handleRadioItem} />
-        {selectedRadioButton?.id === 5 &&
-          selectedRadioButton?.isSelected === true && (
-            <>
-              <View style={style.inputContainer}>
-                <TextInput
-                  multiline={true}
-                  placeholder={"Enter your reason to delete account"}
-                  onChangeText={(value) => {
-                    setOtherText(value);
-                    setError(false);
-                  }}
-                  numberOfLines={4}
-                  value={otherText}
-                  placeholderTextColor={Colors.gray500}
-                  autoCapitalize="none"
-                  style={style.input}
-                />
-              </View>
-              {error && (
-                <View>
-                  <Text
-                    marginL-16
-                    fs16
-                    lh24
-                    primary600
-                    style={style.fontWeight500}
-                  >
-                    Please enter the reason
-                  </Text>
-                </View>
+            <RadioButton
+              radioItem={radioItem}
+              handleRadioItem={handleRadioItem}
+            />
+            {selectedRadioButton?.id === 5 &&
+              selectedRadioButton?.isSelected === true && (
+                <>
+                  <View style={style.inputContainer}>
+                    <TextInput
+                      multiline={true}
+                      placeholder={"Enter your reason to delete account"}
+                      onChangeText={(value) => {
+                        setOtherText(value);
+                        setError(false);
+                      }}
+                      numberOfLines={4}
+                      value={otherText}
+                      placeholderTextColor={Colors.gray500}
+                      autoCapitalize="none"
+                      style={style.input}
+                    />
+                  </View>
+                  {error && (
+                    <View>
+                      <Text
+                        marginL-16
+                        fs16
+                        lh24
+                        primary600
+                        style={[style.fontWeight500, { marginTop: -100 }]}
+                      >
+                        Please enter the reason
+                      </Text>
+                    </View>
+                  )}
+                </>
               )}
-            </>
-          )}
-        <View style={style.buttonContainer}>
-          <Button
-            activeOpacity={0.9}
-            disabled={!selectedRadioButton?.isSelected}
-            label={"Continue"}
-            style={{
-              backgroundColor: selectedRadioButton?.isSelected
-                ? Colors.primary600
-                : "#FFC6C8",
-            }}
-            onPress={() => {
-              handleDeleteAccount();
-            }}
-          />
-        </View>
+          </View>
+          <View style={style.buttonContainer}>
+            <Button
+              activeOpacity={0.9}
+              disabled={!selectedRadioButton?.isSelected}
+              label={"Continue"}
+              style={[
+                {
+                  backgroundColor: selectedRadioButton?.isSelected
+                    ? Colors.primary600
+                    : "#FFC6C8",
+                },
+              ]}
+              onPress={() => {
+                handleDeleteAccount();
+              }}
+            />
+          </View>
+        </ScrollView>
       </View>
-    </View>
     </SafeAreaView>
   );
 };

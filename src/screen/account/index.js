@@ -253,7 +253,8 @@ const Account = ({ navigation }) => {
               style={styles.chevron_rightIcon}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.detailContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate("Support")}
+            style={styles.detailContainer}>
             <Image source={Images.support} style={styles.featureIcon} />
             <Text fs16 lh24 flex black>
               {" "}

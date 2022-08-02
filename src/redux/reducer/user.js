@@ -162,7 +162,7 @@ export const onDeleteUser = createAsyncThunk('user/deleteUser', async (param, { 
     dispatch(setLoading(false))
     return response?.data
   } catch (error) {
-    showMessage({ message: error.message, type: 'danger' })
+    showMessage({ message: error?.userInfo?.code ? error?.userInfo?.message : error?.message, type: 'danger' })
     dispatch(setLoading(false))
     throw (error)
   }

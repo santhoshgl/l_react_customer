@@ -17,6 +17,7 @@ export default styles = StyleSheet.create({
     marginVertical: 6,
     paddingLeft: 14,
     // paddingVertical: 0,
+    marginBottom: 100,
     borderWidth: 1,
     borderRadius: 8,
     backgroundColor: Colors.white,
@@ -32,6 +33,7 @@ export default styles = StyleSheet.create({
     justifyContent: "flex-end",
     marginBottom: 10,
     marginHorizontal: 16,
+    marginTop: '40%'
   },
   passWordInput: {
     marginTop: 10,

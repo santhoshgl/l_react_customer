@@ -63,5 +63,8 @@ export default {
   fbIcon: require("../assets/fbIcon.png"),
   twiterIcon: require("../assets/twiterIcon.png"),
   instaIcon: require("../assets/instaIcon.png"),
+  help_circle: require("../assets/help_circle.png"),
+  mail: require("../assets/mail.png"),
+  thumbs_up: require("../assets/thumbs_up.png"),
   AccountDeleted: require("../assets/AccountDeleted.png"),
 };

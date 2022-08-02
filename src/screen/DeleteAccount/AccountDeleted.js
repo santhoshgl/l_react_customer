@@ -14,7 +14,11 @@ const AccountDeleted = ({ navigation }) => {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(logout())
-    setTimeout(() => navigation.navigate("landing"), 5000)
+    setTimeout(() =>
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'landing' }]
+      }), 5000)
   }, [])
 
   return (

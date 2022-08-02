@@ -19,7 +19,8 @@ const Colors = {
   blue: '#23E7FF',
   yellow: '#F8CD5C',
   success700: "#027A48",
-  blue700: "#175CD3"
+  blue700: "#175CD3",
+  primary200: '#FFC6C8'
 }
 
 export default Colors
