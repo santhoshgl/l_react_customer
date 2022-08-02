@@ -8,7 +8,7 @@ import {
 } from "react-native-ui-lib";
 import style from "./style";
 import { Colors, Images } from "@constants";
-import { SafeAreaView, TextInput } from "react-native";
+import { SafeAreaView, ScrollView, TextInput } from "react-native";
 import { useDispatch } from "react-redux";
 import { onDeleteUser } from "../../redux/reducer/user";
 import { useRoute } from "@react-navigation/native";
@@ -39,7 +39,7 @@ const ConfirmDeleAccount = ({ navigation }) => {
 
   return (
     <SafeAreaView style={style.mainWrapper}>
-      <View style={style.mainWrapper}>
+      <ScrollView style={style.mainWrapper} contentContainerStyle={{ flexGrow: 1}}>
         <View style={[style.headerContainer, { marginTop: 15 }]}>
           <TouchableOpacity onPress={navigation.goBack}>
             <Image source={Images.back} style={style.backIcon} />
@@ -90,14 +90,14 @@ const ConfirmDeleAccount = ({ navigation }) => {
               backgroundColor:
                 password !== "" && password.length > 7
                   ? Colors.primary600
-                  : "#FFC6C8",
+                  : Colors.primary200,
             }}
             onPress={() => {
               handleConfurmDeleteAccount();
             }}
           />
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

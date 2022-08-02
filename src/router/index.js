@@ -1,35 +1,36 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useSelector } from "react-redux";
-import { isEmpty } from "underscore";
-import Login from "../screen/login";
-import Register from "../screen/register";
-import Home from "../screen/home";
-import Landing from "../screen/landing";
-import Onboarding from "../screen/onboarding";
-import ForgotPassword from "../screen/forgotPassword";
-import Hub from "../screen/hub";
-import AddHub from "../screen/hub/addHub";
-import BottomTab from "./bottomTab";
-import Offers from "../screen/offers";
-import OffersList from "../screen/offersList";
-import BusinessList from "../screen/businessList";
-import History from "../screen/points";
-import RewardDetails from "../screen/points/rewardDetails";
-import Business from "../screen/business";
-import Account from "../screen/account";
-import personalDetails from "../screen/personalDetails";
-import AccountSettings from "../screen/accountSettings";
-import inviteFriends from "../screen/inviteFriends";
-import accountNotifications from "../screen/accountNotifications";
-import followingBusiness from "../screen/followingBusiness";
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSelector } from 'react-redux';
+import { isEmpty } from 'underscore';
+import Login from '../screen/login';
+import Register from '../screen/register';
+import Home from '../screen/home';
+import Landing from '../screen/landing';
+import Onboarding from '../screen/onboarding';
+import ForgotPassword from '../screen/forgotPassword';
+import Hub from '../screen/hub';
+import AddHub from '../screen/hub/addHub';
+import BottomTab from './bottomTab';
+import Offers from '../screen/offers';
+import OffersList from '../screen/offersList';
+import BusinessList from '../screen/businessList';
+import History from '../screen/points';
+import RewardDetails from '../screen/points/rewardDetails';
+import Business from '../screen/business';
+import Account from '../screen/account';
+import personalDetails from '../screen/personalDetails';
+import AccountSettings from '../screen/accountSettings';
+import inviteFriends from '../screen/inviteFriends';
+import accountNotifications from '../screen/accountNotifications';
+import followingBusiness from '../screen/followingBusiness';
 import aboutAccount from "../screen/aboutAccount";
 import termsAccount from "../screen/termsAccount";
 import privacyPolicyAccount from "../screen/privacyPolicyAccount";
 import userNotification from "../screen/userNotification";
 import BusinessInfo from "../screen/businessInfo";
+import { Support, Faqs } from '../screen/support';
 import OfferFilter from '../screen/offerFilter';
 import {
   DeleteAccountReason,
@@ -137,6 +138,8 @@ const App = () => {
         />
         <Stack.Screen name="userNotification" component={userNotification} />
         <Stack.Screen name="BusinessInfo" component={BusinessInfo} />
+        <Stack.Screen name='Support' component={Support} />
+        <Stack.Screen name='Faqs' component={Faqs} />
         <Stack.Screen
           name="DeleteAccountReason"
           component={DeleteAccountReason}
