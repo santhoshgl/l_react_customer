@@ -22,8 +22,6 @@ const PersonalDetails = ({ navigation }) => {
   const [error, _error] = useState(false)
   const [invalid, _invalid] = useState({})
 
-  console.log('userData :>> ', userData);
-
   useEffect(() => {
     if (userData) {
       _firstName(userData?.firstName)

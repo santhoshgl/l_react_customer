@@ -51,8 +51,8 @@ const OfferCard = ({ item }) => {
       <View style={styles.separator} />
       <View style={styles.bottom}>
         <Image source={Images.check} style={{ height: 16, width: 16 }} />
-        <Text fs12 lh18 gray500 marginL-4>Redeemed</Text>
-        <Text fs12SB lh18 gray700 marginH-4>{item?.offersRedeemed || 0}</Text>
+        <Text fs12 lh18 gray500 marginL-4>{item?.offersRedeemed ? 'Redeemed' : 'Rewarded'}</Text>
+        <Text fs12SB lh18 gray700 marginH-4>{(item?.offersRedeemed ? item?.offersRedeemed : item?.offersRewarded) || 0}</Text>
         <Text fs12 lh18 gray500> times </Text>
       </View>
     </View>

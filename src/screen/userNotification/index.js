@@ -161,16 +161,23 @@ const UserNotification = ({ navigation }) => {
         stickySectionHeadersEnabled={false}
         sections={groupData || []}
         keyExtractor={(item, index) => item + index}
-        renderItem={({ item }) => <View style={[styles.notificationContainer, !(item.read) ? { backgroundColor: Colors.primary25 } : {}]} marginT-16>
-          <Image source={(item?.type == "reward") ? Images?.notificationStar : (item?.type == "redeem") ? Images?.redeem : { uri: item?.logo }} style={{ height: 32, width: 32, marginLeft: 16, marginTop: 16 }} />
-          <View flex marginL-10 marginT-16>
-            <Text fs16 lh24 black> {item.message} </Text>
-            <Text fs14 lh20 black> <Text primary700 fs14 lh20>{item.description} </Text> </Text>
-            <Text fs12 lh18 gray500> {moment(item?.created).fromNow()} </Text>
+        renderItem={({ item }) => (
+          <View style={[styles.notificationContainer, !(item.read) ? { backgroundColor: Colors.primary25 } : {}]} marginT-16>
+            <Image source={(item?.type == "reward") ? Images?.notificationStar : (item?.type == "redeem") ? Images?.redeem : { uri: item?.logo }} style={{ height: 32, width: 32, marginLeft: 16, marginTop: 16 }} />
+            <View flex marginL-10 marginT-16>
+              <Text fs16 lh24 black> {item.message} </Text>
+              <Text fs14 lh20 black> <Text primary700 fs14 lh20>{item.description} </Text> </Text>
+              <Text fs12 lh18 gray500> {moment(item?.created).fromNow()} </Text>
+            </View>
           </View>
-        </View>}
+        )}
         renderSectionHeader={({ section: { title } }) => (
           <Text primary700 fs14 lh20 marginT-16> {title} </Text>
+        )}
+        ListEmptyComponent={() => (
+          <View flex center>
+            <Text gray700>No new notifications.</Text>
+          </View>
         )}
       />
     </SafeAreaView >
