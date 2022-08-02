@@ -595,7 +595,6 @@ const BusinessInfo = () => {
     dispatch(onFollowBusiness(requestData))
       .then(unwrapResult)
       .then((data) => {
-        console.log("data", data);
         data?.created && setBusinessInfo(cloneDeep(updatedBusinessData));
       });
     dispatch(setLoading(false));

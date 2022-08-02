@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
-import { SafeAreaView, Image, Pressable, FlatList, ActivityIndicator } from 'react-native';
+import { SafeAreaView, Image, Pressable, FlatList, ActivityIndicator, BackHandler } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import Config from "react-native-config";
@@ -21,25 +21,24 @@ const OffersList = ({ navigation, route }) => {
   const [loading, _loading] = useState(false)
   const [nomore, _nomore] = useState(false)
   const [search, _search] = useState(null)
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, [])
+  const [filter, _filter] = useState(null)
 
   useEffect(() => {
-    fetchData();
-  }, [search, defaultHub?.id])
+    fetchData(search, filter);
+  }, [defaultHub?.id])
 
-  const fetchData = () => {
+  const fetchData = (search, filter) => {
     dispatch(setLoading(true))
     const category = fetchBusinessCategory(param?.title);
-    let url = `hubs/${defaultHub?.id}/offers?category=${category}`;
-    if (search && search?.length > 0)
-      url = `hubs/${defaultHub?.id}/offers?category=${category}&search=${search}`;
-    if (param?.title == 'Latest Offers')
-      url = `hubs/${defaultHub?.id}/offers?sortBy=latest`;
+    let url = `hubs/${defaultHub?.id}/offers?sortBy=${filter?.sortBy ? filter?.sortBy : 'latest'}`;
+
+    if (category)
+      url = `${url}&category=${category}`;
     else if (param?.title == 'Featured Offers')
-      url = `hubs/${defaultHub?.id}/offers?featured=true`;
+      url = `${url}&featured=true`;
+
+    if (search)
+      url = `${url}&search=${search}`;
 
     apiRequest.get(url).then(res => {
       _offersData(res?.data || [])
@@ -78,9 +77,33 @@ const OffersList = ({ navigation, route }) => {
       navigation.goBack();
   }
 
+  useEffect(() => {
+    if (param?.source == "homeTab") {
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+        navigation.popToTop();
+        navigation.navigate(param?.source);
+        return true
+      })
+      return () => backHandler.remove()
+    }
+  }, [])
+
   const setNextLink = (url) => {
     _nextLink(url?.replace(Config.API_URL, ''))
   }
+
+  const onFilterButtonClick = () => {
+    navigation.navigate("offerFilter", {
+      source: param?.title,
+      filter,
+      onApplyFilter: (val) => {
+        _filter(val);
+        fetchData(search, val);
+      }
+    })
+  }
+
+  const isFilterApplied = () => filter?.sortBy == 'oldest' || filter?.category;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -90,11 +113,16 @@ const OffersList = ({ navigation, route }) => {
           <SearchBar
             value={search}
             style={{ flex: 1, marginVertical: 0 }}
-            onSearch={(val) => _search(val)}
+            onSearch={(val) => fetchData(val, filter)}
+            onChangeText={(val) => _search(val)}
             placeholder={'Search for Offers'}
           />
-          <Pressable onPress={() => { }} hitSlop={10}>
+          <Pressable hitSlop={10} onPress={() => onFilterButtonClick()} >
             <Image source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
+            {isFilterApplied() ?
+              <View style={{ backgroundColor: Colors?.primary600, height: 8, width: 8, borderRadius: 8, position: 'absolute', right: 0 }}></View>
+              : null
+            }
           </Pressable>
         </View>
         <View paddingH-16 row centerV marginB-8 >
@@ -105,6 +133,7 @@ const OffersList = ({ navigation, route }) => {
         </View>
         <FlatList
           data={offersData || []}
+          contentContainerStyle={{ flexGrow: 1 }}
           renderItem={({ item }) => <Card item={item} />}
           keyExtractor={(_, index) => index.toString()}
           showsVerticalScrollIndicator={false}
@@ -121,6 +150,11 @@ const OffersList = ({ navigation, route }) => {
               }
             </View>
           )}
+          ListEmptyComponent={() => (
+            <View flex center>
+              <Text gray700>No matching offers found. Please try again.</Text>
+            </View>
+          )}
         />
       </View>
     </SafeAreaView>
@@ -129,7 +163,7 @@ const OffersList = ({ navigation, route }) => {
 
 export default memo(OffersList)
 
-const Card = ({ item }) => {
+export const Card = ({ item }) => {
 
   const getCardStyles = useMemo(() => {
     let icon = Images.offers;
@@ -175,7 +209,6 @@ const Card = ({ item }) => {
           <Text fs14 lh20 gray700 marginL-4>{item?.credit}</Text>
         </View>
       </View>
-
     </View >
   );
 }

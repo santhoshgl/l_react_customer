@@ -30,7 +30,7 @@ import termsAccount from "../screen/termsAccount";
 import privacyPolicyAccount from "../screen/privacyPolicyAccount";
 import userNotification from "../screen/userNotification";
 import BusinessInfo from "../screen/businessInfo";
-
+import OfferFilter from '../screen/offerFilter';
 import {
   DeleteAccountReason,
   ConfirDeleAccount,
@@ -63,6 +63,8 @@ const _OffersStack = () => {
     >
       <OffersStack.Screen name="offers" component={Offers} />
       <OffersStack.Screen name="offersList" component={OffersList} />
+      <OffersStack.Screen name="offerFilter" component={OfferFilter} />
+
     </OffersStack.Navigator>
   );
 };

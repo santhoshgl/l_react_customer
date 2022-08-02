@@ -81,25 +81,30 @@ const RewardDetails = ({ navigation, route }) => {
             </View>
 
           </View>
-          <Text fs14 lh20 gray700>Offer used</Text>
-          <View style={styles.card}>
-            <View row >
-              <View style={{
-                backgroundColor: getCardStyles?.color, height: 32, width: 32, justifyContent: 'center',
-                alignItems: 'center', borderRadius: 32
-              }}>
-                <Image source={getCardStyles?.icon} style={{ height: 16, width: 16, tintColor: "black" }} />
+          {rewardDetails.attributes?.rewardType == 'credit' ?
+            <>
+              <Text fs14 lh20 gray700>Offer used</Text>
+              <View style={styles.card}>
+                <View row >
+                  <View style={{
+                    backgroundColor: getCardStyles?.color, height: 32, width: 32, justifyContent: 'center',
+                    alignItems: 'center', borderRadius: 32
+                  }}>
+                    <Image source={getCardStyles?.icon} style={{ height: 16, width: 16, tintColor: "black" }} />
+                  </View>
+                  <View marginL-16 flex>
+                    <Text beb24 lh32 black numberOfLines={1} ellipsizeMode='tail'>{rewardDetails?.attributes?.offer?.title}</Text>
+                    <Text fs14 lh20 gray500 numberOfLines={2}>{rewardDetails?.attributes?.offer?.description || ''}</Text>
+                  </View>
+                  <View style={styles.badge}>
+                    <Image source={Images.star} style={{ height: 12, width: 12, tintColor: Colors.gray500 }} />
+                    <Text fs14 lh20 gray700 marginL-4>{rewardDetails?.attributes?.offer?.credit}</Text>
+                  </View>
+                </View>
               </View>
-              <View marginL-16 flex>
-                <Text beb24 lh32 black numberOfLines={1} ellipsizeMode='tail'>{rewardDetails?.attributes?.offer?.title}</Text>
-                <Text fs14 lh20 gray500 numberOfLines={2}>{rewardDetails?.attributes?.offer?.description || ''}</Text>
-              </View>
-              <View style={styles.badge}>
-                <Image source={Images.star} style={{ height: 12, width: 12, tintColor: Colors.gray500 }} />
-                <Text fs14 lh20 gray700 marginL-4>{rewardDetails?.attributes?.offer?.credit}</Text>
-              </View>
-            </View>
-          </View>
+            </>
+            : null
+          }
         </View>
       </ScrollView>
     </SafeAreaView >

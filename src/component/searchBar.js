@@ -3,6 +3,10 @@ import { StyleSheet, Pressable, View, Image, TextInput } from "react-native";
 import { Colors, Images } from "../constants";
 
 const searchBar = ({ onChangeText = () => { }, value, onSearch = () => { }, onFocus = () => { }, ...props }) => {
+  const onCloseClick = () => {
+    onChangeText('');
+    onSearch('');
+  }
   return (
     <View style={[styles.searchBox, props?.style, { borderColor: value ? Colors.black : Colors.gray300 }]}>
       <Image source={props?.fromFollowingBusiness ? Images.searchRed : Images.search}
@@ -18,7 +22,7 @@ const searchBar = ({ onChangeText = () => { }, value, onSearch = () => { }, onFo
         onSubmitEditing={(e) => onSearch(e.nativeEvent.text)}
       />
       {value ?
-        <Pressable hitSlop={10} onPress={() => { onChangeText(''); onSearch() }} style={{ justifyContent: 'center' }} >
+        <Pressable hitSlop={10} onPress={() => onCloseClick()} style={{ justifyContent: 'center' }} >
           <Image source={Images.close} style={styles.searchIcon} resizeMode={'contain'} />
         </Pressable>
         : null}

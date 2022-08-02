@@ -48,14 +48,22 @@ const Business = ({ navigation }) => {
           </View>
           <FlatList
             data={Object.keys(businessList) || []}
-            renderItem={({ item }) => <BusinessList
-              item={businessList?.[item]}
-              title={item}
-              onPressBusiness={onPressBusiness}
-            />}
+            contentContainerStyle={{ flexGrow: 1 }}
+            renderItem={({ item }) => (
+              <BusinessList
+                item={businessList?.[item]}
+                title={item}
+                onPressBusiness={onPressBusiness}
+              />
+            )}
             keyExtractor={(_, index) => index.toString()}
             showsHorizontalScrollIndicator={false}
             keyboardDismissMode={'on-drag'}
+            ListEmptyComponent={() => (
+              <View flex center>
+                <Text gray700>No businesses found.</Text>
+              </View>
+            )}
           />
         </View>
       </ScrollView>

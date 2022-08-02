@@ -112,9 +112,8 @@ const History = ({ navigation }) => {
                       index % 2 == 0 ? Colors.gray50 : Colors.white,
                   }}
                 >
-                  <Text fs14 lh20 gray500 center style={styles.tableBody}>{`#${
-                    index + 1
-                  }`}</Text>
+                  <Text fs14 lh20 gray500 center style={styles.tableBody}>{`#${index + 1
+                    }`}</Text>
                   <Text fs14 lh20 gray500 center style={styles.tableBody}>
                     {moment(reward?.attributes?.createdAt).format("ll")}
                   </Text>
@@ -174,7 +173,11 @@ const History = ({ navigation }) => {
               />
             </View>
           </View>
-        ) : null}
+        ) :
+          <View flex center>
+            <Text gray700>No transactions yet.</Text>
+          </View>
+        }
       </ScrollView>
     </SafeAreaView>
   );

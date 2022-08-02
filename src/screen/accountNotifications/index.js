@@ -7,7 +7,6 @@ import styles from './styles'
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, updateUser } from '../../redux/reducer/user';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { setLoading } from '../../redux/reducer/loading';
 
 const AccountNotification = ({ navigation }) => {
 

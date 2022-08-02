@@ -21,7 +21,7 @@ export const animation = {
   },
 }
 
-const BusinessCategories = {
+export const BusinessCategories = {
   'Arts Culture & Entertainment': 'arts_culture_entertainment',
   'Auto Sales & Service': 'auto_sales_services',
   'Chiropractor': 'chiropractor',
