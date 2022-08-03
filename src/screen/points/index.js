@@ -27,9 +27,11 @@ const History = ({ navigation }) => {
   const { walletData, rewards } = useSelector((s) => s.points);
 
   useEffect(() => {
-    dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
-    dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id }));
-  }, []);
+    if (defaultHub?.id) {
+      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
+      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id }));
+    }
+  }, [defaultHub?.id]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -80,99 +82,101 @@ const History = ({ navigation }) => {
             account.
           </Text>
         </View>
-        <View style={{ backgroundColor: Colors.white, paddingHorizontal: 10 }}>
-          <View row centerV flex>
-            <Text fs12 lh18 gray500 center style={styles.tableTitle}>
-              Reference
-            </Text>
-            <Text fs12 lh18 gray500 center style={styles.tableTitle}>
-              Date
-            </Text>
-            <Text fs12 lh18 gray500 center style={styles.tableTitle}>
-              Credit Amount
-            </Text>
-            <Text fs12 lh18 gray500 center style={styles.tableTitle}>
-              Type
-            </Text>
-          </View>
-          {rewards?.data?.map((reward, index) => {
-            return (
-              <TouchableOpacity
-                key={reward?.id}
-                onPress={() =>
-                  navigation.navigate("rewardDetails", { rewardId: reward?.id })
-                }
-              >
-                <View
-                  row
-                  centerV
-                  flex
-                  style={{
-                    backgroundColor:
-                      index % 2 == 0 ? Colors.gray50 : Colors.white,
-                  }}
-                >
-                  <Text fs14 lh20 gray500 center style={styles.tableBody}>{`#${index + 1
-                    }`}</Text>
-                  <Text fs14 lh20 gray500 center style={styles.tableBody}>
-                    {moment(reward?.attributes?.createdAt).format("ll")}
-                  </Text>
-                  <Text fs14 lh20 gray500 center style={styles.tableBody}>
-                    {reward?.attributes?.credits}
-                  </Text>
-                  <View fs14 lh20 success700 center style={styles.tableBody}>
-                    {reward?.attributes?.rewardType == "credit" ? (
-                      <View center style={styles.typeText}>
-                        <Image
-                          source={Images.star}
-                          style={{
-                            width: 12,
-                            height: 12,
-                            tintColor: Colors.success700,
-                            marginRight: 4,
-                          }}
-                        />
-                        <Text fs12 lh18 success700>
-                          Reward
-                        </Text>
+        {rewards?.data?.length > 0 ? (
+          <>
+            <View style={{ backgroundColor: Colors.white, paddingHorizontal: 10 }}>
+              <View row centerV flex>
+                <Text fs12 lh18 gray500 center style={styles.tableTitle}>
+                  Reference
+                </Text>
+                <Text fs12 lh18 gray500 center style={styles.tableTitle}>
+                  Date
+                </Text>
+                <Text fs12 lh18 gray500 center style={styles.tableTitle}>
+                  Credit Amount
+                </Text>
+                <Text fs12 lh18 gray500 center style={styles.tableTitle}>
+                  Type
+                </Text>
+              </View>
+              {rewards?.data?.map((reward, index) => {
+                return (
+                  <TouchableOpacity
+                    key={reward?.id}
+                    onPress={() =>
+                      navigation.navigate("rewardDetails", { rewardId: reward?.id })
+                    }
+                  >
+                    <View
+                      row
+                      centerV
+                      flex
+                      style={{
+                        backgroundColor:
+                          index % 2 == 0 ? Colors.gray50 : Colors.white,
+                      }}
+                    >
+                      <Text fs14 lh20 gray500 center style={styles.tableBody}>{`#${reward?.id.substr(reward?.id.length - 4)}`}</Text>
+                      <Text fs14 lh20 gray500 center style={styles.tableBody}>
+                        {moment(reward?.attributes?.createdAt).format("ll")}
+                      </Text>
+                      <Text fs14 lh20 gray500 center style={styles.tableBody}>
+                        {reward?.attributes?.credits}
+                      </Text>
+                      <View fs14 lh20 success700 center style={styles.tableBody}>
+                        {reward?.attributes?.rewardType == "credit" ? (
+                          <View center style={styles.typeText}>
+                            <Image
+                              source={Images.star}
+                              style={{
+                                width: 12,
+                                height: 12,
+                                tintColor: Colors.success700,
+                                marginRight: 4,
+                              }}
+                            />
+                            <Text fs12 lh18 success700>
+                              Reward
+                            </Text>
+                          </View>
+                        ) : (
+                          <View center style={styles.typeReward}>
+                            <Image
+                              source={Images.gift}
+                              style={{
+                                width: 12,
+                                height: 12,
+                                tintColor: Colors.blue700,
+                                marginRight: 4,
+                              }}
+                            />
+                            <Text fs12 lh18 blue700>
+                              Redeem
+                            </Text>
+                          </View>
+                        )}
                       </View>
-                    ) : (
-                      <View center style={styles.typeReward}>
-                        <Image
-                          source={Images.gift}
-                          style={{
-                            width: 12,
-                            height: 12,
-                            tintColor: Colors.blue700,
-                            marginRight: 4,
-                          }}
-                        />
-                        <Text fs12 lh18 blue700>
-                          Redeem
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-        {rewards?.length > 0 ? (
-          <View row centerV flex style={styles.pagination}>
-            <View style={styles.paginationButton}>
-              <Image source={Images.back} style={{ height: 20, width: 20 }} />
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
             </View>
-            <Text fs14 lh20 gray700>
-              Page 1 of {rewards?.meta?.totalPages}
-            </Text>
-            <View style={styles.paginationButton}>
-              <Image
-                source={Images.arrowRight}
-                style={{ height: 20, width: 20 }}
-              />
+
+            <View row centerV flex style={styles.pagination}>
+              <View style={styles.paginationButton}>
+                <Image source={Images.back} style={{ height: 20, width: 20 }} />
+              </View>
+              <Text fs14 lh20 gray700>
+                Page 1 of {rewards?.meta?.totalPages}
+              </Text>
+              <View style={styles.paginationButton}>
+                <Image
+                  source={Images.arrowRight}
+                  style={{ height: 20, width: 20 }}
+                />
+              </View>
             </View>
-          </View>
+          </>
         ) :
           <View flex center>
             <Text gray700>No transactions yet.</Text>

@@ -11,7 +11,7 @@ export const getRewardWallet = createAsyncThunk('points/getRewardWallet', async 
     dispatch(setLoading(false))
     return data?.data;
   } catch (error) {
-    showMessage({ message: error?.message, type: 'danger' })
+    // showMessage({ message: error?.message, type: 'danger' })
     dispatch(setLoading(false))
     throw (error)
   }

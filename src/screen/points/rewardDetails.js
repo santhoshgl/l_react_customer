@@ -1,11 +1,13 @@
 import React, { memo, useEffect, useMemo } from 'react';
 import { SafeAreaView, ImageBackground, Pressable, ScrollView, Image, Dimensions, StyleSheet } from 'react-native';
-import { View, Text } from 'react-native-ui-lib';
+import { View, Text, TouchableOpacity } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'underscore';
 import moment from 'moment';
 import { Colors, Images } from '@constants';
 import { getRewardDetails } from '../../redux/reducer/points';
+import Clipboard from '@react-native-community/clipboard';
+import { showMessage } from 'react-native-flash-message';
 
 const RewardDetails = ({ navigation, route }) => {
   const dispatch = useDispatch()
@@ -42,6 +44,11 @@ const RewardDetails = ({ navigation, route }) => {
     return { icon, color }
   }, [rewardDetails])
 
+  const copyRefernceHandler = () => {
+    Clipboard.setString(rewardDetails?.id);
+    showMessage({ message: "Reference copied to clipboard.", type: "success" });
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <View style={{ backgroundColor: Colors.white }}>
@@ -66,6 +73,9 @@ const RewardDetails = ({ navigation, route }) => {
         <View style={styles.listContainer}>
           <Text beb24 lh32 black flex numberOfLines={1}>{rewardDetails.attributes?.rewardType == 'credit' ? 'Rewarded' : 'Redeemed'}</Text>
           <Text fs14 lh20 gray500>{`${moment(rewardDetails?.attributes?.createdAt).format('ll')}  ·  ${moment(rewardDetails?.attributes?.createdAt).format('LT')}`}</Text>
+          <TouchableOpacity marginT-4 onPress={() => copyRefernceHandler()}>
+            <Text fs14 lh20 gray500>{`Reference #${rewardDetails?.id}`}</Text>
+          </TouchableOpacity>
         </View>
         <View style={{ margin: 16 }}>
           <Text fs14 lh20 gray700>Business</Text>

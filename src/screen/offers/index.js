@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo, useState } from 'react';
+import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { SafeAreaView, Image, Pressable, FlatList, Text, ActivityIndicator } from 'react-native';
 import { View } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,7 @@ const Offers = ({ navigation }) => {
   const dispatch = useDispatch()
   const { defaultHub } = useSelector(s => s.user)
   const { offerData, filteredOffers } = useSelector(s => s.offers)
+  const flatListRef = useRef()
 
   const [offerFilterList, _offerFilterList] = useState([])
   const [search, _search] = useState(null)
@@ -69,18 +70,25 @@ const Offers = ({ navigation }) => {
   }
 
   useEffect(() => {
-    if (filter?.sortBy?.length > 0 || filter?.category?.length > 0)
+    if (filter?.sortBy?.length > 0 || filter?.category?.length > 0 || search?.length > 0) {
       _isListView(true)
-    else
+      moveToTop()
+    } else {
       _isListView(false)
+    }
   }, [filter])
+
+  const moveToTop = () => flatListRef?.current?.scrollToIndex({ index: 0 });
 
   const onSearchOffers = (val) => {
     fetchFilteredOffers(defaultHub?.id, val, filter);
-    if (filter?.sortBy?.length > 0 || val?.length > 0 || filter?.category?.length > 0)
+    if (filter?.sortBy?.length > 0 || val?.length > 0 || filter?.category?.length > 0) {
       _isListView(true)
-    else
+      moveToTop()
+    }
+    else {
       _isListView(false)
+    }
   }
 
 
@@ -126,6 +134,7 @@ const Offers = ({ navigation }) => {
         </View>
         {isListView ?
           <FlatList
+            ref={flatListRef}
             data={offerFilterList || []}
             contentContainerStyle={{ flexGrow: 1 }}
             renderItem={({ item }) => <Card item={item} />}

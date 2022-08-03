@@ -41,11 +41,11 @@ const OfferFilter = ({ navigation, route }) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <View style={{ backgroundColor: Colors.white }}>
         <View row centerV marginH-16 marginV-16 style={{ justifyContent: 'space-between' }}>
-          <Pressable onPress={navigation.goBack} hitSlop={10} style={{ width: 35 }}>
+          <Pressable onPress={navigation.goBack} hitSlop={10} style={{ width: 50 }}>
             <Image source={Images.back} style={{ height: 24, width: 24 }} />
           </Pressable>
           <Text fs16 lh24 center black >Filter</Text>
-          <Text fs14 lh20 center primary600 underline={true} style={{ height: 24, width: 35 }}
+          <Text fs14 lh20 center primary600 underline={true} style={{ height: 24, width: 50 }}
             onPress={() => { _sortBy(source == "all" ? null : "latest"), _category([]) }}
           >Reset</Text>
         </View>

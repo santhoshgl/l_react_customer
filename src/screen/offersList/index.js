@@ -11,10 +11,13 @@ import SearchBar from '../../component/searchBar';
 import { Colors, Images } from '@constants';
 import { fetchBusinessCategory } from '@util';
 import styles from './styles';
+import { useRef } from 'react';
 
 const OffersList = ({ navigation, route }) => {
   const dispatch = useDispatch()
   const { defaultHub } = useSelector(s => s.user)
+  const flatListRef = useRef()
+
   const param = useMemo(() => { return route?.params }, [route])
   const [offersData, _offersData] = useState([])
   const [nextLink, _nextLink] = useState('')
@@ -99,9 +102,12 @@ const OffersList = ({ navigation, route }) => {
       onApplyFilter: (val) => {
         _filter(val);
         fetchData(search, val);
+        moveToTop()
       }
     })
   }
+
+  const moveToTop = () => flatListRef?.current?.scrollToIndex({ index: 0 });
 
   const isFilterApplied = () => filter?.sortBy == 'oldest' || filter?.category;
 
@@ -113,7 +119,12 @@ const OffersList = ({ navigation, route }) => {
           <SearchBar
             value={search}
             style={{ flex: 1, marginVertical: 0 }}
-            onSearch={(val) => fetchData(val, filter)}
+            onSearch={(val) => {
+              if (offersData.length > 0) {
+                moveToTop()
+              }
+              fetchData(val, filter)
+            }}
             onChangeText={(val) => _search(val)}
             placeholder={'Search for Offers'}
           />
@@ -132,6 +143,7 @@ const OffersList = ({ navigation, route }) => {
           <Text beb24 lh32 black flex marginL-10 numberOfLines={1} >{param?.title}</Text>
         </View>
         <FlatList
+          ref={flatListRef}
           data={offersData || []}
           contentContainerStyle={{ flexGrow: 1 }}
           renderItem={({ item }) => <Card item={item} />}
