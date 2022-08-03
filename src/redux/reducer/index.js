@@ -4,13 +4,16 @@ import offers from './offers'
 import loading from './loading'
 import business from './business'
 import points from './points'
+import network from './network'
+
 
 const appReducer = combineReducers({
   user,
   loading,
   offers,
   business,
-  points
+  points,
+  network
 })
 
 
