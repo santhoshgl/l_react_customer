@@ -119,10 +119,11 @@ const FollowingBusiness = ({ navigation, route }) => {
 
             <View style={{ backgroundColor: Colors.gray50, flex: 1 }}>
                 <View style={{ margin: 16, flexDirection: 'row', alignItems: 'center', top: -40 }}>
-                    <SearchBar style={{ flex: 1, marginVertical: 0 }} placeholder={'Search for Business'} fromFollowingBusiness />
+                    <SearchBar style={{ flex: 1, marginVertical: 0 }} placeholder={'Search for Businesses'} fromFollowingBusiness />
                 </View>
                 <FlatList
                     data={businessData || []}
+                    contentContainerStyle={{ flexGrow: 1 }}
                     renderItem={({ item }) => <Card item={item} />}
                     keyExtractor={(_, index) => index.toString()}
                     showsVerticalScrollIndicator={false}
@@ -134,10 +135,15 @@ const FollowingBusiness = ({ navigation, route }) => {
                     refreshing={loading}
                     ListFooterComponent={() => (
                         <View center marginV-20>
-                            {nomore ?
+                            {(nomore && businessData?.length > 0) ?
                                 <Text gray700>No more results.</Text>
                                 : <ActivityIndicator animating={loading} size={'large'} />
                             }
+                        </View>
+                    )}
+                    ListEmptyComponent={() => (
+                        <View flex center>
+                            <Text gray700>You are not following any busines yet.</Text>
                         </View>
                     )}
                 />
