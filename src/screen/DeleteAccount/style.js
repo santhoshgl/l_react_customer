@@ -14,6 +14,7 @@ export default styles = StyleSheet.create({
     paddingTop: 10,
     // maxHeight: 120,
     minHeight: 120,
+    maxHeight: 120,
     marginVertical: 6,
     paddingLeft: 14,
     // paddingVertical: 0,

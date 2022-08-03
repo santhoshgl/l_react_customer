@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, ScrollView, TextInput } from "react-native";
+import { SafeAreaView, ScrollView, TextInput, Keyboard } from "react-native";
 import style from "./style";
 import {
   Text,
@@ -11,12 +11,15 @@ import {
 import { Colors, Images } from "@constants";
 import RadioButton from "../../component/RadioButton";
 import { radioArray } from "../../constants/RadioArray";
+import { useDispatch } from "react-redux";
+import { deleteAccountReason } from "../../redux/reducer/user";
 
 const DeleteAccountReason = ({ navigation }) => {
   const [radioItem, setRadioItem] = useState(radioArray);
   const [selectedRadioButton, setRadioButton] = useState({});
   const [otherText, setOtherText] = useState("");
   const [error, setError] = useState(false);
+  const dispatch = useDispatch();
 
   //....... handle Radio Item true or false........ //
   const handleRadioItem = (id, item) => {
@@ -37,6 +40,11 @@ const DeleteAccountReason = ({ navigation }) => {
     if (selectedRadioButton?.id === 5 && otherText === "") {
       setError(true);
     } else {
+      let reasonData = {
+        selectedRadioButton: selectedRadioButton,
+        otherText: otherText
+      }
+      dispatch(deleteAccountReason(reasonData))
       navigation.navigate("ConfirDeleAccount", {
         selectedRadioButton: selectedRadioButton,
         otherText: otherText,
@@ -45,7 +53,10 @@ const DeleteAccountReason = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={style.mainWrapper}>
+    <SafeAreaView style={style.mainWrapper}
+      onPress={() => Keyboard.dismiss()}
+      keyboardShouldPersistTaps='handled'
+    >
       <View style={style.mainWrapper}>
         <View
           marginV-16
@@ -88,10 +99,13 @@ const DeleteAccountReason = ({ navigation }) => {
                         setError(false);
                       }}
                       numberOfLines={4}
+                      maxLength={150}
                       value={otherText}
                       placeholderTextColor={Colors.gray500}
                       autoCapitalize="none"
                       style={style.input}
+                      blurOnSubmit={true}
+                      onSubmitEditing={() => Keyboard.dismiss()}
                     />
                   </View>
                   {error && (

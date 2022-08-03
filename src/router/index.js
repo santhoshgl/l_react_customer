@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { isEmpty } from 'underscore';
 import Login from '../screen/login';
 import Register from '../screen/register';
@@ -37,6 +37,9 @@ import {
   ConfirDeleAccount,
   AccountDeleted,
 } from "../screen/DeleteAccount";
+import { useNetInfo } from '@react-native-community/netinfo';
+import { onGetInternetStatus } from '../redux/reducer/network';
+
 
 const Stack = createNativeStackNavigator();
 const OffersStack = createNativeStackNavigator();
@@ -107,6 +110,14 @@ const App = () => {
   if (userData && (!defaultHub || isEmpty(defaultHub))) {
     intialPage = "hub";
   }
+  const dispatch = useDispatch()
+  const netInfo = useNetInfo();
+
+
+  useEffect(() => {
+    dispatch(onGetInternetStatus(netInfo?.isConnected))
+},[netInfo]) // in order to re-call the hooks whenever the netInfo status changed 
+
   return (
     <NavigationContainer>
       <Stack.Navigator

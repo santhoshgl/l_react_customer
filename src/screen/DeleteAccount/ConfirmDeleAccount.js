@@ -8,38 +8,57 @@ import {
 } from "react-native-ui-lib";
 import style from "./style";
 import { Colors, Images } from "@constants";
-import { SafeAreaView, ScrollView, TextInput } from "react-native";
-import { useDispatch } from "react-redux";
+import { SafeAreaView, ScrollView, TextInput, Keyboard } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { onDeleteUser } from "../../redux/reducer/user";
 import { useRoute } from "@react-navigation/native";
 import { unwrapResult } from '@reduxjs/toolkit';
+import { showOfflineMessage } from "../../redux/reducer/network";
+import { showMessage } from "react-native-flash-message";
+import { deleteAccountReason, onsetPassword } from "../../redux/reducer/user";
 
 const ConfirmDeleAccount = ({ navigation }) => {
-  const [password, setPassWord] = useState("");
+  const isInternetReachable = useSelector((s) => s?.network?.isInternetReachable)
+  const password = useSelector((s) => s.user.password)
   const [passwordError, setpassWordError] = useState(false);
   const dispatch = useDispatch();
-  const route = useRoute();
-  const { params } = route;
+  const reasonDetails = useSelector((s) => s?.user?.deleteAccountReason);
+  const userEmail = useSelector((s) => s.user.userData.email)
 
   const handleConfurmDeleteAccount = () => {
-    if (password == "" && password.length > 9) {
+    let reason = reasonDetails?.otherText || reasonDetails?.selectedRadioButton?.text
+    if (reason === "" && reason?.length > 9) {
       setpassWordError(true);
     } else {
       let data = {
         password: password,
-        reason: params?.otherText || params?.selectedRadioButton?.text
+        reason: reason,
+        email: userEmail
       }
-      dispatch(
-        onDeleteUser(data)).then(unwrapResult)
-        .then((data) => {
-          data?.created && navigation.navigate("AccountDeleted")
-        })
+      if (!isInternetReachable) {
+        showMessage({ message: "You are offline", type: 'danger' })
+      }
+      else {
+        dispatch(
+          onDeleteUser(data)).then(unwrapResult)
+          .then((data) => {
+            data?.created &&
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'AccountDeleted' }]
+              })
+          })
+      }
+
     }
   };
 
   return (
     <SafeAreaView style={style.mainWrapper}>
-      <ScrollView style={style.mainWrapper} contentContainerStyle={{ flexGrow: 1}}>
+      <ScrollView style={style.mainWrapper} contentContainerStyle={{ flexGrow: 1 }}
+        onPress={() => Keyboard.dismiss()}
+        keyboardShouldPersistTaps='handled'
+      >
         <View style={[style.headerContainer, { marginTop: 15 }]}>
           <TouchableOpacity onPress={navigation.goBack}>
             <Image source={Images.back} style={style.backIcon} />
@@ -63,7 +82,7 @@ const ConfirmDeleAccount = ({ navigation }) => {
             <TextInput
               placeholder={"Password"}
               onChangeText={(value) => {
-                setPassWord(value);
+                dispatch(onsetPassword(value))
                 setpassWordError(false);
               }}
               secureTextEntry={true}
@@ -71,6 +90,8 @@ const ConfirmDeleAccount = ({ navigation }) => {
               placeholderTextColor={Colors.gray500}
               autoCapitalize="none"
               style={style.passWordInput}
+              blurOnSubmit={true}
+              onSubmitEditing={() => Keyboard.dismiss()}
             />
           </View>
           {passwordError && (
@@ -84,11 +105,11 @@ const ConfirmDeleAccount = ({ navigation }) => {
         <View style={style.buttonContainer}>
           <Button
             activeOpacity={0.9}
-            disabled={!(password !== "" && password.length > 7)}
+            disabled={!(password !== "" && password?.length > 7)}
             label={"Confirm Account Deletion"}
             style={{
               backgroundColor:
-                password !== "" && password.length > 7
+                password !== "" && password?.length > 7
                   ? Colors.primary600
                   : Colors.primary200,
             }}

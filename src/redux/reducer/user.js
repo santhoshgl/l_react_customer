@@ -146,7 +146,7 @@ export const getNotification = createAsyncThunk('user/getNotification', async (p
 
 
 export const onDeleteUser = createAsyncThunk('user/deleteUser', async (param, { getState, requestId, dispatch }) => {
-  const userEmail = await auth()?.currentUser?.email;
+  var userEmail = param?.email;
   const loginObject = {
     email: userEmail?.trim(),
     password: param?.password?.trim()
@@ -159,6 +159,8 @@ export const onDeleteUser = createAsyncThunk('user/deleteUser', async (param, { 
     const userData = await auth().signInWithEmailAndPassword(loginObject?.email, loginObject?.password);
     userData?.user?.uid && auth()?.currentUser?.delete()
     const response = await apiRequest.post('users/delete', { data })
+    dispatch(deleteAccountReason(""))
+    dispatch(onsetPassword(''))
     dispatch(setLoading(false))
     return response?.data
   } catch (error) {
@@ -170,10 +172,16 @@ export const onDeleteUser = createAsyncThunk('user/deleteUser', async (param, { 
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState: { userData: null, defaultHub: {}, deviceToken: {}, userNotification: null },
+  initialState: { userData: null, defaultHub: {}, deviceToken: {}, userNotification: null, deleteAccountReason: '', password: '' },
   reducers: {
     onGetDeviceToken: (state, { payload }) => {
       state.deviceToken = payload
+    },
+    deleteAccountReason: (state, { payload }) => {
+      state.deleteAccountReason = payload
+    },
+    onsetPassword: (state, { payload }) => {
+      state.password = payload
     },
     logout: (state, { payload }) => {
       state.userData = null;
@@ -202,6 +210,6 @@ export const userSlice = createSlice({
   }
 })
 
-export const { onGetDeviceToken, logout } = userSlice.actions
+export const { onGetDeviceToken, logout, deleteAccountReason, onsetPassword } = userSlice.actions
 
 export default userSlice.reducer
