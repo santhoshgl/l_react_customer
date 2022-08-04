@@ -156,13 +156,16 @@ export const onDeleteUser = createAsyncThunk('user/deleteUser', async (param, { 
   }
   try {
     dispatch(setLoading(true))
-    const userData = await auth().signInWithEmailAndPassword(loginObject?.email, loginObject?.password);
-    userData?.user?.uid && auth()?.currentUser?.delete()
-    const response = await apiRequest.post('users/delete', { data })
+    await auth().signInWithEmailAndPassword(loginObject?.email, loginObject?.password);
+    const response = await apiRequest.post('/users/delete', { data })
+    response?.data?.created && await auth()?.currentUser?.delete()
+    let sucessData = {
+      isUserDeleted: true
+    }
     dispatch(deleteAccountReason(""))
     dispatch(onsetPassword(''))
     dispatch(setLoading(false))
-    return response?.data
+    return sucessData
   } catch (error) {
     showMessage({ message: error?.userInfo?.code ? error?.userInfo?.message : error?.message, type: 'danger' })
     dispatch(setLoading(false))

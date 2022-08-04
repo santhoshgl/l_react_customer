@@ -9,7 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { View, Text } from "react-native-ui-lib";
+import { View, Text, Button } from "react-native-ui-lib";
 import { useDispatch, useSelector } from "react-redux";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import _ from "underscore";
@@ -33,9 +33,13 @@ const Account = ({ navigation }) => {
   const [pictureModal, _pictureModel] = useState(false);
   const [picture, _picture] = useState(userData?.profilePicture);
   const userDeviceToken = useSelector((s) => s.user?.deviceToken?.token);
+  const [logoutModal, _logoutModal] = useState(false);
+  const [divisibleButton, setDivisibleButton] = useState(false)
 
   const _logout = () => {
+    setDivisibleButton(true)
     var pushNotificationTokens = [];
+    dispatch(setLoading(true))
     dispatch(getUser())
       .then(unwrapResult)
       .then((res) => {
@@ -49,7 +53,12 @@ const Account = ({ navigation }) => {
           .then(unwrapResult)
           .then((originalPromiseResult) => {
             dispatch(logout());
-            navigation.navigate("landing");
+            dispatch(setLoading(false))
+            setDivisibleButton(false)
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "landing" }],
+            });
           });
       });
   };
@@ -288,13 +297,77 @@ const Account = ({ navigation }) => {
               marginB-60
               fs16
               lh20
-              onPress={_logout}
+              onPress={() => {
+                _logoutModal(true);
+              }}
             >
               Log out
             </Text>
           </View>
         </ScrollView>
       </SafeAreaView>
+      {logoutModal && (
+        <Modal
+          visible={logoutModal}
+          transparent
+          animationType={"fade"}
+          onRequestClose={() => _logoutModal(false)}
+        >
+          <Pressable
+            disabled={divisibleButton}
+            onPress={() => _logoutModal(false)}
+            style={{
+              flex: 1,
+              backgroundColor: "rgba(0,0,0,0.5)",
+              justifyContent: "flex-end",
+            }}
+          >
+            <View
+              marginH-16
+              bg-white
+              style={{
+                marginBottom: 67,
+                borderRadius: 32,
+                // height: windowHeight / 2.5,
+                // height: 284,
+              }}
+            >
+              <Image source={Images.logout} style={styles.logoutIcon} />
+              <Text
+                lh32
+                beb24
+                center
+                marginT-16
+                black
+                style={styles.fontWeight400}
+              >
+                LOGOUT
+              </Text>
+              <Text fs14 center gray500 lh20 marginT-8>
+                Are you sure you would like to log out?
+              </Text>
+              <Button
+                disabled={divisibleButton}
+                onPress={() => _logout()}
+                marginH-16
+                marginT-24
+                label={"Yes, Log Out"}
+              ></Button>
+              <Button
+                disabled={divisibleButton}
+                onPress={() => _logoutModal(false)}
+                marginH-16
+                marginT-12
+                style={styles.cancleButton}
+              >
+                <Text fs16 gray700 center lh24 style={styles.fontWeight400}>
+                  Cancel
+                </Text>
+              </Button>
+            </View>
+          </Pressable>
+        </Modal>
+      )}
       {pictureModal ? (
         <Modal
           visible={true}

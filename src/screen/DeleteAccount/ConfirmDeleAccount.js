@@ -42,7 +42,7 @@ const ConfirmDeleAccount = ({ navigation }) => {
         dispatch(
           onDeleteUser(data)).then(unwrapResult)
           .then((data) => {
-            data?.created &&
+            data?.isUserDeleted &&
               navigation.reset({
                 index: 0,
                 routes: [{ name: 'AccountDeleted' }]
