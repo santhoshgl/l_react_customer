@@ -67,4 +67,5 @@ export default {
   mail: require("../assets/mail.png"),
   thumbs_up: require("../assets/thumbs_up.png"),
   AccountDeleted: require("../assets/AccountDeleted.png"),
+  logout: require("../assets/logout.png"),
 };
