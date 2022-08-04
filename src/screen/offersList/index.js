@@ -146,7 +146,7 @@ const OffersList = ({ navigation, route }) => {
           ref={flatListRef}
           data={offersData || []}
           contentContainerStyle={{ flexGrow: 1 }}
-          renderItem={({ item }) => <Card item={item} />}
+          renderItem={({ item }) => <Card navigation={navigation} item={item} />}
           keyExtractor={(_, index) => index.toString()}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode={'on-drag'}
@@ -175,7 +175,7 @@ const OffersList = ({ navigation, route }) => {
 
 export default memo(OffersList)
 
-export const Card = ({ item }) => {
+export const Card = ({ navigation, item }) => {
 
   const getCardStyles = useMemo(() => {
     let icon = Images.offers;
@@ -202,8 +202,12 @@ export const Card = ({ item }) => {
     return { icon, color }
   }, [item])
 
+  const onPressOffers = () => {
+    navigation.navigate('BusinessInfo', { business: { id: item?.businessID } })
+  }
+
   return (
-    <View style={styles.card}>
+    <Pressable onPress={() => onPressOffers()} style={styles.card}>
       <View row >
         <View style={{ backgroundColor: getCardStyles?.color, height: 32, width: 32, justifyContent: 'center', alignItems: 'center', borderRadius: 32 }}>
           <Image source={getCardStyles?.icon} style={{ height: 16, width: 16, tintColor: "black" }} />
@@ -221,6 +225,13 @@ export const Card = ({ item }) => {
           <Text fs14 lh20 gray700 marginL-4>{item?.credit}</Text>
         </View>
       </View>
-    </View >
+      <View style={styles.separator} />
+      <View style={styles.bottom}>
+        <Image source={Images.check} style={{ height: 16, width: 16 }} />
+        <Text fs12 lh18 gray500 marginL-4>{item?.offersRedeemed ? 'Redeemed' : 'Rewarded'}</Text>
+        <Text fs12SB lh18 gray700 marginH-4>{(item?.offersRedeemed ? item?.offersRedeemed : item?.offersRewarded) || 0}</Text>
+        <Text fs12 lh18 gray500> times </Text>
+      </View>
+    </Pressable >
   );
 }

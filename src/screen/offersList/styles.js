@@ -18,4 +18,11 @@ export default styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center',
     alignSelf: 'flex-start'
   },
+  separator: {
+    height: 1, backgroundColor: Colors.gray200, marginTop: 16
+  },
+  bottom: {
+    marginTop: 8, marginHorizontal: 8,
+    flexDirection: 'row', alignItems: 'center'
+  }
 })

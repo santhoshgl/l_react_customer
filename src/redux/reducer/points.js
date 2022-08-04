@@ -19,8 +19,12 @@ export const getRewardWallet = createAsyncThunk('points/getRewardWallet', async 
 
 export const getRewards = createAsyncThunk('points/getRewards', async (params, { dispatch }) => {
   try {
+    let url = `rewards?customerID=${params?.userID}&hubID=${params?.hubID}`;
+    if (params?.url) {
+      url = params?.url
+    }
     dispatch(setLoading(true))
-    const data = await apiRequest.get(`rewards?customerID=${params?.userID}&hubID=${params?.hubID}`)
+    const data = await apiRequest.get(url)
     dispatch(setLoading(false))
     return data;
   } catch (error) {

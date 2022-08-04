@@ -137,7 +137,7 @@ const Offers = ({ navigation }) => {
             ref={flatListRef}
             data={offerFilterList || []}
             contentContainerStyle={{ flexGrow: 1 }}
-            renderItem={({ item }) => <Card item={item} />}
+            renderItem={({ item }) => <Card navigation={navigation} item={item} />}
             keyExtractor={(_, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             keyboardDismissMode={'on-drag'}
