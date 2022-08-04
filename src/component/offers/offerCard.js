@@ -1,10 +1,12 @@
 import React, { memo, useMemo } from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Image, Pressable, StyleSheet } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { Colors } from '@constants';
 import { Images } from '../../constants';
+import { useNavigation } from '@react-navigation/native';
 
 const OfferCard = ({ item }) => {
+  const navigation = useNavigation()
 
   const getCardStyles = useMemo(() => {
     let icon = Images.offers;
@@ -31,8 +33,12 @@ const OfferCard = ({ item }) => {
     return { icon, color }
   }, [item])
 
+  const onPressOffers = () => {
+    navigation.navigate('BusinessInfo', { business: { id: item?.businessID } })
+  }
+
   return (
-    <View style={styles.card}>
+    <Pressable onPress={() => onPressOffers()} style={styles.card}>
       <View style={[{ backgroundColor: getCardStyles?.color, ...styles.header }]}>
         <Image source={getCardStyles?.icon} style={{ height: 24, width: 24, tintColor: "black" }} />
         <View style={styles.badge}>
@@ -55,7 +61,7 @@ const OfferCard = ({ item }) => {
         <Text fs12SB lh18 gray700 marginH-4>{(item?.offersRedeemed ? item?.offersRedeemed : item?.offersRewarded) || 0}</Text>
         <Text fs12 lh18 gray500> times </Text>
       </View>
-    </View>
+    </Pressable>
   );
 }
 

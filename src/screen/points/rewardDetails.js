@@ -49,6 +49,10 @@ const RewardDetails = ({ navigation, route }) => {
     showMessage({ message: "Reference copied to clipboard.", type: "success" });
   }
 
+  const onPressOffers = () => {
+    navigation.navigate('BusinessInfo', { business: { id: rewardDetails?.attributes?.business?.id } })
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <View style={{ backgroundColor: Colors.white }}>
@@ -94,7 +98,7 @@ const RewardDetails = ({ navigation, route }) => {
           {rewardDetails.attributes?.rewardType == 'credit' ?
             <>
               <Text fs14 lh20 gray700>Offer used</Text>
-              <View style={styles.card}>
+              <Pressable onPress={() => onPressOffers()} style={styles.card}>
                 <View row >
                   <View style={{
                     backgroundColor: getCardStyles?.color, height: 32, width: 32, justifyContent: 'center',
@@ -111,7 +115,7 @@ const RewardDetails = ({ navigation, route }) => {
                     <Text fs14 lh20 gray700 marginL-4>{rewardDetails?.attributes?.offer?.credit}</Text>
                   </View>
                 </View>
-              </View>
+              </Pressable>
             </>
             : null
           }

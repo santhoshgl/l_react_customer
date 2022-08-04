@@ -1,30 +1,44 @@
-import React, { memo, useEffect } from "react";
-import {
-  SafeAreaView,
-  FlatList,
-  Pressable,
-  ScrollView,
-  Image,
-  Dimensions,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import React, { memo, useEffect, useRef, useState } from "react";
+import { SafeAreaView, ScrollView, Image, StyleSheet, TouchableOpacity, } from "react-native";
 import { View, Text } from "react-native-ui-lib";
 import { useDispatch, useSelector } from "react-redux";
+import Config from "react-native-config";
 import _ from "underscore";
 import moment from "moment";
 import Header from "@component/header";
 import { Colors, Images } from "@constants";
-import apiRequest from "@services/networkProvider";
-import { setLoading } from "../../redux/reducer/loading";
 import { getRewardWallet, getRewards } from "../../redux/reducer/points";
-
-const { width } = Dimensions.get("screen");
 
 const History = ({ navigation }) => {
   const dispatch = useDispatch();
   const { userData, defaultHub } = useSelector((s) => s.user);
   const { walletData, rewards } = useSelector((s) => s.points);
+  const scrollRef = useRef()
+
+  const [rewardsData, _rewardsData] = useState([]);
+  const [nextLink, _nextLink] = useState("");
+  const [prevLink, _prevLink] = useState("");
+  const [page, _page] = useState(1);
+
+  const setNextLink = (url) => {
+    _nextLink(url?.replace(Config.API_URL, ''))
+  }
+
+  const setPrevLink = (url) => {
+    _prevLink(url?.replace(Config.API_URL, ''))
+  }
+
+  useEffect(() => {
+    moveToTop();
+    if (rewards?.meta?.offset) {
+      _page((rewards?.meta?.offset / rewards?.meta?.limit) + 1);
+    } else {
+      _page(1);
+    }
+    _rewardsData(rewards?.data);
+    setNextLink(rewards?.links?.next);
+    setPrevLink(rewards?.links?.prev);
+  }, [rewards])
 
   useEffect(() => {
     if (defaultHub?.id) {
@@ -33,10 +47,24 @@ const History = ({ navigation }) => {
     }
   }, [defaultHub?.id]);
 
+  const moveToTop = () => scrollRef.current?.scrollTo({
+    y: 0,
+    animated: true,
+  });
+
+  const nextPageHandler = () => {
+    dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, url: nextLink }));
+  }
+
+  const prevPageHandler = () => {
+    dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, url: prevLink }));
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <Header navigation={navigation} />
       <ScrollView
+        ref={scrollRef}
         contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}
       >
         <View style={{ backgroundColor: Colors.yellow }}>
@@ -82,7 +110,7 @@ const History = ({ navigation }) => {
             account.
           </Text>
         </View>
-        {rewards?.data?.length > 0 ? (
+        {rewardsData?.length > 0 ? (
           <>
             <View style={{ backgroundColor: Colors.white, paddingHorizontal: 10 }}>
               <View row centerV flex>
@@ -99,7 +127,7 @@ const History = ({ navigation }) => {
                   Type
                 </Text>
               </View>
-              {rewards?.data?.map((reward, index) => {
+              {rewardsData?.map((reward, index) => {
                 return (
                   <TouchableOpacity
                     key={reward?.id}
@@ -163,18 +191,19 @@ const History = ({ navigation }) => {
             </View>
 
             <View row centerV flex style={styles.pagination}>
-              <View style={styles.paginationButton}>
+              <TouchableOpacity onPress={() => prevPageHandler()} disabled={prevLink ? false : true} style={[styles.paginationButton, prevLink ? {} : { backgroundColor: "#e3e3e3" }]}>
                 <Image source={Images.back} style={{ height: 20, width: 20 }} />
-              </View>
+              </TouchableOpacity>
               <Text fs14 lh20 gray700>
-                Page 1 of {rewards?.meta?.totalPages}
+                Page {page} of {rewards?.meta?.totalPages}
               </Text>
-              <View style={styles.paginationButton}>
+              <TouchableOpacity onPress={() => nextPageHandler()} disabled={nextLink ? false : true} style={[styles.paginationButton, nextLink ? {} : { backgroundColor: "#e3e3e3" }]}>
                 <Image
                   source={Images.arrowRight}
                   style={{ height: 20, width: 20 }}
                 />
-              </View>
+
+              </TouchableOpacity>
             </View>
           </>
         ) :
