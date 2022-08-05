@@ -39,6 +39,7 @@ import {
 } from "../screen/DeleteAccount";
 import { useNetInfo } from '@react-native-community/netinfo';
 import { onGetInternetStatus } from '../redux/reducer/network';
+import BusinessFilter from '../screen/businessFilter';
 
 
 const Stack = createNativeStackNavigator();
@@ -82,6 +83,7 @@ const _BusinessStack = () => {
       <BusinessStack.Screen name="businesses" component={Business} />
       <BusinessStack.Screen name="businessList" component={BusinessList} />
       <BusinessStack.Screen name="businessInfo" component={BusinessInfo} />
+      <BusinessStack.Screen name="businessFilter" component={BusinessFilter} />
     </BusinessStack.Navigator>
   );
 };
@@ -116,7 +118,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(onGetInternetStatus(netInfo?.isConnected))
-},[netInfo]) // in order to re-call the hooks whenever the netInfo status changed 
+  }, [netInfo]) // in order to re-call the hooks whenever the netInfo status changed 
 
   return (
     <NavigationContainer>

@@ -10,7 +10,7 @@ const searchBar = ({ onChangeText = () => { }, value, onSearch = () => { }, onFo
   return (
     <View style={[styles.searchBox, props?.style, { borderColor: value ? Colors.black : Colors.gray300 }]}>
       <Image source={props?.fromFollowingBusiness ? Images.searchRed : Images.search}
-        style={[styles.searchIcon, { tintColor: value ? Colors.primary600 : null }]} resizeMode={'contain'} />
+        style={[styles.searchIcon, { tintColor: Colors.primary600 }]} resizeMode={'contain'} />
       <TextInput
         placeholder={props?.placeholder || 'Search'}
         value={value}

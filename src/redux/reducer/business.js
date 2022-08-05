@@ -3,10 +3,51 @@ import apiRequest from '@services/networkProvider';
 import { showMessage } from "react-native-flash-message";
 import auth from '@react-native-firebase/auth';
 
+const generateBusinessURL = (url, filter, search) => {
+  if (search?.length)
+    url = `${url}?search=${search}`;
+
+  let operator = search?.length ? '&' : '?';
+
+  if (filter?.sortBy?.length) {
+    url = `${url}${operator}sortBy=${filter?.sortBy}`;
+  }
+
+  operator = (search?.length || filter?.sortBy?.length) ? '&' : '?';
+
+  if (filter?.category?.length) {
+    filter?.category?.forEach((item, index) => {
+      if (index == 0)
+        url = `${url}${operator}category=${item}`
+      else
+        url = `${url}&category=${item}`
+    });
+  }
+  return url;
+}
+
+
 export const getBusiness = createAsyncThunk('business/getBusiness', async (hubID) => {
   try {
     const data = await apiRequest.get(`hubs/${hubID}/business?sortBy=category`)
     return data?.data;
+  } catch (error) {
+    showMessage({ message: error?.message, type: 'danger' })
+    throw (error)
+  }
+})
+
+export const getFilteredBusiness = createAsyncThunk('offers/getFilteredBusiness', async (params) => {
+  try {
+    const { hubId, search = null, filter = null } = params;
+    let url = `hubs/${hubId}/business`;
+
+    if (filter?.category?.length > 0 || filter?.sortBy?.length > 0 || search?.length) {
+      url = generateBusinessURL(url, filter, search);
+    }
+
+    const data = await apiRequest.get(url);
+    return data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
     throw (error)
@@ -32,7 +73,7 @@ export const onFollowBusiness = createAsyncThunk('followers/business', async (pa
 
 export const businessSlice = createSlice({
   name: 'business',
-  initialState: { businessData: [], featuredBusinessData: [], businessLoading: false },
+  initialState: { businessData: [], featuredBusinessData: [], businessLoading: false, filteredBusiness: {} },
   reducers: {},
   extraReducers: {
     [getFeaturedBusiness.pending]: (state, { payload }) => {
@@ -47,6 +88,9 @@ export const businessSlice = createSlice({
     },
     [getBusiness.fulfilled]: (state, { payload }) => {
       state.businessData = payload
+    },
+    [getFilteredBusiness.fulfilled]: (state, { payload }) => {
+      state.filteredBusiness = payload
     },
   }
 })
