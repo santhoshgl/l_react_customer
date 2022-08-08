@@ -71,6 +71,12 @@ const BusinessList = ({ navigation, route }) => {
     if (search)
       url = `${url}&search=${search}`;
 
+    if (filter?.category?.length) {
+      filter?.category?.forEach((item) => {
+        url = `${url}&category=${item}`
+      });
+    }
+
     apiRequest.get(url).then(res => {
       _businessData(res?.data || [])
       setNextLink(res?.links?.next)

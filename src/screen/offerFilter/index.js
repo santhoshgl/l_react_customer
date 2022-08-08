@@ -30,7 +30,7 @@ const OfferFilter = ({ navigation, route }) => {
     const applyFilter = {
       sortBy: sortBy
     }
-    if (source == "all")
+    if (source == "all" || source == "Featured Offers" || source == "Latest Offers")
       applyFilter['category'] = category;
 
     onApplyFilter?.(applyFilter);
@@ -76,7 +76,7 @@ const OfferFilter = ({ navigation, route }) => {
           </View>
 
           {
-            source == "all" && <View marginT-6>
+            (source == "all" || source == "Featured Offers" || source == "Latest Offers") && <View marginT-6>
               <Text fs14SB lh20 gray900> By Category </Text>
               <View style={styles.boxSortBy}>
                 {

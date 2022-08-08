@@ -30,7 +30,7 @@ const BusinessFilter = ({ navigation, route }) => {
     const applyFilter = {
       sortBy: sortBy
     }
-    if (source == "all")
+    if (source == "all" || source == "Latest Businesses" || source == "Featured businesses")
       applyFilter['category'] = category;
 
     onApplyFilter?.(applyFilter);
@@ -76,7 +76,7 @@ const BusinessFilter = ({ navigation, route }) => {
           </View>
 
           {
-            source == "all" && <View marginT-6>
+            (source == "all" || source == "Latest Businesses" || source == "Featured businesses") && <View marginT-6>
               <Text fs14SB lh20 gray900> By Category </Text>
               <View style={styles.boxSortBy}>
                 {
