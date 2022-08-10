@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { Colors } from '@constants';
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 
@@ -22,7 +22,7 @@ export default styles = StyleSheet.create({
   },
   featureIcon: {
     height: 20, width: 20,
-     marginRight: 16
+    marginRight: 16
   },
   chevron_rightIcon: {
     height: 24, width: 24

@@ -143,7 +143,7 @@ const FollowingBusiness = ({ navigation, route }) => {
                     )}
                     ListEmptyComponent={() => (
                         <View flex center>
-                            <Text gray700>You are not following any busines yet.</Text>
+                            <Text gray700>You are not following any business yet.</Text>
                         </View>
                     )}
                 />

@@ -72,7 +72,9 @@ const Offers = ({ navigation }) => {
   useEffect(() => {
     if (filter?.sortBy?.length > 0 || filter?.category?.length > 0 || search?.length > 0) {
       _isListView(true)
-      moveToTop()
+      if (offerFilterList.length > 0) {
+        moveToTop()
+      }
     } else {
       _isListView(false)
     }
@@ -84,7 +86,9 @@ const Offers = ({ navigation }) => {
     fetchFilteredOffers(defaultHub?.id, val, filter);
     if (filter?.sortBy?.length > 0 || val?.length > 0 || filter?.category?.length > 0) {
       _isListView(true)
-      moveToTop()
+      if (offerFilterList.length > 0) {
+        moveToTop()
+      }
     }
     else {
       _isListView(false)

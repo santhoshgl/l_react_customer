@@ -1,8 +1,10 @@
 import React, { memo } from 'react';
-import { SafeAreaView, Pressable, ScrollView, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Pressable, ScrollView, Image, ImageBackground, TouchableOpacity, Dimensions } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { Colors, Images } from '@constants';
 import styles from './styles'
+
+const windowWidth = Dimensions.get('window').width;
 
 const AboutAccount = ({ navigation }) => {
 
@@ -19,7 +21,7 @@ const AboutAccount = ({ navigation }) => {
       </View>
       <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}>
         <View style={styles.imageBanner}>
-          <ImageBackground source={Images.aboutBanner} style={styles.image} />
+          <ImageBackground source={Images.aboutBanner} style={[styles.image, { width: windowWidth }]} resizeMode={'contain'} />
         </View>
         <View marginH-16>
           <View flex>
