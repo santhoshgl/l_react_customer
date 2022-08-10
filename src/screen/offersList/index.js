@@ -12,10 +12,12 @@ import { Colors, Images } from '@constants';
 import { fetchBusinessCategory } from '@util';
 import styles from './styles';
 import { useRef } from 'react';
+import ListSkeleton from '../../component/listSkeleton';
 
 const OffersList = ({ navigation, route }) => {
   const dispatch = useDispatch()
   const { defaultHub } = useSelector(s => s.user)
+  const listLoading = useSelector(s => s.loading.loading)
   const flatListRef = useRef()
 
   const param = useMemo(() => { return route?.params }, [route])
@@ -148,32 +150,36 @@ const OffersList = ({ navigation, route }) => {
           </Pressable>
           <Text beb24 lh32 black flex marginL-10 numberOfLines={1} >{param?.title}</Text>
         </View>
-        <FlatList
-          ref={flatListRef}
-          data={offersData || []}
-          contentContainerStyle={{ flexGrow: 1 }}
-          renderItem={({ item }) => <Card navigation={navigation} item={item} />}
-          keyExtractor={(_, index) => index.toString()}
-          showsVerticalScrollIndicator={false}
-          keyboardDismissMode={'on-drag'}
-          onEndReached={!nomore && fetchMore}
-          scrollEventThrottle={16}
-          onEndReachedThreshold={0.3}
-          refreshing={loading}
-          ListFooterComponent={() => (
-            <View center marginV-20>
-              {nomore ?
-                <Text gray700>No more results.</Text>
-                : <ActivityIndicator animating={loading} size={'large'} />
-              }
-            </View>
-          )}
-          ListEmptyComponent={() => (
-            <View flex center>
-              <Text gray700>No matching offers found. Please try again.</Text>
-            </View>
-          )}
-        />
+        {
+          listLoading ?
+            <ListSkeleton source="offerList" /> :
+            <FlatList
+              ref={flatListRef}
+              data={offersData || []}
+              contentContainerStyle={{ flexGrow: 1 }}
+              renderItem={({ item }) => <Card navigation={navigation} item={item} />}
+              keyExtractor={(_, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+              keyboardDismissMode={'on-drag'}
+              onEndReached={!nomore && fetchMore}
+              scrollEventThrottle={16}
+              onEndReachedThreshold={0.3}
+              refreshing={loading}
+              ListFooterComponent={() => (
+                <View center marginV-20>
+                  {nomore ?
+                    <Text gray700>No more results.</Text>
+                    : <ActivityIndicator animating={loading} size={'large'} />
+                  }
+                </View>
+              )}
+              ListEmptyComponent={() => (
+                <View flex center>
+                  <Text gray700>No matching offers found. Please try again.</Text>
+                </View>
+              )}
+            />
+        }
       </View>
     </SafeAreaView>
   );

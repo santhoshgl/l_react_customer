@@ -14,10 +14,12 @@ import styles from './styles';
 import { onFollowBusiness } from '../../redux/reducer/business';
 import { cloneDeep } from 'lodash';
 import { unwrapResult } from '@reduxjs/toolkit';
+import ListSkeleton from '../../component/listSkeleton';
 
 const BusinessList = ({ navigation, route }) => {
   const dispatch = useDispatch()
   const { defaultHub } = useSelector(s => s.user)
+  const listLoading = useSelector(s => s.loading.loading)
   const param = useMemo(() => { return route?.params }, [route])
   const [businessData, _businessData] = useState([])
   const [nextLink, _nextLink] = useState('')
@@ -191,34 +193,37 @@ const BusinessList = ({ navigation, route }) => {
           </Pressable>
           <Text beb24 lh32 black flex marginL-10 numberOfLines={1} >{param?.title}</Text>
         </View>
-        <FlatList
-          ref={flatListRef}
-          contentContainerStyle={{ flexGrow: 1 }}
-          data={businessData || []}
-          renderItem={({ item }) => <Card item={item} onPressBusiness={onPressBusiness} onPressFollow={onPressFollow} />}
-          keyExtractor={(_, index) => index.toString()}
-          showsVerticalScrollIndicator={false}
-          keyboardDismissMode={'on-drag'}
-          onEndReached={!nomore && fetchMore}
-          scrollEventThrottle={16}
-          onEndReachedThreshold={0.3}
-          refreshing={loading}
-          ListFooterComponent={() => (
-            <View center marginV-20>
-              {nomore ?
-                <Text gray700>No more results.</Text>
-                : <ActivityIndicator animating={loading} size={'large'} />
-              }
-            </View>
-          )}
-          ListEmptyComponent={() => (
-            <View flex center>
-              <Text gray700>No businesses found.</Text>
-            </View>
-          )}
-        />
+        {
+          listLoading ?
+            <ListSkeleton source="businessList" /> :
+            <FlatList
+              ref={flatListRef}
+              contentContainerStyle={{ flexGrow: 1 }}
+              data={businessData || []}
+              renderItem={({ item }) => <Card item={item} onPressBusiness={onPressBusiness} onPressFollow={onPressFollow} />}
+              keyExtractor={(_, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+              keyboardDismissMode={'on-drag'}
+              onEndReached={!nomore && fetchMore}
+              scrollEventThrottle={16}
+              onEndReachedThreshold={0.3}
+              refreshing={loading}
+              ListFooterComponent={() => (
+                <View center marginV-20>
+                  {nomore ?
+                    <Text gray700>No more results.</Text>
+                    : <ActivityIndicator animating={loading} size={'large'} />
+                  }
+                </View>
+              )}
+              ListEmptyComponent={() => (
+                <View flex center>
+                  <Text Text gray700>No matching Business found. Please try again.</Text>
+                </View>
+              )}
+            />}
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 }
 

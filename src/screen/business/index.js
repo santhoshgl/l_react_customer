@@ -168,6 +168,7 @@ const Business = ({ navigation }) => {
             <FlatList
               ref={flatListRef}
               data={businessFilterList || []}
+              contentContainerStyle={{ flexGrow: 1 }}
               renderItem={({ item }) => <Card item={item} onPressBusiness={onPressBusiness} onPressFollow={onPressFollow} />}
               keyExtractor={(_, index) => index.toString()}
               showsVerticalScrollIndicator={false}
@@ -176,9 +177,14 @@ const Business = ({ navigation }) => {
               scrollEventThrottle={16}
               onEndReachedThreshold={0.3}
               refreshing={loading}
+              ListEmptyComponent={() => (
+                <View flex center>
+                  <Text gray700>No matching Business found. Please try again.</Text>
+                </View>
+              )}
               ListFooterComponent={() => (
                 <View center marginV-20>
-                  {nomore ?
+                  {!businessFilterList && nomore ?
                     <Text gray700>No more results.</Text>
                     : <ActivityIndicator animating={loading} size={'large'} />
                   }
