@@ -114,16 +114,16 @@ const History = ({ navigation }) => {
           <>
             <View style={{ backgroundColor: Colors.white, paddingHorizontal: 10 }}>
               <View row centerV flex>
-                <Text fs12 lh18 gray500 center style={styles.tableTitle}>
+                <Text fs12 lh18 gray500 center style={[styles.tableTitle, { width: "20%" }]}>
                   Reference
                 </Text>
-                <Text fs12 lh18 gray500 center style={styles.tableTitle}>
+                <Text fs12 lh18 gray500 center style={[styles.tableTitle, { width: "35%" }]}>
                   Date
                 </Text>
-                <Text fs12 lh18 gray500 center style={styles.tableTitle}>
-                  Credit Amount
+                <Text fs12 lh18 gray500 center style={[styles.tableTitle, { width: "20%" }]}>
+                  Credits
                 </Text>
-                <Text fs12 lh18 gray500 center style={styles.tableTitle}>
+                <Text fs12 lh18 gray500 center style={[styles.tableTitle, { width: "25%" }]}>
                   Type
                 </Text>
               </View>
@@ -144,14 +144,14 @@ const History = ({ navigation }) => {
                           index % 2 == 0 ? Colors.gray50 : Colors.white,
                       }}
                     >
-                      <Text fs14 lh20 gray500 center style={styles.tableBody}>{`#${reward?.id.substr(reward?.id.length - 4)}`}</Text>
-                      <Text fs14 lh20 gray500 center style={styles.tableBody}>
+                      <Text fs14 lh20 gray500 center style={[styles.tableBody, { width: "20%" }]}>{`#${reward?.id.substr(reward?.id.length - 4)}`}</Text>
+                      <Text fs14 lh20 gray500 center style={[styles.tableBody, { width: "35%" }]}>
                         {moment(reward?.attributes?.createdAt).format("ll")}
                       </Text>
-                      <Text fs14 lh20 gray500 center style={styles.tableBody}>
+                      <Text fs14 lh20 gray500 center style={[styles.tableBody, { width: "20%" }]}>
                         {reward?.attributes?.credits}
                       </Text>
-                      <View fs14 lh20 success700 center style={styles.tableBody}>
+                      <View fs14 lh20 success700 center style={[styles.tableBody, { width: "25%" }]}>
                         {reward?.attributes?.rewardType == "credit" ? (
                           <View center style={styles.typeText}>
                             <Image

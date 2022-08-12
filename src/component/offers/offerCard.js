@@ -46,9 +46,9 @@ const OfferCard = ({ item }) => {
           <Text fs14 lh20 black marginL-4>{item?.credit}</Text>
         </View>
       </View>
-      <View margin-16>
+      <View flex margin-16>
         <Text beb24 lh32 black numberOfLines={1} ellipsizeMode='tail'>{item?.title || ''}</Text>
-        <Text fs16 lh24 gray700 numberOfLines={2}>{item?.description || ''}</Text>
+        <Text flex fs16 lh24 gray700 numberOfLines={2}>{item?.description || ''}</Text>
         <View marginT-12 row centerV >
           <Image source={item?.businessLogo ? { uri: item?.businessLogo } : Images.defaultBusinessSmall} style={{ height: 24, width: 24, borderRadius: 24 }} />
           <Text marginL-6 fs12 lh18 gray700>{item?.businessName}</Text>

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useDispatch, useSelector } from 'react-redux';
+import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { isEmpty } from 'underscore';
 import Login from '../screen/login';
 import Register from '../screen/register';
@@ -87,6 +89,8 @@ const _BusinessStack = () => {
     </BusinessStack.Navigator>
   );
 };
+import { Colors, Images } from '../constants';
+import { Image, Text } from 'react-native-ui-lib';
 
 const Dashboard = () => {
   return (
@@ -94,15 +98,52 @@ const Dashboard = () => {
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,
+        tabBarActiveTintColor: Colors.primary600,
+        tabBarInactiveTintColor: Colors.gray500,
         lazy: false,
+        tabBarStyle: {
+          height: Platform.OS == "android" ? getBottomSpace() + 90 : getBottomSpace() + 60,
+          paddingTop: 16,
+          paddingBottom: Platform.OS == "android" ? 30 : getBottomSpace(),
+          borderTopWidth: 0.5, borderTopColor: Colors.gray300
+        }
       }}
-      tabBar={(props) => <BottomTab {...props} />}
+    // tabBar={(props) => <BottomTab {...props} />}
     >
-      <Tab.Screen name="homeTab" component={Home} />
-      <Tab.Screen name="offersTab" component={_OffersStack} />
-      <Tab.Screen name="businessTab" component={_BusinessStack} />
-      <Tab.Screen name="pointsTab" component={_PointsStack} />
-    </Tab.Navigator>
+      <Tab.Screen name="homeTab" component={Home}
+        options={{
+          tabBarLabel: ({ focused }) => (
+            <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Home</Text>
+          ),
+          tabBarIcon: ({ color, size }) => (
+            <Image source={Images.home} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
+          ),
+        }} />
+      <Tab.Screen name="offersTab" component={_OffersStack} options={{
+        tabBarLabel: ({ focused }) => (
+          <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Offers</Text>
+        ),
+        tabBarIcon: ({ color, size }) => (
+          <Image source={Images.offers} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
+        ),
+      }} />
+      <Tab.Screen name="businessTab" component={_BusinessStack} options={{
+        tabBarLabel: ({ focused }) => (
+          <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Businesses</Text>
+        ),
+        tabBarIcon: ({ color, size }) => (
+          <Image source={Images.tab_business} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
+        ),
+      }} />
+      <Tab.Screen name="pointsTab" component={_PointsStack} options={{
+        tabBarLabel: ({ focused }) => (
+          <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Points</Text>
+        ),
+        tabBarIcon: ({ color, size }) => (
+          <Image source={Images.points} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
+        ),
+      }} />
+    </Tab.Navigator >
   );
 };
 
