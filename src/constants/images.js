@@ -69,4 +69,5 @@ export default {
   AccountDeleted: require("../assets/AccountDeleted.png"),
   logout: require("../assets/logout.png"),
   refresh: require("../assets/refresh.png"),
+  lealzy: require("../assets/Lealzy.png"),
 };
