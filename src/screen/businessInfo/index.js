@@ -32,6 +32,7 @@ const BusinessInfo = () => {
   const route = useRoute();
   const dispatch = useDispatch();
   const { id } = route?.params?.business;
+  const { source } = route?.params;
   const [businessInfo, setBusinessInfo] = useState();
   const [offerData, setOfferData] = useState([]);
   const [lengthMore, setLengthMore] = useState(false);
@@ -47,8 +48,6 @@ const BusinessInfo = () => {
   useEffect(() => {
     fetchData();
   }, [id]);
-
-  console.log("isss", id)
 
   const fetchData = () => {
     let businessInfoUrl = `business/${id}`;
@@ -116,7 +115,7 @@ const BusinessInfo = () => {
 
   const CloseIcon = () => {
     return (
-      <Pressable onPress={() => navigation.goBack()}>
+      <Pressable onPress={() => source && source.length ? navigation.navigate(source, { isRefresh: Math.floor(Math.random() * 900000) }) : navigation.goBack()}>
         <View style={styles.closeView}>
           <Image source={Images.x} style={styles.closeIcon} />
         </View>

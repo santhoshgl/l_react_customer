@@ -10,6 +10,7 @@ import { mailRegex } from '@util';
 import { showMessage } from "react-native-flash-message";
 import { getUser, updateUser } from '../../redux/reducer/user';
 import { unwrapResult } from '@reduxjs/toolkit';
+import PhoneInput from '../../component/phoneInput';
 
 const PersonalDetails = ({ navigation }) => {
 
@@ -26,7 +27,7 @@ const PersonalDetails = ({ navigation }) => {
     if (userData) {
       _firstName(userData?.firstName)
       _lastName(userData?.lastName)
-      _phoneNumber(userData?.phoneNumber)
+      _phoneNumber(userData?.phoneNumber.substring(2))
     }
   }, [userData])
 
@@ -36,7 +37,7 @@ const PersonalDetails = ({ navigation }) => {
       _error(true)
       return
     }
-    else if (phoneNumber.length < 7 || phoneNumber.length > 15) {
+    else if (phoneNumber.length != 10) {
       showMessage({ message: "Enter valid Phone Number.", type: "warning" });
       return;
     }
@@ -44,7 +45,7 @@ const PersonalDetails = ({ navigation }) => {
     const updatedUser = { ...userData }
     updatedUser["firstName"] = firstName?.trim()
     updatedUser["lastName"] = lastName?.trim()
-    updatedUser["phoneNumber"] = phoneNumber?.trim()
+    updatedUser["phoneNumber"] = `+1${phoneNumber?.trim()}`
 
     dispatch(updateUser(updatedUser)).then(unwrapResult).then((originalPromiseResult) => {
       dispatch(getUser()).then(unwrapResult).then((response) => {
@@ -85,16 +86,16 @@ const PersonalDetails = ({ navigation }) => {
             onBlur={(e) => { if (!lastName?.trim()) { _invalid({ ...invalid, lastName: true }) } }}
           />
 
-          <Input
+          <PhoneInput
             label={'Phone Number'}
-            placeholder={'Enter Phone Number'}
+            placeholder={'Enter your number'}
             error={error || invalid?.phoneNumber}
-            keyboardType='phone-pad'
             value={phoneNumber}
             onChangeText={_phoneNumber}
+            keyboardType='phone-pad'
             validVal={!invalid?.phoneNumber}
             onBlur={(e) => {
-              if (!phoneNumber?.trim() || phoneNumber.length < 7 || phoneNumber.length > 15) { _invalid({ ...invalid, phoneNumber: true }) }
+              if (!phoneNumber?.trim() || phoneNumber.length != 10) { _invalid({ ...invalid, phoneNumber: true }) }
               else { _invalid({ ...invalid, phoneNumber: false }) }
             }}
           />

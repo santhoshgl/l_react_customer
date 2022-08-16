@@ -37,7 +37,7 @@ const BusinessList = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchData(search, filter);
-  }, [defaultHub?.id])
+  }, [defaultHub?.id, param?.isRefresh])
 
   // const fetchData = (search, filter) => {
   //   console.log('search :>> ', search);
@@ -154,7 +154,7 @@ const BusinessList = ({ navigation, route }) => {
   }
 
   const onPressBusiness = (business) => {
-    navigation.navigate('BusinessInfo', businessInfo = { business })
+    navigation.navigate('BusinessInfo', { business: business, source: "businessList" })
   }
 
   const moveToTop = () => flatListRef?.current?.scrollToIndex({ index: 0 });
