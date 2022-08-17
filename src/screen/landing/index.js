@@ -4,7 +4,7 @@ import { Button } from 'react-native-ui-lib';
 import { Images, Colors } from '../../constants';
 import { onGetDeviceToken } from '../../redux/reducer/user';
 import { useDispatch } from 'react-redux';
-import { getToken, onMessage, registerForRemoteMessages, requestPermissions } from '../../services/IOSNotificationServices';
+import { getToken, onMessage, requestPermissions } from '../../services/IOSNotificationServices';
 import PushNotification from 'react-native-push-notification';
 
 

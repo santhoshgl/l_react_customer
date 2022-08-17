@@ -145,6 +145,41 @@ export const getNotification = createAsyncThunk('user/getNotification', async (p
 })
 
 
+export const onReadNotification = createAsyncThunk('user/onReadNotification', async (param, { getState, requestId, dispatch }) => {
+  try {
+    let notificationId = param
+    dispatch(setLoading(true))
+    let data = {
+      read: true
+    }
+    const readResponse = await apiRequest.patch(`notifications/${notificationId}`, { data });
+    dispatch(setLoading(false))
+    return readResponse
+  } catch (error) {
+    dispatch(setLoading(false))
+    throw (error)
+  }
+})
+
+
+export const readAllNotifications = createAsyncThunk('user/readAllNotifications', async (param, { getState, requestId, dispatch }) => {
+  try {
+    dispatch(setLoading(true))
+    let data = {
+      read: true
+    }
+    const readResponse = await apiRequest.patch(`notifications`, { data });
+    dispatch(setLoading(false))
+    return readResponse
+  } catch (error) {
+    dispatch(setLoading(false))
+    throw (error)
+  }
+})
+
+
+
+
 export const onDeleteUser = createAsyncThunk('user/deleteUser', async (param, { getState, requestId, dispatch }) => {
   var userEmail = param?.email;
   const loginObject = {
@@ -175,7 +210,7 @@ export const onDeleteUser = createAsyncThunk('user/deleteUser', async (param, { 
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState: { userData: null, defaultHub: {}, deviceToken: {}, userNotification: null, deleteAccountReason: '', password: '' },
+  initialState: { userData: null, defaultHub: {}, deviceToken: {}, userNotification: null, deleteAccountReason: '', password: '', routeNavigationData: {} },
   reducers: {
     onGetDeviceToken: (state, { payload }) => {
       state.deviceToken = payload
@@ -185,6 +220,9 @@ export const userSlice = createSlice({
     },
     onsetPassword: (state, { payload }) => {
       state.password = payload
+    },
+    onGetRouteNavigationData: (state, { payload }) => {
+      state.routeNavigationData = payload
     },
     logout: (state, { payload }) => {
       state.userData = null;
@@ -213,6 +251,6 @@ export const userSlice = createSlice({
   }
 })
 
-export const { onGetDeviceToken, logout, deleteAccountReason, onsetPassword } = userSlice.actions
+export const { onGetDeviceToken, logout, deleteAccountReason, onsetPassword, onGetRouteNavigationData } = userSlice.actions
 
 export default userSlice.reducer

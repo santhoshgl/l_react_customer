@@ -52,14 +52,15 @@ const BusinessInfo = () => {
   const fetchData = () => {
     let businessInfoUrl = `business/${id}`;
     let offerListUrl = `business/${id}/offers`;
+
     dispatch(setLoading(true));
     setOfferLoading(true);
     apiRequest
       .get(businessInfoUrl)
       .then((res) => {
         apiRequest.get(offerListUrl).then((res) => {
-          setOfferList(cloneDeep(res?.data.splice(0, 3)));
           setOfferData(cloneDeep(res?.data) || []);
+          setOfferList(cloneDeep(res?.data.splice(0, 3)));
           setNextLink(res?.links?.next);
         });
         setOfferLoading(false);
@@ -95,7 +96,7 @@ const BusinessInfo = () => {
 
   const onPressLoadMore = () => {
     setLoadMore(true);
-    setOfferList((old) => [...old, ...offerData]);
+    setOfferList(offerData);
   };
 
   const setNextLink = (url) => {

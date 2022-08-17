@@ -16,15 +16,18 @@ import { getFeaturedBusiness } from '../../redux/reducer/business';
 import styles from './styles';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { uniqBy } from 'lodash';
+import { useRoute } from '@react-navigation/native';
 
 const { width } = Dimensions.get('screen')
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation },) => {
   const dispatch = useDispatch()
   const { defaultHub } = useSelector(s => s.user)
   const { featuredOfferData, offerLoading } = useSelector(s => s.offers)
   const { featuredBusinessData, businessLoading } = useSelector(s => s.business)
   const userDeviceToken = useSelector(s => s.user?.deviceToken?.token)
+  const onNotificationData = useSelector(s => s.user.routeNavigationData)
+  const route = useRoute()
 
   useEffect(() => {
     var pushNotificationTokens = []
@@ -44,10 +47,17 @@ const Home = ({ navigation }) => {
     }
   }, [defaultHub?.id])
 
-  const onPressBusiness = (business) =>{
-    navigation.navigate('BusinessInfo', businessInfo={business})
+  const onPressBusiness = (business) => {
+    navigation.navigate('BusinessInfo', businessInfo = { business })
   }
 
+
+  useEffect(() => {
+    if (onNotificationData?.isNavigate) {
+      route?.params?.onShowInAppNotification(false)
+      navigation.navigate(onNotificationData?.route)
+    }
+  }, [onNotificationData])
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
