@@ -1,11 +1,13 @@
-import React, { memo, useEffect, useState } from 'react';
-import { SafeAreaView, Pressable, ScrollView, Image, SectionList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, Pressable, Image, SectionList, TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { Colors, Images } from '@constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { getNotification } from '../../redux/reducer/user';
+import { getNotification, readAllNotifications } from '../../redux/reducer/user';
 import styles from './styles';
 import moment from 'moment';
+import { cloneDeep } from 'lodash'
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const dummyData = [
   {
@@ -13,10 +15,10 @@ const dummyData = [
     "uid": "UsuSGDZSbSgQ7xUOcsMGyuUY1F02",
     "message": "Redeem the bill amount of $192 @",
     "description": "offer acctepted",
-    "created": "2022-07-26T08:51:12.989Z",
+    "created": "2022-08-07T08:51:12.989Z",
     "updated": "2022-07-21T08:51:12.989Z",
     "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": false,
+    "read": true,
     "type": "reward", //| redeem | offer | business,
     "logo": ""
   },
@@ -40,7 +42,7 @@ const dummyData = [
     "created": "2022-07-25T08:51:12.989Z",
     "updated": "2022-07-21T08:51:12.989Z",
     "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": false,
+    "read": true,
     "type": "reward", //| redeem | offer | business,
     "logo": ""
   },
@@ -52,7 +54,7 @@ const dummyData = [
     "created": "2022-07-15T08:51:12.989Z",
     "updated": "2022-07-21T08:51:12.989Z",
     "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": false,
+    "read": true,
     "type": "reward", //| redeem | offer | business,
     "logo": ""
   },
@@ -64,7 +66,7 @@ const dummyData = [
     "created": "2022-06-02T08:51:12.989Z",
     "updated": "2022-07-21T08:51:12.989Z",
     "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": false,
+    "read": true,
     "type": "business", //| redeem | offer | business,
     "logo": ""
   },
@@ -76,7 +78,7 @@ const dummyData = [
     "created": "2022-06-02T08:51:12.989Z",
     "updated": "2022-07-21T08:51:12.989Z",
     "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": false,
+    "read": true,
     "type": "reward", //| redeem | offer | business,
     "logo": ""
   },
@@ -88,7 +90,7 @@ const dummyData = [
     "created": "2022-06-02T08:51:12.989Z",
     "updated": "2022-07-21T08:51:12.989Z",
     "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": false,
+    "read": true,
     "type": "reward", //| redeem | offer | business,
     "logo": ""
   },
@@ -100,7 +102,7 @@ const dummyData = [
     "created": "2022-07-20T08:51:12.989Z",
     "updated": "2022-07-21T08:51:12.989Z",
     "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": false,
+    "read": true,
     "type": "redeem", //| redeem | offer | business,
     "logo": ""
   },
@@ -110,8 +112,9 @@ const UserNotification = ({ navigation }) => {
 
   const { userNotification } = useSelector(s => s.user)
   const dispatch = useDispatch()
-
   const [groupData, _groupData] = useState([])
+  const [isCheckedMarkAll, setMarkAll] = useState(false)
+  const [isDisableMark, setDisableMark] = useState(false)
 
   useEffect(() => {
     dispatch(getNotification())
@@ -139,9 +142,24 @@ const UserNotification = ({ navigation }) => {
           updated[4]?.data?.push(item)
         }
       })
-      _groupData(updated.filter((item) => item.data.length > 0));
+
+      let notificationData = updated.filter((item) => item.data.length > 0)
+      let isRequireMarkAll = updated.filter((item) => item?.data[0]?.read === false)
+      isRequireMarkAll?.length === 0 ? setMarkAll(true) : setMarkAll(false)
+      // isRequireMarkAll?.length > 0 ? notificationData[0].showMarkAll = true : notificationData
+      notificationData[0].showMarkAll = true
+      _groupData(cloneDeep(notificationData))
     }
-  }, [userNotification])
+  }, [userNotification, dispatch])
+
+  const onPressMarkAllRead = () => {
+    setMarkAll(!isCheckedMarkAll)
+    dispatch(readAllNotifications())
+      .then(unwrapResult)
+      .then((res) => {
+        dispatch(getNotification())
+      })
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -159,7 +177,7 @@ const UserNotification = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         stickySectionHeadersEnabled={false}
-        sections={groupData || []}
+        sections={cloneDeep(groupData) || []}
         keyExtractor={(item, index) => item + index}
         renderItem={({ item }) => (
           <View style={[styles.notificationContainer, !(item.read) ? { backgroundColor: Colors.primary25 } : {}]} marginT-16>
@@ -171,8 +189,18 @@ const UserNotification = ({ navigation }) => {
             </View>
           </View>
         )}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text primary700 fs14 lh20 marginT-16> {title} </Text>
+        renderSectionHeader={({ section: { title, showMarkAll } }) => (
+          <View style={{ flexDirection: 'row', flex: 1 }}>
+            <Text primary700 fs14 lh20 marginT-16> {title} </Text>
+            {showMarkAll &&
+              <TouchableOpacity
+                disabled={isCheckedMarkAll}
+                onPress={() => onPressMarkAllRead()}
+                style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <Image source={!isCheckedMarkAll ? Images.checkNotifications : Images.notificationGray} style={{ width: 13, height: 10, marginBottom: 3, alignSelf: 'flex-end', marginRight: 5 }} />
+                <Text fs14 lh20 marginT-16 style={{ color: !isCheckedMarkAll ? Colors.primary700 : Colors.gray500 }} > Mark all as read </Text>
+              </TouchableOpacity>}
+          </View>
         )}
         ListEmptyComponent={() => (
           <View flex center>
@@ -184,4 +212,4 @@ const UserNotification = ({ navigation }) => {
   );
 }
 
-export default memo(UserNotification)
+export default UserNotification

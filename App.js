@@ -1,21 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { LogBox } from 'react-native';
 import { Typography, ThemeManager } from 'react-native-ui-lib';
 import { Provider } from 'react-redux'
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from 'redux-persist'
-import FlashMessage from "react-native-flash-message";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 import SplashScreen from 'react-native-splash-screen'
 import { Fonts, Colors } from '@constants'
-import Router from './src/router';
+import Router, { FlashNotification } from './src/router';
 import store from './src/redux/store'
 import AppLoader from './src/component/AppLoader';
 
 let persistor = persistStore(store);
 
 const App = () => {
+  const [showInAppNotification, onShowInAppNotification] = useState(false)
   LogBox.ignoreAllLogs()
-  
+
   useEffect(() => {
     SplashScreen.hide();
   }, [])
@@ -23,10 +24,14 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Router />
+        <Router onShowInAppNotification={onShowInAppNotification} />
         <AppLoader />
       </PersistGate>
-      <FlashMessage position="top" duration={3000} />
+      {showInAppNotification &&
+        <FlashMessage position="top" duration={3000} renderCustomContent={(data) => FlashNotification(data, onShowInAppNotification)} style={{ backgroundColor: 'transparent', top: - 40 }}
+          onHide={() => onShowInAppNotification(false)} />}
+      {!showInAppNotification &&
+        <FlashMessage position="top" duration={3000} />}
     </Provider>
   );
 };

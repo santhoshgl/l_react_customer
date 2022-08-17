@@ -8,16 +8,21 @@ import { Colors, Images } from '@constants';
 import { getRewardDetails } from '../../redux/reducer/points';
 import Clipboard from '@react-native-community/clipboard';
 import { showMessage } from 'react-native-flash-message';
+import { onGetRouteNavigationData, onReadNotification } from '../../redux/reducer/user';
 
 const RewardDetails = ({ navigation, route }) => {
   const dispatch = useDispatch()
   const param = useMemo(() => { return route?.params }, [route])
   const { rewardDetails } = useSelector(s => s.points)
+  const navigationData = useSelector(s => s?.user?.routeNavigationData?.navigationData)
+  const id = useSelector(s => s?.user?.routeNavigationData?.navigationData?.id)
 
   useEffect(() => {
-    if (param?.rewardId)
-      dispatch(getRewardDetails(param?.rewardId));
-  }, [param])
+    if (param?.rewardId || id)
+      dispatch(getRewardDetails(param?.rewardId ? param?.rewardId : id));
+    dispatch(onReadNotification(navigationData?.notificationID))
+  }, [param, navigationData, id])
+
 
   const getCardStyles = useMemo(() => {
     let icon = Images.offers;
@@ -53,11 +58,17 @@ const RewardDetails = ({ navigation, route }) => {
     navigation.navigate('BusinessInfo', { business: { id: rewardDetails?.attributes?.business?.id } })
   }
 
+
+  const onPressBack = () => {
+    dispatch(onGetRouteNavigationData({}))
+    navigation.goBack()
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <View style={{ backgroundColor: Colors.white }}>
         <View row centerV marginH-16 marginV-16 style={{ justifyContent: 'space-between' }}>
-          <Pressable onPress={navigation.goBack} hitSlop={10}>
+          <Pressable onPress={() => onPressBack()} hitSlop={10}>
             <Image source={Images.back} style={{ height: 24, width: 24 }} />
           </Pressable>
           <Text fs16 lh24 center black >Reward Details</Text>

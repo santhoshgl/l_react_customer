@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { Image, Pressable, View, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -41,7 +41,17 @@ import {
 } from "../screen/DeleteAccount";
 import { useNetInfo } from '@react-native-community/netinfo';
 import { onGetInternetStatus } from '../redux/reducer/network';
+import { onGetRouteName } from '../services/NotificationServices';
+import { showMessage } from 'react-native-flash-message';
+import firebase from '@react-native-firebase/app';
+import '@react-native-firebase/messaging';
+import { onGetRouteNavigationData, onReceiveFlashMessage } from '../redux/reducer/user';
+import PushNotification from 'react-native-push-notification';
 import BusinessFilter from '../screen/businessFilter';
+import HighlightText from '@sanar/react-native-highlight-text';
+import { Colors, Images } from '../constants';
+import store from '../../src/redux/store'
+import {  Text } from 'react-native-ui-lib';
 
 
 const Stack = createNativeStackNavigator();
@@ -49,6 +59,7 @@ const OffersStack = createNativeStackNavigator();
 const BusinessStack = createNativeStackNavigator();
 const PointsStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+var flashNotifictionData = {}
 
 const _PointsStack = () => {
   return (
@@ -89,10 +100,8 @@ const _BusinessStack = () => {
     </BusinessStack.Navigator>
   );
 };
-import { Colors, Images } from '../constants';
-import { Image, Text } from 'react-native-ui-lib';
 
-const Dashboard = () => {
+const Dashboard = (props) => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -110,7 +119,7 @@ const Dashboard = () => {
       }}
     // tabBar={(props) => <BottomTab {...props} />}
     >
-      <Tab.Screen name="homeTab" component={Home}
+      <Tab.Screen name="homeTab" component={Home} initialParams={props?.route?.params}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Home</Text>
@@ -147,7 +156,32 @@ const Dashboard = () => {
   );
 };
 
-const App = () => {
+const handlePressNotification = () => {
+  const route = onGetRouteName(flashNotifictionData?.data?.type)
+  const navigationData = flashNotifictionData?.data
+  const navigationObj = { route, navigationData, isNavigate: true }
+  store.dispatch(onGetRouteNavigationData(navigationObj))
+}
+
+export const FlashNotification = (data, onClose) => {
+  return (
+    <View style={{ padding: 16, borderColor: Colors.primary200, backgroundColor: Colors.primary25, borderRadius: 8, flexDirection: 'row', borderWidth: 1 }}>
+      <Pressable style={{ flex: 0.9 }} onPress={() => handlePressNotification()} >
+        <HighlightText
+          highlightStyle={{ color: Colors.primary700 }}
+          searchWords={flashNotifictionData?.data?.highlightText || []}
+          style={{ fontFamily: 'NotoSans-Regular', fontWeight: '400', fontSize: 16, lineHeight: 24, }}
+          textToHighlight={data?.message}
+        />
+      </Pressable>
+      <Pressable style={{ flex: 0.1, alignItems: 'flex-end' }} onPress={() => onClose(false)}>
+        <Image source={Images.x} style={{ height: 16, width: 16 }} />
+      </Pressable>
+    </View>
+  )
+}
+
+export const App = ({ onShowInAppNotification }) => {
   const { userData, defaultHub } = useSelector((s) => s.user);
   let intialPage = userData ? "dashboard" : "landing";
   if (userData && (!defaultHub || isEmpty(defaultHub))) {
@@ -157,8 +191,35 @@ const App = () => {
   const netInfo = useNetInfo();
 
 
+  const onReceiveInAppNotification = () => {
+    firebase.messaging().onMessage(response => {
+      onShowInAppNotification(true)
+      flashNotifictionData = response
+      showMessage({ message: response?.notification?.body })
+    });
+  };
+
+  const onPressNotification = (notificationDetails) => {
+    const route = onGetRouteName(notificationDetails?.data?.type)
+    const navigationData = notificationDetails?.data
+    const navigationObj = { route, navigationData, isNavigate: true }
+    dispatch(onGetRouteNavigationData(navigationObj))
+  }
+
+  const onInitialNotification = () => {
+    firebase
+      .messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        onPressNotification(remoteMessage)
+      });
+  }
+
   useEffect(() => {
+    PushNotification.cancelAllLocalNotifications()
     dispatch(onGetInternetStatus(netInfo?.isConnected))
+    onInitialNotification()
+    onReceiveInAppNotification()
   }, [netInfo]) // in order to re-call the hooks whenever the netInfo status changed 
 
   return (
@@ -174,7 +235,7 @@ const App = () => {
         <Stack.Screen name="onboarding" component={Onboarding} />
         <Stack.Screen name="hub" component={Hub} />
         <Stack.Screen name="addHub" component={AddHub} />
-        <Stack.Screen name="dashboard" component={Dashboard} />
+        <Stack.Screen name="dashboard" component={Dashboard} initialParams={{ onShowInAppNotification }} />
         <Stack.Screen name="account" component={Account} />
         <Stack.Screen name="personalDetails" component={personalDetails} />
         <Stack.Screen name="accountSettings" component={AccountSettings} />
