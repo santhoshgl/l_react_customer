@@ -26,6 +26,7 @@ import apiRequest from "@services/networkProvider";
 import images from "../../constants/images";
 import Config from "react-native-config";
 import OfferCardSkeleton from "@component/offers/offerCardSkeleton";
+import { onPhoneCall } from "../../services/PhoneCallServices";
 
 const BusinessInfo = () => {
   const navigation = useNavigation();
@@ -269,7 +270,7 @@ const BusinessInfo = () => {
                         <Text fs12 lh18 gray500 center style={{ fontWeight: '500', paddingTop: 3 }}> Directions</Text>
                     </View> */}
           {businessInfo?.contactDetails?.phoneNumber && (
-            <View>
+            <Pressable onPress={() => onPhoneCall(businessInfo?.contactDetails?.phoneNumber)}>
               <Image
                 source={Images.phone}
                 resizeMode={"contain"}
@@ -285,14 +286,14 @@ const BusinessInfo = () => {
                 {" "}
                 Phone
               </Text>
-            </View>
+            </Pressable>
           )}
         </View>
         <View style={{ marginLeft: 24, marginTop: 25 }}>
           {businessInfo?.addressLine?.length > 0 && (
             <>
               <Text fs16SB lh24 black style={{ fontWeight: "600" }}>
-                Location name
+                Business Name
               </Text>
               <Text fs16 lh24 black style={{ fontWeight: "400", marginTop: 8 }}>
                 {businessInfo?.addressLine}, {businessInfo?.addressLine2 + "\n"}
