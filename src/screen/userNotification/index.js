@@ -1,123 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { SafeAreaView, Pressable, Image, SectionList, TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { Colors, Images } from '@constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { getNotification, readAllNotifications } from '../../redux/reducer/user';
+import NotificationSkeleton from "../../component/notificationSkleton"
 import styles from './styles';
 import moment from 'moment';
 import { cloneDeep } from 'lodash'
 import { unwrapResult } from '@reduxjs/toolkit';
 
-const dummyData = [
-  {
-    "id": "62d91380bdf12a1568cd5871",
-    "uid": "UsuSGDZSbSgQ7xUOcsMGyuUY1F02",
-    "message": "Redeem the bill amount of $192 @",
-    "description": "offer acctepted",
-    "created": "2022-08-07T08:51:12.989Z",
-    "updated": "2022-07-21T08:51:12.989Z",
-    "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": true,
-    "type": "reward", //| redeem | offer | business,
-    "logo": ""
-  },
-  {
-    "id": "62d91380bdf12a1568cd5871",
-    "uid": "UsuSGDZSbSgQ7xUOcsMGyuUY1F02",
-    "message": "Redeem the bill amount of $192 @",
-    "description": "offer acctepted",
-    "created": "2022-07-26T08:51:12.989Z",
-    "updated": "2022-07-21T08:51:12.989Z",
-    "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": true,
-    "type": "reward", //| redeem | offer | business,
-    "logo": ""
-  },
-  {
-    "id": "62d91380bdf12a1568cd5871",
-    "uid": "UsuSGDZSbSgQ7xUOcsMGyuUY1F02",
-    "message": "Redeem the bill amount of $192 @",
-    "description": "offer acctepted",
-    "created": "2022-07-25T08:51:12.989Z",
-    "updated": "2022-07-21T08:51:12.989Z",
-    "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": true,
-    "type": "reward", //| redeem | offer | business,
-    "logo": ""
-  },
-  {
-    "id": "62d91380bdf12a1568cd5871",
-    "uid": "UsuSGDZSbSgQ7xUOcsMGyuUY1F02",
-    "message": "Redeem the bill amount of $192 @",
-    "description": "offer acctepted",
-    "created": "2022-07-15T08:51:12.989Z",
-    "updated": "2022-07-21T08:51:12.989Z",
-    "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": true,
-    "type": "reward", //| redeem | offer | business,
-    "logo": ""
-  },
-  {
-    "id": "62d91380bdf12a1568cd5871",
-    "uid": "UsuSGDZSbSgQ7xUOcsMGyuUY1F02",
-    "message": "Redeem the bill amount of $192 @",
-    "description": "offer acctepted",
-    "created": "2022-06-02T08:51:12.989Z",
-    "updated": "2022-07-21T08:51:12.989Z",
-    "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": true,
-    "type": "business", //| redeem | offer | business,
-    "logo": ""
-  },
-  {
-    "id": "62d91380bdf12a1568cd5871",
-    "uid": "UsuSGDZSbSgQ7xUOcsMGyuUY1F02",
-    "message": "Redeem the bill amount of $192 @",
-    "description": "offer acctepted",
-    "created": "2022-06-02T08:51:12.989Z",
-    "updated": "2022-07-21T08:51:12.989Z",
-    "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": true,
-    "type": "reward", //| redeem | offer | business,
-    "logo": ""
-  },
-  {
-    "id": "62d91380bdf12a1568cd5871",
-    "uid": "UsuSGDZSbSgQ7xUOcsMGyuUY1F02",
-    "message": "Redeem the bill amount of $192 @",
-    "description": "offer acctepted",
-    "created": "2022-06-02T08:51:12.989Z",
-    "updated": "2022-07-21T08:51:12.989Z",
-    "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": true,
-    "type": "reward", //| redeem | offer | business,
-    "logo": ""
-  },
-  {
-    "id": "62d91380bdf12a1568cd5871",
-    "uid": "UsuSGDZSbSgQ7xUOcsMGyuUY1F02",
-    "message": "Redeem the bill amount of $192 @",
-    "description": "offer acctepted",
-    "created": "2022-07-20T08:51:12.989Z",
-    "updated": "2022-07-21T08:51:12.989Z",
-    "redirectURL": "/redeem-status/62d913804db688ff5edabf09",
-    "read": true,
-    "type": "redeem", //| redeem | offer | business,
-    "logo": ""
-  },
-]
-
 const UserNotification = ({ navigation }) => {
-
   const { userNotification } = useSelector(s => s.user)
   const dispatch = useDispatch()
   const [groupData, _groupData] = useState([])
   const [isCheckedMarkAll, setMarkAll] = useState(false)
   const [isDisableMark, setDisableMark] = useState(false)
+  const [loader, setLoader] = useState(false)
 
   useEffect(() => {
-    dispatch(getNotification())
+    setLoader(true)
+    dispatch(getNotification()).then(() => {
+      setLoader(false)
+    }).catch(() => setLoader(false))
   }, [])
 
   useEffect(() => {
@@ -172,44 +77,49 @@ const UserNotification = ({ navigation }) => {
           <View style={{ height: 24, width: 24 }} />
         </View>
       </View>
-      <SectionList
-        contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50, paddingHorizontal: 16 }}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-        stickySectionHeadersEnabled={false}
-        sections={cloneDeep(groupData) || []}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({ item }) => (
-          <View style={[styles.notificationContainer, !(item.read) ? { backgroundColor: Colors.primary25 } : {}]} marginT-16>
-            <Image source={(item?.type == "reward") ? Images?.notificationStar : (item?.type == "redeem") ? Images?.redeem : { uri: item?.logo }} style={{ height: 32, width: 32, marginLeft: 16, marginTop: 16 }} />
-            <View flex marginL-10 marginT-16>
-              <Text fs16 lh24 black> {item.message} </Text>
-              <Text fs14 lh20 black> <Text primary700 fs14 lh20>{item.description} </Text> </Text>
-              <Text fs12 lh18 gray500> {moment(item?.created).fromNow()} </Text>
+      {loader ?
+        <NotificationSkeleton /> : <SectionList
+          contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50, paddingHorizontal: 16 }}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          stickySectionHeadersEnabled={false}
+          sections={cloneDeep(groupData) || []}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ item }) => <NotificationCard item={item} />}
+          renderSectionHeader={({ section: { title, showMarkAll } }) => (
+            <View style={{ flexDirection: 'row', flex: 1 }}>
+              <Text primary700 fs14 lh20 marginT-16> {title} </Text>
+              {showMarkAll &&
+                <TouchableOpacity
+                  disabled={isCheckedMarkAll}
+                  onPress={() => onPressMarkAllRead()}
+                  style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+                  <Image source={!isCheckedMarkAll ? Images.checkNotifications : Images.notificationGray} style={{ width: 13, height: 10, marginBottom: 3, alignSelf: 'flex-end', marginRight: 5 }} />
+                  <Text fs14 lh20 marginT-16 style={{ color: !isCheckedMarkAll ? Colors.primary700 : Colors.gray500 }} > Mark all as read </Text>
+                </TouchableOpacity>}
             </View>
-          </View>
-        )}
-        renderSectionHeader={({ section: { title, showMarkAll } }) => (
-          <View style={{ flexDirection: 'row', flex: 1 }}>
-            <Text primary700 fs14 lh20 marginT-16> {title} </Text>
-            {showMarkAll &&
-              <TouchableOpacity
-                disabled={isCheckedMarkAll}
-                onPress={() => onPressMarkAllRead()}
-                style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-                <Image source={!isCheckedMarkAll ? Images.checkNotifications : Images.notificationGray} style={{ width: 13, height: 10, marginBottom: 3, alignSelf: 'flex-end', marginRight: 5 }} />
-                <Text fs14 lh20 marginT-16 style={{ color: !isCheckedMarkAll ? Colors.primary700 : Colors.gray500 }} > Mark all as read </Text>
-              </TouchableOpacity>}
-          </View>
-        )}
-        ListEmptyComponent={() => (
-          <View flex center>
-            <Text gray700>No new notifications.</Text>
-          </View>
-        )}
-      />
+          )}
+          ListEmptyComponent={() => (
+            <View flex center>
+              <Text gray700>No new notifications.</Text>
+            </View>
+          )}
+        />}
     </SafeAreaView >
   );
 }
 
-export default UserNotification
+export default memo(UserNotification)
+
+const NotificationCard = ({ item }) => {
+  return (
+    <View style={[styles.notificationContainer, !(item.read) ? { backgroundColor: Colors.primary25 } : {}]} marginT-16>
+      <Image source={(item?.type == "reward") ? Images?.notificationStar : (item?.type == "redeem") ? Images?.redeem : { uri: item?.logo }} style={{ height: 32, width: 32, marginLeft: 16, marginTop: 16 }} />
+      <View flex marginL-10 marginT-16>
+        <Text fs16 lh24 black> {item.message} </Text>
+        <Text fs14 lh20 black> <Text primary700 fs14 lh20>{item.description} </Text> </Text>
+        <Text fs12 lh18 gray500> {moment(item?.created).fromNow()} </Text>
+      </View>
+    </View>
+  );
+}

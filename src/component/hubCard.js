@@ -7,7 +7,7 @@ const HubCard = ({ item, selectText = 'Select', onSelect = () => { } }) => {
   return (
     <View style={styles.card}>
       <View style={styles.header} >
-        <Image source={{ uri: item?.logo }} style={styles.userImg} />
+        <Image source={item?.logo ? { uri: item?.logo } : Images.hubLogoDefault} style={styles.userImg} />
         <View marginL-12>
           <Text beb24 black lh32>{item?.name}</Text>
           <View row centerV>
