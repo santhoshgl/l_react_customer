@@ -474,7 +474,11 @@ const BusinessInfo = () => {
           resizeMode={"stretch"}
         />
     ) : (
-      <View style={styles.bannerImageView} />
+      <Image
+        source={Images.businessCover}
+        style={styles.bannerImage}
+        resizeMode={"stretch"}
+      />
     );
   };
 
@@ -699,7 +703,7 @@ const BusinessInfo = () => {
 export default memo(BusinessInfo);
 
 const styles = StyleSheet.create({
-  defaultStatusbar: { backgroundColor: Colors.yellow, height: 40 },
+  defaultStatusbar: { backgroundColor: Colors.white, height: 40 },
   withBannerBar: { backgroundColor: Colors.white, height: 40 },
   closeView: {
     backgroundColor: Colors.white,

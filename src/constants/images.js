@@ -72,4 +72,7 @@ export default {
   checkNotifications: require("../assets/checkNotifications.png"),
   notificationGray: require("../assets/notificationGray.png"),
   lealzy: require("../assets/Lealzy.png"),
+  businessCover: require("../assets/businessCover.png"),
+  hubCover: require("../assets/hubCover.png"),
+  hubLogoDefault: require("../assets/hubLogoDefault.png"),
 };

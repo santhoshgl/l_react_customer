@@ -42,7 +42,7 @@ const Header = ({ navigation }) => {
           .then((originalPromiseResult) => {
             dispatch(getUser())
               .then(unwrapResult)
-              .then((response) => {});
+              .then((response) => { });
           });
       });
   };
@@ -101,7 +101,7 @@ const Header = ({ navigation }) => {
             }}
           >
             <Image
-              source={{ uri: defaultHub?.logo }}
+              source={defaultHub?.logo ? { uri: defaultHub?.logo } : Images.hubLogoDefault}
               style={{ height: 40, width: 40, borderRadius: 40 }}
             />
             <Text beb30 black marginH-12 numberOfLines={1}>
@@ -163,7 +163,7 @@ const Header = ({ navigation }) => {
                     <TouchableOpacity onPress={() => _onSelectHub(_hub)}>
                       <View row centerV marginV-8 key={i}>
                         <Image
-                          source={{ uri: _hub?.logo }}
+                          source={_hub?.logo ? { uri: _hub?.logo } : Images.hubLogoDefault}
                           style={{ height: 32, width: 32, borderRadius: 32 }}
                         />
                         <Text beb24 black marginH-12 lh32 numberOfLines={1}>
@@ -203,7 +203,7 @@ const Header = ({ navigation }) => {
           >
             <View padding-16 marginB-94 bg-white style={{ borderRadius: 16 }}>
               <ImageBackground
-                source={{ uri: addedHub?.bannerImage }}
+                source={addedHub?.bannerImage ? { uri: addedHub?.bannerImage } : Images.hubCover}
                 imageStyle={{
                   borderTopLeftRadius: 16,
                   borderTopRightRadius: 16,
@@ -224,7 +224,7 @@ const Header = ({ navigation }) => {
                   />
                 </Pressable>
                 <Image
-                  source={{ uri: addedHub?.logo }}
+                  source={addedHub?.logo ? { uri: addedHub?.logo } : Images.hubLogoDefault}
                   style={{
                     height: 72,
                     width: 72,

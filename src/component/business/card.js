@@ -7,7 +7,7 @@ import { Images } from '../../constants';
 const BusinessCard = ({ item, onPressBusiness }) => {
   return (
     <Pressable onPress={() => onPressBusiness(item)} style={styles.card}>
-      <ImageBackground source={{ uri: item?.bannerImage }} imageStyle={styles.backImg} >
+      <ImageBackground source={item?.bannerImage ? { uri: item?.bannerImage } : Images.businessCover} imageStyle={styles.backImg} >
         <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={styles.logo} />
         <Text beb24 ln32 center marginT-8 black >{item?.name}</Text>
         <Text fs14 ln20 center gray500 >{item?.category?.label}</Text>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   backImg: {
     borderTopLeftRadius: 16, borderTopRightRadius: 16,
-    height: 120, width: 240, backgroundColor: Colors.yellow
+    height: 120, width: 240,
   },
   logo: { height: 80, width: 80, borderRadius: 80, marginTop: 78, alignSelf: 'center' },
   tag: {

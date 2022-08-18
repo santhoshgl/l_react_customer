@@ -134,12 +134,9 @@ export const getNotification = createAsyncThunk('user/getNotification', async (p
   const userId = await auth().currentUser?.uid;
 
   try {
-    dispatch(setLoading(true))
     const notifications = await apiRequest.get(`notifications?uid=${userId}`);
-    dispatch(setLoading(false))
     return notifications?.data;
   } catch (error) {
-    dispatch(setLoading(false))
     throw (error)
   }
 })
