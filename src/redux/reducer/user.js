@@ -4,6 +4,7 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import { showMessage } from "react-native-flash-message";
 import { setLoading } from "./loading";
+import _ from 'lodash';
 
 export const getUser = createAsyncThunk('user/getUser', async (param, { getState, requestId, dispatch }) => {
   try {
@@ -70,9 +71,19 @@ export const loginUser = createAsyncThunk('user/loginUser', async (param, { getS
     dispatch(setLoading(true))
     const res = await auth().signInWithEmailAndPassword(param?.email, param?.password);
     const userId = res.user?.uid;
-    const user = await apiRequest.get(`users/${userId}`)
+    let user = await apiRequest.get(`users/${userId}`)
     showMessage({ message: 'Login successfully.', type: 'success' })
     dispatch(setLoading(false))
+    const isCheckCustomerRole = _.find(user?.data?.roles, function (role) {
+      if (role === 'customer') {
+        return role
+      }
+    });
+    if (isCheckCustomerRole === undefined) {
+      let roles = user?.data?.roles
+      roles.push('customer')
+      dispatch(addCustomerRole(roles))
+    }
     return user?.data;
   } catch (error) {
     showMessage({ message: error?.userInfo?.code ? error?.userInfo?.message : error?.message, type: 'danger' })
@@ -205,6 +216,23 @@ export const onDeleteUser = createAsyncThunk('user/deleteUser', async (param, { 
   }
 })
 
+export const addCustomerRole = createAsyncThunk('user/addCustomerRole', async (param, { getState, requestId, dispatch }) => {
+  try {
+    const userId = await auth().currentUser?.uid;
+    dispatch(setLoading(true))
+    let data = {
+      roles: param
+    }
+    const readResponse = await apiRequest.patch(`users/${userId}`, { data });
+    dispatch(setLoading(false))
+    return readResponse
+  } catch (error) {
+    dispatch(setLoading(false))
+    await auth().signOut();
+    throw (error)
+  }
+})
+
 export const userSlice = createSlice({
   name: 'user',
   initialState: { userData: null, defaultHub: {}, deviceToken: {}, userNotification: null, deleteAccountReason: '', password: '', routeNavigationData: {} },
@@ -244,7 +272,10 @@ export const userSlice = createSlice({
     },
     [getNotification.fulfilled]: (state, { payload }) => {
       state.userNotification = payload
-    }
+    },
+    [addCustomerRole.fulfilled]: (state, { payload }) => {
+      state.userData = payload
+    },
   }
 })
 

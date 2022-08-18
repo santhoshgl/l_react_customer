@@ -15,7 +15,7 @@ const RewardDetails = ({ navigation, route }) => {
   const param = useMemo(() => { return route?.params }, [route])
   const { rewardDetails } = useSelector(s => s.points)
   const navigationData = useSelector(s => s?.user?.routeNavigationData?.navigationData)
-  const id = useSelector(s => s?.user?.routeNavigationData?.navigationData?.id)
+  const id = useSelector(s => s?.user?.routeNavigationData?.navigationData?.redirectionID)
 
   useEffect(() => {
     if (param?.rewardId || id)
