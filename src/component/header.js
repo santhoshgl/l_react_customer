@@ -180,6 +180,7 @@ const Header = ({ navigation }) => {
                 onPress={() => {
                   _showHubs(false);
                   navigation.navigate("addHub", {
+                    addedHub: userData?.hubs?.map((item) => item?.id),
                     handleItem: (item, hub) => {
                       _addedHub(hub);
                       _showHubAdded(item);

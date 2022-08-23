@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Linking,
   Platform,
+  BackHandler,
 } from "react-native";
 import { View, Text } from "react-native-ui-lib";
 import { Colors } from "@constants";
@@ -49,6 +50,16 @@ const BusinessInfo = () => {
   useEffect(() => {
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    if (source && source.length) {
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+        navigation.navigate(source, { isRefresh: Math.floor(Math.random() * 900000) })
+        return true
+      })
+      return () => backHandler.remove()
+    }
+  }, [])
 
   const fetchData = () => {
     let businessInfoUrl = `business/${id}`;

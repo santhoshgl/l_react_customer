@@ -106,7 +106,7 @@ const History = ({ navigation }) => {
             Transaction history
           </Text>
           <Text fs16 lh24 gray500>
-            Below you will see your most recient transactions for your Lealzy
+            Below you will see your most recent transactions for your Lealzy
             account.
           </Text>
         </View>
@@ -114,16 +114,19 @@ const History = ({ navigation }) => {
           <>
             <View style={{ backgroundColor: Colors.white, paddingHorizontal: 10 }}>
               <View row centerV flex>
-                <Text fs12 lh18 gray500 center style={[styles.tableTitle, { width: "20%" }]}>
-                  Reference
-                </Text>
-                <Text fs12 lh18 gray500 center style={[styles.tableTitle, { width: "35%" }]}>
+                <TouchableOpacity style={styles.tableTitleRef}>
+                  <Text fs12 lh18 center gray500>
+                    Reference
+                  </Text>
+                  <Image source={Images.arrowDown} style={{ width: 16, height: 16 }} />
+                </TouchableOpacity>
+                <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
                   Date
                 </Text>
-                <Text fs12 lh18 gray500 center style={[styles.tableTitle, { width: "20%" }]}>
+                <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
                   Credits
                 </Text>
-                <Text fs12 lh18 gray500 center style={[styles.tableTitle, { width: "25%" }]}>
+                <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
                   Type
                 </Text>
               </View>
@@ -144,14 +147,14 @@ const History = ({ navigation }) => {
                           index % 2 == 0 ? Colors.gray50 : Colors.white,
                       }}
                     >
-                      <Text fs14 lh20 gray500 center style={[styles.tableBody, { width: "20%" }]}>{`#${reward?.id.substr(reward?.id.length - 4)}`}</Text>
-                      <Text fs14 lh20 gray500 center style={[styles.tableBody, { width: "35%" }]}>
+                      <Text fs14 lh20 gray500 center flex style={styles.tableBody}>{`#${reward?.id.substr(reward?.id.length - 4)}`}</Text>
+                      <Text fs14 lh20 gray500 center flex style={styles.tableBody}>
                         {moment(reward?.attributes?.createdAt).format("ll")}
                       </Text>
-                      <Text fs14 lh20 gray500 center style={[styles.tableBody, { width: "20%" }]}>
+                      <Text fs14 lh20 gray500 center flex style={styles.tableBody}>
                         {reward?.attributes?.credits}
                       </Text>
-                      <View fs14 lh20 success700 center style={[styles.tableBody, { width: "25%" }]}>
+                      <View fs14 lh20 success700 center flex style={styles.tableBody}>
                         {reward?.attributes?.rewardType == "credit" ? (
                           <View center style={styles.typeText}>
                             <Image
@@ -266,8 +269,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: Colors.gray200,
   },
-  tableTitle: { width: "25%", paddingLeft: 16, paddingVertical: 13 },
-  tableBody: { width: "25%", paddingLeft: 16, paddingVertical: 26 },
+  tableTitleRef: { flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", paddingVertical: 13 },
+  tableTitle: { paddingVertical: 13 },
+  tableBody: { paddingVertical: 26 },
   pagination: {
     justifyContent: "space-between",
     paddingHorizontal: 16,
