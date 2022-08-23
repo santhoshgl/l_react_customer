@@ -51,7 +51,7 @@ import BusinessFilter from '../screen/businessFilter';
 import HighlightText from '@sanar/react-native-highlight-text';
 import { Colors, Images } from '../constants';
 import store from '../../src/redux/store'
-import {  Text } from 'react-native-ui-lib';
+import { Text } from 'react-native-ui-lib';
 
 
 const Stack = createNativeStackNavigator();

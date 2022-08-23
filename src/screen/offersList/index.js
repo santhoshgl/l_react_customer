@@ -110,7 +110,9 @@ const OffersList = ({ navigation, route }) => {
       onApplyFilter: (val) => {
         _filter(val);
         fetchData(search, val);
-        moveToTop()
+        if (offersData.length > 0) {
+          moveToTop()
+        }
       }
     })
   }
@@ -167,7 +169,7 @@ const OffersList = ({ navigation, route }) => {
               refreshing={loading}
               ListFooterComponent={() => (
                 <View center marginV-20>
-                  {nomore ?
+                  {nomore && offersData.length > 0 ?
                     <Text gray700>No more results.</Text>
                     : <ActivityIndicator animating={loading} size={'large'} />
                   }

@@ -75,4 +75,5 @@ export default {
   businessCover: require("../assets/businessCover.png"),
   hubCover: require("../assets/hubCover.png"),
   hubLogoDefault: require("../assets/hubLogoDefault.png"),
+  arrowDown: require("../assets/arrow-down.png"),
 };

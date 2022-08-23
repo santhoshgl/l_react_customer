@@ -2,11 +2,9 @@ import React, { memo, useEffect, useState } from "react";
 import {
   SafeAreaView,
   Image,
-  Modal,
-  Platform,
-  UIManager,
   Pressable,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { Text, View } from "react-native-ui-lib";
 import { useDispatch } from "react-redux";
@@ -14,19 +12,34 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { Images, Colors } from "@constants";
 import SearchBar from "@component/searchBar";
 import HubCard from "@component/hubCard";
-import { animation } from "@util";
 import Request from "@services/networkProvider";
 import styles from "./styles";
 import { getUser, updateUser } from "../../redux/reducer/user";
+import Config from "react-native-config"
 
 const AddHub = ({ route, navigation }) => {
   const dispatch = useDispatch();
+
   const [hubs, _hubs] = useState(undefined);
+  const [filtredHubs, _filtredHubs] = useState(undefined)
   const [searchVal, _searchVal] = useState("");
+  const [nextLink, _nextLink] = useState('')
+  const [loading, _loading] = useState(false)
+  const [nomore, _nomore] = useState(false)
+  const setNextLink = (url) => {
+    _nextLink(url?.replace(Config.API_URL, ''))
+  }
 
   useEffect(() => {
     _search();
   }, []);
+
+  useEffect(() => {
+    if (hubs?.length) {
+      const filtredData = hubs?.filter((item) => !((route?.params?.addedHub || []).includes(item?.id)))
+      _filtredHubs(filtredData)
+    }
+  }, [hubs]);
 
   const _search = () => {
     let url = "hubs";
@@ -36,9 +49,31 @@ const AddHub = ({ route, navigation }) => {
     Request.get(url)
       .then((res) => {
         _hubs(res?.data || []);
+        setNextLink(res?.links?.next)
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
+
+  const fetchMore = async () => {
+    if (nextLink) {
+      try {
+        _loading(true)
+        const res = await Request.get(nextLink);
+        if (res?.data) {
+          _hubs(old => [...old, ...res?.data])
+          setNextLink(res?.links?.next)
+        } else {
+          _nomore(true)
+        }
+        _loading(false)
+      } catch (error) {
+        _loading(false)
+      }
+    }
+    else {
+      _nomore(true)
+    }
+  }
 
   const _onSelectHub = (hub) => {
     const selectedHub = { id: hub?.id, default: true };
@@ -115,9 +150,9 @@ const AddHub = ({ route, navigation }) => {
           <View marginT-24 paddingH-16 row spread centerV></View>
         )}
         <View flex paddingH-16>
-          {hubs?.length ? (
+          {filtredHubs?.length ? (
             <FlatList
-              data={hubs}
+              data={filtredHubs}
               renderItem={({ item }) => (
                 <HubCard
                   item={item}
@@ -126,10 +161,19 @@ const AddHub = ({ route, navigation }) => {
                 />
               )}
               keyExtractor={(_, index) => index.toString()}
+              onEndReached={!nomore && fetchMore}
+              ListFooterComponent={() => (
+                <View center marginV-20>
+                  {nomore && filtredHubs.length ?
+                    <Text gray700>No more results.</Text>
+                    : <ActivityIndicator animating={loading} size={'large'} />
+                  }
+                </View>
+              )}
               showsVerticalScrollIndicator={false}
               keyboardDismissMode={"on-drag"}
             />
-          ) : hubs != undefined ? (
+          ) : filtredHubs != undefined ? (
             <View flex center>
               <Image
                 source={Images.warning}

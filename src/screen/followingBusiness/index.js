@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import { Image, FlatList, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text } from 'react-native-ui-lib';
@@ -11,29 +11,32 @@ import auth from '@react-native-firebase/auth';
 import styles from './styles';
 import Config from "react-native-config"
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+import ListSkeleton from '../../component/listSkeleton';
 
 
 const FollowingBusiness = ({ navigation, route }) => {
     const dispatch = useDispatch()
     const hubID = useSelector(s => s.user?.defaultHub?.id)
+    const listLoading = useSelector(s => s.loading.loading)
     const [businessData, _businessData] = useState([])
     const [nextLink, _nextLink] = useState('')
     const [loading, _loading] = useState(false)
     const [nomore, _nomore] = useState(false)
-    const [search, _search] = useState(null)
+    const [search, _search] = useState("")
     const userId = auth().currentUser?.uid;
+    const flatListRef = useRef()
 
     useEffect(() => {
         fetchData();
     }, [])
 
-    useEffect(() => {
-        fetchData();
-    }, [search])
-
-    const fetchData = () => {
+    const fetchData = (search) => {
         dispatch(setLoading(true))
         let url = `followers/business?hubID=${hubID}&userID=${userId}`;
+
+        if (search)
+            url = `followers/business?hubID=${hubID}&userID=${userId}&search=${search}`;
+
         apiRequest.get(url).then(res => {
             _businessData(res?.data || [])
             setNextLink(res?.links?.next)
@@ -73,6 +76,8 @@ const FollowingBusiness = ({ navigation, route }) => {
         _nextLink(url?.replace(Config.API_URL, ''))
     }
 
+    const moveToTop = () => flatListRef?.current?.scrollToIndex({ index: 0 });
+
     const Card = ({ item }) => {
         return (
             <Pressable style={styles.card} onPress={() => onPressBusiness(item)}>
@@ -105,7 +110,6 @@ const FollowingBusiness = ({ navigation, route }) => {
         );
     }
 
-
     return (
         <View style={{ flex: 1, backgroundColor: Colors.blue, paddingTop: Platform.OS === 'ios' ? 40 : 30 }}>
             <View style={{ flexDirection: 'row', height: 100 }}>
@@ -119,34 +123,52 @@ const FollowingBusiness = ({ navigation, route }) => {
 
             <View style={{ backgroundColor: Colors.gray50, flex: 1 }}>
                 <View style={{ margin: 16, flexDirection: 'row', alignItems: 'center', top: -40 }}>
-                    <SearchBar style={{ flex: 1, marginVertical: 0 }} placeholder={'Search for Businesses'} fromFollowingBusiness />
-                </View>
-                <FlatList
-                    data={businessData || []}
-                    contentContainerStyle={{ flexGrow: 1 }}
-                    renderItem={({ item }) => <Card item={item} />}
-                    keyExtractor={(_, index) => index.toString()}
-                    showsVerticalScrollIndicator={false}
-                    keyboardDismissMode={'on-drag'}
-                    onEndReached={!nomore && fetchMore}
-                    scrollEventThrottle={16}
-                    onEndReachedThreshold={0.3}
-                    style={{ marginTop: -40 }}
-                    refreshing={loading}
-                    ListFooterComponent={() => (
-                        <View center marginV-20>
-                            {(nomore && businessData?.length > 0) ?
-                                <Text gray700>No more results.</Text>
-                                : <ActivityIndicator animating={loading} size={'large'} />
+                    <SearchBar
+                        value={search}
+                        style={{ flex: 1, marginVertical: 0 }}
+                        onSearch={(val) => {
+                            if (businessData.length > 0) {
+                                moveToTop()
                             }
+                            fetchData(val)
+                        }}
+                        onChangeText={(val) => _search(val)}
+                        placeholder={'Search for Businesses'}
+                    />
+                </View>
+                {
+                    listLoading ?
+                        <View style={{ marginTop: -40 }}>
+                            <ListSkeleton source="businessList" />
                         </View>
-                    )}
-                    ListEmptyComponent={() => (
-                        <View flex center>
-                            <Text gray700>You are not following any business yet.</Text>
-                        </View>
-                    )}
-                />
+                        :
+                        <FlatList
+                            ref={flatListRef}
+                            data={businessData || []}
+                            contentContainerStyle={{ flexGrow: 1 }}
+                            renderItem={({ item }) => <Card item={item} />}
+                            keyExtractor={(_, index) => index.toString()}
+                            showsVerticalScrollIndicator={false}
+                            keyboardDismissMode={'on-drag'}
+                            onEndReached={!nomore && fetchMore}
+                            scrollEventThrottle={16}
+                            onEndReachedThreshold={0.3}
+                            style={{ marginTop: -40 }}
+                            refreshing={loading}
+                            ListFooterComponent={() => (
+                                <View center marginV-20>
+                                    {(nomore && businessData?.length > 0) ?
+                                        <Text gray700>No more results.</Text>
+                                        : <ActivityIndicator animating={loading} size={'large'} />
+                                    }
+                                </View>
+                            )}
+                            ListEmptyComponent={() => (
+                                <View flex center>
+                                    <Text gray700>You are not following any business yet.</Text>
+                                </View>
+                            )}
+                        />}
             </View>
 
         </View>

@@ -148,7 +148,9 @@ const BusinessList = ({ navigation, route }) => {
       onApplyFilter: (val) => {
         _filter(val);
         fetchData(search, val);
-        moveToTop()
+        if (businessData.length > 0) {
+          moveToTop()
+        }
       }
     })
   }
@@ -210,7 +212,7 @@ const BusinessList = ({ navigation, route }) => {
               refreshing={loading}
               ListFooterComponent={() => (
                 <View center marginV-20>
-                  {nomore ?
+                  {nomore && businessData.length ?
                     <Text gray700>No more results.</Text>
                     : <ActivityIndicator animating={loading} size={'large'} />
                   }
