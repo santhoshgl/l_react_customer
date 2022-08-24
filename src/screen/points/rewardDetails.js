@@ -1,30 +1,54 @@
-import React, { memo, useEffect, useMemo } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { SafeAreaView, ImageBackground, Pressable, ScrollView, Image, Dimensions, StyleSheet } from 'react-native';
 import { View, Text, TouchableOpacity } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'underscore';
 import moment from 'moment';
 import { Colors, Images } from '@constants';
-import { getRewardDetails } from '../../redux/reducer/points';
 import Clipboard from '@react-native-community/clipboard';
 import { showMessage } from 'react-native-flash-message';
 import { onGetRouteNavigationData, onReadNotification } from '../../redux/reducer/user';
+import { setLoading } from '../../redux/reducer/loading';
+import apiRequest from '@services/networkProvider';
 
 const RewardDetails = ({ navigation, route }) => {
   const dispatch = useDispatch()
   const param = useMemo(() => { return route?.params }, [route])
-  const { rewardDetails } = useSelector(s => s.points)
+  const [ rewardDetails, setDetails ] = useState({})
   const navigationData = useSelector(s => s?.user?.routeNavigationData?.navigationData)
   const id = useSelector(s => s?.user?.routeNavigationData?.navigationData?.rewardID)
   const loading = useSelector(s => s.loading.loading)
+  const [loadingPage, setLoadingPage] = useState(true)
 
 
   useEffect(() => {
-    if (param?.rewardId || id)
-      dispatch(getRewardDetails(param?.rewardId ? param?.rewardId : id));
-    dispatch(onReadNotification(param?.notificationID ? param?.notificationID : navigationData?.notificationID))
-  }, [param, navigationData, id])
+    if (param?.rewardId){
+    param?.rewardId && getRewardDetails(param?.rewardId);
+    param?.notificationID && dispatch(onReadNotification( param?.notificationID))
+    }
+    setLoadingPage(false)
+  }, [param])
 
+
+  useEffect(() => {
+    if (id){
+      getRewardDetails(id)
+      dispatch(onReadNotification(navigationData?.notificationID))
+    }
+  }, [ navigationData, id])
+
+
+const getRewardDetails = async (rewardID) =>{
+  setLoadingPage(true)
+  dispatch(setLoading(true))
+  const data = await apiRequest.get(`rewards/${rewardID}`)
+  dispatch(setLoading(true))
+  // return data?.data;
+  setDetails(data?.data)
+  setLoadingPage(false)
+  dispatch(setLoading(false))
+
+}
 
   const getCardStyles = useMemo(() => {
     let icon = Images.offers;
@@ -60,7 +84,6 @@ const RewardDetails = ({ navigation, route }) => {
     navigation.navigate('BusinessInfo', { business: { id: rewardDetails?.attributes?.business?.id } })
   }
 
-
   const onPressBack = () => {
     dispatch(onGetRouteNavigationData({}))
     navigation.goBack()
@@ -77,24 +100,26 @@ const RewardDetails = ({ navigation, route }) => {
           <View style={{ height: 24, width: 24 }} />
         </View>
       </View>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}>
+    { !loadingPage && !loading && <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}>
         <View style={{ height: 312 }}>
-          <ImageBackground source={Images.rewardDetails} re style={styles.image}>
+        {rewardDetails?.attributes?.rewardType &&   <ImageBackground source={Images.rewardDetails} re style={styles.image}>
             <View center marginT-50>
-              <Image source={rewardDetails.attributes?.rewardType == 'credit' ? Images.star : Images.gift} style={{ height: 26, width: 26, tintColor: "white", marginBottom: 10 }} />
-             {!loading && <Text fs16 lh24 white >{`Credits ${rewardDetails.attributes?.rewardType == 'credit' ? 'Rewarded' : 'Redeemed'}!`}</Text>}
-             {!loading && <Text beb48 lh60 white>{rewardDetails.attributes?.credits}</Text>}
+            <Image source={rewardDetails?.attributes?.rewardType == 'credit' ? Images.star : Images.gift} style={{ height: 26, width: 26, tintColor: "white", marginBottom: 10 }} />
+             {!loading && rewardDetails?.attributes?.rewardType && <Text fs16 lh24 white >{`Credits ${rewardDetails?.attributes?.rewardType == 'credit' ? 'Rewarded' :
+               rewardDetails?.attributes?.rewardType == 'debit' ? 'Redeemed' : '' }!`}</Text>}
+              <Text beb48 lh60 white>{rewardDetails?.attributes?.credits}</Text>
             </View>
-          </ImageBackground>
-        </View>
-        <View style={styles.listContainer}>
-        {!loading &&   <Text beb24 lh32 black flex numberOfLines={1}>{rewardDetails.attributes?.rewardType == 'credit' ? 'Rewarded' : 'Redeemed'}</Text>}
+          </ImageBackground>}
+       </View>
+      {rewardDetails?.attributes?.rewardType &&  <View style={styles.listContainer}>
+        {!loading &&   <Text beb24 lh32 black flex numberOfLines={1}>{rewardDetails?.attributes?.rewardType == 'credit' ? 'Rewarded' : 
+        rewardDetails?.attributes?.rewardType == 'debit' ? 'Redeemed' : ''}</Text>}
         {!loading &&   <Text fs14 lh20 gray500>{`${moment(rewardDetails?.attributes?.createdAt).format('ll')}  ·  ${moment(rewardDetails?.attributes?.createdAt).format('LT')}`}</Text> }
           <TouchableOpacity marginT-4 onPress={() => copyRefernceHandler()}>
           {!loading &&  <Text fs14 lh20 gray500>{`Reference #${rewardDetails?.id}`}</Text>}
           </TouchableOpacity>
-        </View>
-        <View style={{ margin: 16 }}>
+        </View>}
+       {rewardDetails?.attributes?.rewardType && <View style={{ margin: 16 }}>
         {!loading &&   <Text fs14 lh20 gray700>Business</Text>}
           <View style={styles.card}>
             <View row >
@@ -132,8 +157,8 @@ const RewardDetails = ({ navigation, route }) => {
             </>
             : null
           }
-        </View>
-      </ScrollView>
+        </View>}
+      </ScrollView>}
     </SafeAreaView >
   );
 }

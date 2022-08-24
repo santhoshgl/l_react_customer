@@ -58,6 +58,9 @@ export const pointsSlice = createSlice({
     [getRewards.fulfilled]: (state, { payload }) => {
       state.rewards = payload
     },
+    [getRewardDetails.pending]: (state, { payload }) => {
+      state.rewardDetails = {}
+    },
     [getRewardDetails.fulfilled]: (state, { payload }) => {
       state.rewardDetails = payload
     }
