@@ -9,6 +9,7 @@ export default styles = StyleSheet.create({
     borderColor: "#FFC6C8",
     borderRadius: 16,
     minHeight: 94,
-    paddingBottom: 16
+    paddingBottom: 16,
+    marginTop: 16
   },
 })

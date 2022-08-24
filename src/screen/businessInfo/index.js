@@ -63,8 +63,7 @@ const BusinessInfo = () => {
 
   const fetchData = () => {
     let businessInfoUrl = `business/${id}`;
-    let offerListUrl = `business/${id}/offers`;
-
+    let offerListUrl = `business/${id}/offers?active=true`;
     dispatch(setLoading(true));
     setOfferLoading(true);
     apiRequest
@@ -90,6 +89,7 @@ const BusinessInfo = () => {
       try {
         _loading(true);
         const res = await apiRequest.get(nextLink);
+        console.log("nextLink", nextLink)
         if (res?.data) {
           setOfferList((old) => [...old, ...res?.data]);
           setNextLink(res?.links?.next);
