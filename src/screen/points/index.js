@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useRef, useState } from "react";
-import { SafeAreaView, ScrollView, Image, StyleSheet, TouchableOpacity, } from "react-native";
+import { SafeAreaView, ScrollView, Image, StyleSheet, TouchableOpacity, RefreshControl, } from "react-native";
 import { View, Text } from "react-native-ui-lib";
 import { useDispatch, useSelector } from "react-redux";
 import Config from "react-native-config";
@@ -19,6 +19,7 @@ const History = ({ navigation }) => {
   const [nextLink, _nextLink] = useState("");
   const [prevLink, _prevLink] = useState("");
   const [page, _page] = useState(1);
+  const loading = useSelector(s => s.loading.loading);
 
   const setNextLink = (url) => {
     _nextLink(url?.replace(Config.API_URL, ''))
@@ -60,13 +61,25 @@ const History = ({ navigation }) => {
     dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, url: prevLink }));
   }
 
+  const onRefresh = () =>{
+    if (defaultHub?.id) {
+      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
+      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id }));
+    }
+  }
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <Header navigation={navigation} />
       <ScrollView
         ref={scrollRef}
         contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}
-      >
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={onRefresh}
+          />
+        }
+      >      
         <View style={{ backgroundColor: Colors.yellow }}>
           <View style={styles.card}>
             <View style={styles.title}>

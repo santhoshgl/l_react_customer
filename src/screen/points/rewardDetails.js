@@ -15,12 +15,14 @@ const RewardDetails = ({ navigation, route }) => {
   const param = useMemo(() => { return route?.params }, [route])
   const { rewardDetails } = useSelector(s => s.points)
   const navigationData = useSelector(s => s?.user?.routeNavigationData?.navigationData)
-  const id = useSelector(s => s?.user?.routeNavigationData?.navigationData?.redirectionID)
+  const id = useSelector(s => s?.user?.routeNavigationData?.navigationData?.rewardID)
+  const loading = useSelector(s => s.loading.loading)
+
 
   useEffect(() => {
     if (param?.rewardId || id)
       dispatch(getRewardDetails(param?.rewardId ? param?.rewardId : id));
-    dispatch(onReadNotification(navigationData?.notificationID))
+    dispatch(onReadNotification(param?.notificationID ? param?.notificationID : navigationData?.notificationID))
   }, [param, navigationData, id])
 
 
@@ -80,35 +82,35 @@ const RewardDetails = ({ navigation, route }) => {
           <ImageBackground source={Images.rewardDetails} re style={styles.image}>
             <View center marginT-50>
               <Image source={rewardDetails.attributes?.rewardType == 'credit' ? Images.star : Images.gift} style={{ height: 26, width: 26, tintColor: "white", marginBottom: 10 }} />
-              <Text fs16 lh24 white >{`Credits ${rewardDetails.attributes?.rewardType == 'credit' ? 'Rewarded' : 'Redeemed'}!`}</Text>
-              <Text beb48 lh60 white>{rewardDetails.attributes?.credits}</Text>
+             {!loading && <Text fs16 lh24 white >{`Credits ${rewardDetails.attributes?.rewardType == 'credit' ? 'Rewarded' : 'Redeemed'}!`}</Text>}
+             {!loading && <Text beb48 lh60 white>{rewardDetails.attributes?.credits}</Text>}
             </View>
           </ImageBackground>
         </View>
         <View style={styles.listContainer}>
-          <Text beb24 lh32 black flex numberOfLines={1}>{rewardDetails.attributes?.rewardType == 'credit' ? 'Rewarded' : 'Redeemed'}</Text>
-          <Text fs14 lh20 gray500>{`${moment(rewardDetails?.attributes?.createdAt).format('ll')}  ·  ${moment(rewardDetails?.attributes?.createdAt).format('LT')}`}</Text>
+        {!loading &&   <Text beb24 lh32 black flex numberOfLines={1}>{rewardDetails.attributes?.rewardType == 'credit' ? 'Rewarded' : 'Redeemed'}</Text>}
+        {!loading &&   <Text fs14 lh20 gray500>{`${moment(rewardDetails?.attributes?.createdAt).format('ll')}  ·  ${moment(rewardDetails?.attributes?.createdAt).format('LT')}`}</Text> }
           <TouchableOpacity marginT-4 onPress={() => copyRefernceHandler()}>
-            <Text fs14 lh20 gray500>{`Reference #${rewardDetails?.id}`}</Text>
+          {!loading &&  <Text fs14 lh20 gray500>{`Reference #${rewardDetails?.id}`}</Text>}
           </TouchableOpacity>
         </View>
         <View style={{ margin: 16 }}>
-          <Text fs14 lh20 gray700>Business</Text>
+        {!loading &&   <Text fs14 lh20 gray700>Business</Text>}
           <View style={styles.card}>
             <View row >
               <Image source={rewardDetails?.attributes?.business?.logo?.length ? { uri: rewardDetails?.attributes?.business?.logo } : Images.defaultBusiness}
                 style={{ height: 50, width: 50, borderRadius: 25 }}
               />
               <View marginL-12 flex>
-                <Text beb24 lh32 black >{rewardDetails?.attributes?.business?.name}</Text>
-                <Text fs12 lh18 gray500 numberOfLines={2}>{rewardDetails?.attributes?.business?.category}</Text>
+              {!loading &&   <Text beb24 lh32 black >{rewardDetails?.attributes?.business?.name}</Text> }
+              {!loading &&  <Text fs12 lh18 gray500 numberOfLines={2}>{rewardDetails?.attributes?.business?.category}</Text> }
               </View>
             </View>
 
           </View>
           {rewardDetails.attributes?.rewardType == 'credit' ?
             <>
-              <Text fs14 lh20 gray700>Offer used</Text>
+               {!loading &&  <Text fs14 lh20 gray700>Offer used</Text> }
               <Pressable onPress={() => onPressOffers()} style={styles.card}>
                 <View row >
                   <View style={{
@@ -118,12 +120,12 @@ const RewardDetails = ({ navigation, route }) => {
                     <Image source={getCardStyles?.icon} style={{ height: 16, width: 16, tintColor: "black" }} />
                   </View>
                   <View marginL-16 flex>
-                    <Text beb24 lh32 black numberOfLines={1} ellipsizeMode='tail'>{rewardDetails?.attributes?.offer?.title}</Text>
-                    <Text fs14 lh20 gray500 numberOfLines={2}>{rewardDetails?.attributes?.offer?.description || ''}</Text>
+                  {!loading &&   <Text beb24 lh32 black numberOfLines={1} ellipsizeMode='tail'>{rewardDetails?.attributes?.offer?.title}</Text> }
+                  {!loading &&    <Text fs14 lh20 gray500 numberOfLines={2}>{rewardDetails?.attributes?.offer?.description || ''}</Text> }
                   </View>
                   <View style={styles.badge}>
                     <Image source={Images.star} style={{ height: 12, width: 12, tintColor: Colors.gray500 }} />
-                    <Text fs14 lh20 gray700 marginL-4>{rewardDetails?.attributes?.offer?.credit}</Text>
+                    {!loading &&   <Text fs14 lh20 gray700 marginL-4>{rewardDetails?.attributes?.offer?.credit}</Text> }
                   </View>
                 </View>
               </Pressable>

@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   SafeAreaView,
   Image,
@@ -13,16 +13,19 @@ import { Text, View, Button } from "react-native-ui-lib";
 import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { Colors, Images } from "@constants";
-import { getUser, updateUser } from "../redux/reducer/user";
+import { getNotification, getUser, handleNotificationBadge, updateUser } from "../redux/reducer/user";
+import { useIsFocused } from "@react-navigation/native";
+import _ from "lodash";
 
 const windowHeight = Dimensions.get("window").height;
 
 const Header = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { userData, defaultHub } = useSelector((s) => s.user);
+  const { userData, defaultHub, userNotification, showNotificationBadge } = useSelector((s) => s.user);
   const [showHubs, _showHubs] = useState(false);
   const [showHubAdded, _showHubAdded] = useState(false);
   const [addedHub, _addedHub] = useState(undefined);
+  const focus = useIsFocused()
 
   const _onSelectHub = (_hub) => {
     dispatch(getUser())
@@ -47,6 +50,18 @@ const Header = ({ navigation }) => {
       });
   };
 
+  useEffect(() => {
+    dispatch(getNotification())
+  }, [focus])
+
+  useEffect(() => {
+    if (userNotification?.length > 0) {
+    }
+    let notificationReadCount = _.filter(userNotification, notification => { return notification?.read === false })
+    notificationReadCount?.length > 0 ? dispatch(handleNotificationBadge(true)) :
+      dispatch(handleNotificationBadge(false))
+  }, [userNotification, focus])
+
   return (
     <>
       <SafeAreaView
@@ -58,10 +73,15 @@ const Header = ({ navigation }) => {
       >
         <View right row centerV marginT-12 marginH-16>
           <Pressable onPress={() => navigation.navigate("userNotification")}>
-            <Image
-              source={Images.bell}
-              style={{ height: 24, width: 24, marginRight: 27 }}
-            />
+            {showNotificationBadge ?
+              <Image
+                source={Images.notificationPending}
+                style={{ height: 24, width: 24, marginRight: 27 }}
+              /> :
+              <Image
+                source={Images.bell}
+                style={{ height: 24, width: 24, marginRight: 27 }}
+              />}
           </Pressable>
           <Pressable onPress={() => navigation.navigate("account")}>
             {userData?.profilePicture ? (

@@ -177,6 +177,7 @@ export const readAllNotifications = createAsyncThunk('user/readAllNotifications'
       read: true
     }
     const readResponse = await apiRequest.patch(`notifications`, { data });
+    dispatch(handleNotificationBadge(false))
     dispatch(setLoading(false))
     return readResponse
   } catch (error) {
@@ -235,7 +236,7 @@ export const addCustomerRole = createAsyncThunk('user/addCustomerRole', async (p
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState: { userData: null, defaultHub: {}, deviceToken: {}, userNotification: null, deleteAccountReason: '', password: '', routeNavigationData: {} },
+  initialState: { userData: null, defaultHub: {}, deviceToken: {}, userNotification: null, deleteAccountReason: '', password: '', routeNavigationData: {}, showNotificationBadge : false },
   reducers: {
     onGetDeviceToken: (state, { payload }) => {
       state.deviceToken = payload
@@ -248,6 +249,9 @@ export const userSlice = createSlice({
     },
     onGetRouteNavigationData: (state, { payload }) => {
       state.routeNavigationData = payload
+    },
+    handleNotificationBadge: (state, { payload }) => {
+      state.showNotificationBadge = payload
     },
     logout: (state, { payload }) => {
       state.userData = null;
@@ -279,6 +283,6 @@ export const userSlice = createSlice({
   }
 })
 
-export const { onGetDeviceToken, logout, deleteAccountReason, onsetPassword, onGetRouteNavigationData } = userSlice.actions
+export const { onGetDeviceToken, logout, deleteAccountReason, onsetPassword, onGetRouteNavigationData, handleNotificationBadge } = userSlice.actions
 
 export default userSlice.reducer

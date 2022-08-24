@@ -3,7 +3,7 @@ import { SafeAreaView, Pressable, Image, SectionList, TouchableOpacity } from 'r
 import { View, Text } from 'react-native-ui-lib';
 import { Colors, Images } from '@constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { getNotification, readAllNotifications } from '../../redux/reducer/user';
+import { getNotification, onGetRouteNavigationData, readAllNotifications } from '../../redux/reducer/user';
 import NotificationSkeleton from "../../component/notificationSkleton"
 import styles from './styles';
 import moment from 'moment';
@@ -66,6 +66,26 @@ const UserNotification = ({ navigation }) => {
       })
   }
 
+
+  const onPressNotificationItem = (item) => {
+    if (item?.type === 'reward' || item?.type === 'credit' || item?.type === "debit") {
+      navigation.navigate("rewardDetails", { rewardId: item?.rewardID, notificationID: item?.id })
+    }
+  }
+  const NotificationCard = ({ item }) => {
+    return (
+      <Pressable style={[styles.notificationContainer, !(item.read) ? { backgroundColor: Colors.primary25 } : {}]} onPress={() => onPressNotificationItem(item)}>
+        <Image source={(item?.type == "reward") ? Images?.notificationStar : (item?.type == "redeem") ? Images?.redeem : { uri: item?.logo }} style={{ height: 32, width: 32, marginLeft: 16, marginTop: 16 }} />
+        <View flex marginL-10 marginT-16>
+          <Text fs16 lh24 black> {item.message} </Text>
+          <Text fs14 lh20 black> <Text primary700 fs14 lh20>{item.description} </Text> </Text>
+          <Text fs12 lh18 gray500> {moment(item?.created).fromNow()} </Text>
+        </View>
+      </Pressable>
+    );
+  }
+
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <View style={{ backgroundColor: Colors.white }}>
@@ -110,16 +130,3 @@ const UserNotification = ({ navigation }) => {
 }
 
 export default memo(UserNotification)
-
-const NotificationCard = ({ item }) => {
-  return (
-    <View style={[styles.notificationContainer, !(item.read) ? { backgroundColor: Colors.primary25 } : {}]} marginT-16>
-      <Image source={(item?.type == "reward") ? Images?.notificationStar : (item?.type == "redeem") ? Images?.redeem : { uri: item?.logo }} style={{ height: 32, width: 32, marginLeft: 16, marginTop: 16 }} />
-      <View flex marginL-10 marginT-16>
-        <Text fs16 lh24 black> {item.message} </Text>
-        <Text fs14 lh20 black> <Text primary700 fs14 lh20>{item.description} </Text> </Text>
-        <Text fs12 lh18 gray500> {moment(item?.created).fromNow()} </Text>
-      </View>
-    </View>
-  );
-}

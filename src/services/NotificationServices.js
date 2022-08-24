@@ -17,6 +17,10 @@ const onGetRouteName = (notificationType) => {
             return 'rewardDetails'
             break;
 
+        case 'debit':
+            return 'rewardDetails'
+            break;
+    
         default:
             return 'Home'
 

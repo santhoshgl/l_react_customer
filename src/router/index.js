@@ -45,7 +45,7 @@ import { onGetRouteName } from '../services/NotificationServices';
 import { showMessage } from 'react-native-flash-message';
 import firebase from '@react-native-firebase/app';
 import '@react-native-firebase/messaging';
-import { onGetRouteNavigationData, onReceiveFlashMessage } from '../redux/reducer/user';
+import { handleNotificationBadge, onGetRouteNavigationData, onReceiveFlashMessage } from '../redux/reducer/user';
 import PushNotification from 'react-native-push-notification';
 import BusinessFilter from '../screen/businessFilter';
 import HighlightText from '@sanar/react-native-highlight-text';
@@ -161,15 +161,19 @@ const handlePressNotification = () => {
   const navigationData = flashNotifictionData?.data
   const navigationObj = { route, navigationData, isNavigate: true }
   store.dispatch(onGetRouteNavigationData(navigationObj))
+  // store.dispatch(handleNotificationBadge(false))
 }
 
 export const FlashNotification = (data, onClose) => {
+  let highlightWords = []
+  flashNotifictionData?.data?.highlightText?.length > 0 && highlightWords.push(flashNotifictionData?.data?.highlightText)
   return (
-    <View style={{ padding: 16, borderColor: Colors.primary200, backgroundColor: Colors.primary25, borderRadius: 8, flexDirection: 'row', borderWidth: 1 }}>
+    <View style={{ padding: 16, borderColor: Colors.primary200, backgroundColor: Colors.primary25, borderRadius: 8, flexDirection: 'row', borderWidth: 1 , 
+    top: flashNotifictionData?.data?.type === 'debit' ? 25 : 10}}>
       <Pressable style={{ flex: 0.9 }} onPress={() => handlePressNotification()} >
         <HighlightText
           highlightStyle={{ color: Colors.primary700 }}
-          searchWords={flashNotifictionData?.data?.highlightText || []}
+          searchWords={highlightWords}
           style={{ fontFamily: 'NotoSans-Regular', fontWeight: '400', fontSize: 16, lineHeight: 24, }}
           textToHighlight={data?.message}
         />
@@ -194,10 +198,13 @@ export const App = ({ onShowInAppNotification }) => {
   const onReceiveInAppNotification = () => {
     firebase.messaging().onMessage(response => {
       onShowInAppNotification(true)
+      dispatch(handleNotificationBadge(true))
       flashNotifictionData = response
       showMessage({ message: response?.notification?.body })
     });
   };
+
+  
 
   const onPressNotification = (notificationDetails) => {
     const route = onGetRouteName(notificationDetails?.data?.type)
@@ -215,11 +222,19 @@ export const App = ({ onShowInAppNotification }) => {
       });
   }
 
+
+  const onForegroundNotification = () =>{
+    firebase.messaging().onNotificationOpenedApp(response => {
+      onPressNotification(response)
+    });  
+  }
+
   useEffect(() => {
     PushNotification.cancelAllLocalNotifications()
     dispatch(onGetInternetStatus(netInfo?.isConnected))
     onInitialNotification()
     onReceiveInAppNotification()
+    onForegroundNotification()
   }, [netInfo]) // in order to re-call the hooks whenever the netInfo status changed 
 
   return (
