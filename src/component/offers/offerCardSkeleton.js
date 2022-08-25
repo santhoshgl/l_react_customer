@@ -1,9 +1,11 @@
 import React, { memo } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { Dimensions, FlatList, StyleSheet } from 'react-native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { Colors } from '@constants';
 
-const OfferCardSkeleton = ({isHorizontal = true, skeletonStyle={}}) => {
+const { width } = Dimensions.get('screen')
+
+const OfferCardSkeleton = ({ isHorizontal = true, skeletonStyle = {} }) => {
   return (
     <FlatList
       horizontal={isHorizontal}
@@ -25,10 +27,32 @@ const OfferCardSkeleton = ({isHorizontal = true, skeletonStyle={}}) => {
             }}
             isLoading={true}
             layout={[
-              { key: 'header', width: skeletonStyle?.layoutHeaderWidth || 240, height: 56, marginBottom: 16, borderTopLeftRadius: 16, borderTopRightRadius: 16 },
-              { key: 'someOtherId', width: 180, height: 20, marginBottom: 6 },
-              { key: 'name', width: 120, height: 20, marginBottom: 6 },
-              { key: 'someId', width: 220, height: 50, marginBottom: 6 },
+              { key: 'header', width: 240, height: 56, borderTopLeftRadius: 16, borderTopRightRadius: 16 },
+              {
+                marginHorizontal: 16,
+                children: [
+                  { key: 'header', width: "65%", height: 25, marginTop: 16, },
+                  { key: 'header', width: "100%", height: 40, marginTop: 10, },
+                  {
+                    key: 'someOtherId', flexDirection: 'row', marginTop: 10,
+                    children: [
+                      { width: width / 10, height: width / 10, borderRadius: width / 2, marginRight: 10 },
+                      { width: "40%", height: 20, marginTop: 10 }
+                    ]
+                  },
+                ]
+              },
+              {
+                width: "100%",
+                height: 1,
+                marginTop: 16,
+              },
+              {
+                width: "60%",
+                height: 20,
+                marginTop: 8,
+                marginLeft: 16
+              }
             ]}
           ></SkeletonContent>
         )

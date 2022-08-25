@@ -1,7 +1,9 @@
 import React, { memo } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, Dimensions } from 'react-native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { Colors } from '@constants';
+
+const { width } = Dimensions.get('screen')
 
 const ListSkeleton = ({ source }) => {
   return (
@@ -26,31 +28,83 @@ const ListSkeleton = ({ source }) => {
             layout={source == "businessList" ?
               [
                 {
-                  key: 'header1', width: 70, height: 70, marginBottom: 16, borderRadius: 50,
+                  flex: 1,
+                  flexDirection: 'row',
+                  marginRight: 10,
+                  children: [
+                    {
+                      width: width / 5,
+                      height: width / 5,
+                      borderRadius: width / 2,
+                    },
+                    {
+                      flex: 1,
+                      marginLeft: 10,
+                      children: [
+                        { key: 'someOtherId', width: '90%', height: 30 },
+                        { key: 'someId1', width: "60%", height: 20, marginTop: 10 },
+                        {
+                          flex: 1, flexDirection: 'row', justifyContent: "space-between", marginTop: 10,
+                          children: [
+                            { width: "40%", height: 25, borderRadius: 25 },
+                            { width: "30%", height: 25, borderRadius: 25 }
+                          ]
+                        }
+                      ]
+                    }
+
+                  ]
                 },
-                {
-                  key: 'header2', width: 200, height: 30, marginTop: -80, marginLeft: 100, marginBottom: 16,
-                },
-                { key: 'someOtherId', width: 170, height: 20, marginBottom: 20, marginLeft: 100 },
-                { key: 'someId1', width: 90, height: 25, marginLeft: 100 },
-                { key: 'someId2', width: 65, height: 25, marginTop: -30, marginLeft: 260 },
               ] :
               [
                 {
-                  key: 'header1', width: 40, height: 40, marginBottom: 13, borderRadius: 50,
+                  flex: 1,
+                  flexDirection: 'row',
+                  marginRight: 10,
+                  children: [
+                    {
+                      width: width / 10,
+                      height: width / 10,
+                      borderRadius: width / 2,
+                    },
+                    {
+                      flex: 1,
+                      marginLeft: 10,
+                      marginTop: 5,
+                      children: [
+                        {
+                          key: 'someOtherId', flexDirection: 'row', justifyContent: "space-between",
+                          children: [
+                            { width: "50%", height: 25 },
+                            { width: "15%", height: 25, borderRadius: 25 }
+                          ]
+                        },
+                        { key: 'someId1', width: "80%", height: 20, marginTop: 8 },
+                        {
+                          key: 'someOtherId', flexDirection: 'row', marginTop: 10,
+                          children: [
+                            { width: width / 10, height: width / 10, borderRadius: width / 2, marginRight: 10 },
+                            { width: "40%", height: 20, marginTop: 10 }
+                          ]
+                        },
+                      ]
+                    }
+
+                  ]
                 },
                 {
-                  key: 'header2', width: 140, height: 25, marginTop: -50, marginLeft: 50, marginBottom: 13,
+                  width: "100%",
+                  height: 1,
+                  marginTop: 10,
                 },
                 {
-                  key: 'header3', width: 50, height: 25, marginTop: -37, marginLeft: 270, marginBottom: 13,
-                },
-                { key: 'someOtherId', width: 170, height: 15, marginBottom: 15, marginLeft: 50 },
-                { key: 'name', width: 200, height: 20, marginBottom: 15, marginLeft: 50 },
-                { key: 'someId', width: "auto", height: 25 },
+                  width: "60%",
+                  height: 20,
+                  marginTop: 8,
+                }
               ]
             }
-          ></SkeletonContent>
+          ></SkeletonContent >
         )
       }}
       keyExtractor={(_, index) => index.toString()}

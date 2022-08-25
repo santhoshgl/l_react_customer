@@ -168,8 +168,10 @@ export const FlashNotification = (data, onClose) => {
   let highlightWords = []
   flashNotifictionData?.data?.highlightText?.length > 0 && highlightWords.push(flashNotifictionData?.data?.highlightText)
   return (
-    <View style={{ padding: 16, borderColor: Colors.primary200, backgroundColor: Colors.primary25, borderRadius: 8, flexDirection: 'row', borderWidth: 1 , 
-    top: flashNotifictionData?.data?.type === 'debit' ? 25 : 10}}>
+    <View style={{
+      padding: 16, borderColor: Colors.primary200, backgroundColor: Colors.primary25, borderRadius: 8, flexDirection: 'row', borderWidth: 1,
+      top: flashNotifictionData?.data?.type === 'debit' ? 25 : 10
+    }}>
       <Pressable style={{ flex: 0.9 }} onPress={() => handlePressNotification()} >
         <HighlightText
           highlightStyle={{ color: Colors.primary700 }}
@@ -204,7 +206,7 @@ export const App = ({ onShowInAppNotification }) => {
     });
   };
 
-  
+
 
   const onPressNotification = (notificationDetails) => {
     const route = onGetRouteName(notificationDetails?.data?.type)
@@ -223,10 +225,10 @@ export const App = ({ onShowInAppNotification }) => {
   }
 
 
-  const onForegroundNotification = () =>{
+  const onForegroundNotification = () => {
     firebase.messaging().onNotificationOpenedApp(response => {
       onPressNotification(response)
-    });  
+    });
   }
 
   useEffect(() => {

@@ -68,6 +68,9 @@ const getRewardDetails = async (rewardID) =>{
     } else if (rewardDetails?.attributes?.offer?.type == "Points") {
       icon = Images.star;
       color = Colors.purple;
+    } else if (rewardDetails?.attributes?.offer?.type == "custom") {
+      icon = Images.custom;
+      color = Colors.gray300;
     } else {
       icon = Images.offers;
       color = Colors.blue;
@@ -96,7 +99,10 @@ const getRewardDetails = async (rewardID) =>{
           <Pressable onPress={() => onPressBack()} hitSlop={10}>
             <Image source={Images.back} style={{ height: 24, width: 24 }} />
           </Pressable>
-          <Text fs16 lh24 center black >Reward Details</Text>
+          <Text fs16 lh24 center black >{
+            rewardDetails.attributes?.rewardType == 'credit' ?
+              "Reward Details" : "Redeem Details"
+          }</Text>
           <View style={{ height: 24, width: 24 }} />
         </View>
       </View>

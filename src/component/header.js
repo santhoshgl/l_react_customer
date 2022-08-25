@@ -264,6 +264,10 @@ const Header = ({ navigation }) => {
                   marginB-8
                   black
                 >{`${addedHub?.name} Added!`}</Text>
+                <View row center marginB-4>
+                  <Image source={Images.pin} style={{ height: 15, width: 12 }} resizeMode={'contain'} />
+                  <Text center fa12 gray500 marginL-8 ln18>{addedHub?.city}{addedHub?.state ? `, ${addedHub?.state}` : ''}{addedHub?.country ? `, ${addedHub?.country}` : ''}</Text>
+                </View>
                 <Text fs14 ln20 center gray500 marginB-8>
                   {addedHub?.description}
                 </Text>

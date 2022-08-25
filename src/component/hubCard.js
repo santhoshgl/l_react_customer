@@ -1,9 +1,9 @@
 import React, { memo } from "react";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import { View, Text } from "react-native-ui-lib";
 import { Colors, Images } from "../constants";
 
-const HubCard = ({ item, selectText = 'Select', onSelect = () => { } }) => {
+const HubCard = ({ item, selectText = 'Select', onSelect = () => { }, addedHub = [] }) => {
   return (
     <View style={styles.card}>
       <View style={styles.header} >
@@ -33,7 +33,11 @@ const HubCard = ({ item, selectText = 'Select', onSelect = () => { } }) => {
         </View>
       </View>
       <View style={styles.separator} />
-      <Text fs14SB lh20 primary700 center marginV-12 onPress={() => onSelect(item)} >{selectText}</Text>
+      <TouchableOpacity disabled={addedHub?.includes(item?.id)} onPress={() => onSelect(item)} >
+        <Text fs14SB lh20 color={addedHub?.includes(item?.id) ? Colors.gray700 : Colors.primary700} center marginV-12>
+          {selectText}
+        </Text>
+      </TouchableOpacity>
     </View>
   )
 }

@@ -34,12 +34,12 @@ const Hub = ({ navigation }) => {
   }, []);
 
   const _search = () => {
-    if (searchVal) {
+    if (searchVal.trim().length > 0) {
       Request.get(`hubs?search=${searchVal}`)
         .then((res) => {
           _hubs(res?.data || []);
         })
-        .catch((err) => {});
+        .catch((err) => { });
     } else _hubs(undefined);
   };
 
@@ -87,7 +87,10 @@ const Hub = ({ navigation }) => {
           find your city!
         </Text>
         <Text fs16 center marginT-8 black>
-          Select the city that you would like to earn points from here.
+          {
+            showHubImg ? "Search for your city below." :
+              "Select the city that you would like to earn points from here."
+          }
         </Text>
         <SearchBar
           onChangeText={_searchVal}
