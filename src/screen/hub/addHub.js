@@ -18,32 +18,30 @@ import { getUser, updateUser } from "../../redux/reducer/user";
 import Config from "react-native-config"
 
 const AddHub = ({ route, navigation }) => {
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const [hubs, _hubs] = useState(undefined);
-  const [filtredHubs, _filtredHubs] = useState(undefined)
   const [searchVal, _searchVal] = useState("");
   const [nextLink, _nextLink] = useState('')
   const [loading, _loading] = useState(false)
   const [nomore, _nomore] = useState(false)
+  const [addedHub, _addedHub] = useState([])
+
   const setNextLink = (url) => {
     _nextLink(url?.replace(Config.API_URL, ''))
   }
 
   useEffect(() => {
+    _addedHub(route?.params?.addedHub)
+  }, [route?.params?.addedHub])
+
+  useEffect(() => {
     _search();
   }, []);
 
-  useEffect(() => {
-    if (hubs?.length) {
-      const filtredData = hubs?.filter((item) => !((route?.params?.addedHub || []).includes(item?.id)))
-      _filtredHubs(filtredData)
-    }
-  }, [hubs]);
-
   const _search = () => {
     let url = "hubs";
-    if (searchVal) {
+    if (searchVal.trim().length > 0) {
       url = `hubs?search=${searchVal}`;
     }
     Request.get(url)
@@ -150,21 +148,22 @@ const AddHub = ({ route, navigation }) => {
           <View marginT-24 paddingH-16 row spread centerV></View>
         )}
         <View flex paddingH-16>
-          {filtredHubs?.length ? (
+          {hubs?.length ? (
             <FlatList
-              data={filtredHubs}
+              data={hubs}
               renderItem={({ item }) => (
                 <HubCard
                   item={item}
                   selectText="Add City"
                   onSelect={(hub) => _onSelectHub(hub)}
+                  addedHub={addedHub}
                 />
               )}
               keyExtractor={(_, index) => index.toString()}
               onEndReached={!nomore && fetchMore}
               ListFooterComponent={() => (
                 <View center marginV-20>
-                  {nomore && filtredHubs.length ?
+                  {nomore && hubs.length ?
                     <Text gray700>No more results.</Text>
                     : <ActivityIndicator animating={loading} size={'large'} />
                   }
@@ -173,7 +172,7 @@ const AddHub = ({ route, navigation }) => {
               showsVerticalScrollIndicator={false}
               keyboardDismissMode={"on-drag"}
             />
-          ) : filtredHubs != undefined ? (
+          ) : hubs != undefined ? (
             <View flex center>
               <Image
                 source={Images.warning}
@@ -198,3 +197,4 @@ const AddHub = ({ route, navigation }) => {
 };
 
 export default memo(AddHub);
+

@@ -4,7 +4,6 @@ import {
   FlatList,
   Image,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -34,7 +33,8 @@ const BusinessInfo = () => {
   const route = useRoute();
   const dispatch = useDispatch();
   const { id } = route?.params?.business;
-  const { source } = route?.params;
+  const { source, title } = route?.params;
+  const { sourceFrom } = route?.params;
   const [businessInfo, setBusinessInfo] = useState();
   const [offerData, setOfferData] = useState([]);
   const [lengthMore, setLengthMore] = useState(false);
@@ -52,13 +52,20 @@ const BusinessInfo = () => {
   }, [id]);
 
   useEffect(() => {
-    if (source && source.length) {
-      const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-        navigation.navigate(source, { isRefresh: Math.floor(Math.random() * 900000) })
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (source && source.length) {
+        navigation.navigate(source, { isRefresh: Math.floor(Math.random() * 900000), title })
         return true
-      })
-      return () => backHandler.remove()
-    }
+      }
+      if (sourceFrom && sourceFrom.length) {
+        navigation.goBack()
+        return true
+      }
+    })
+    return () => backHandler.remove()
+    // const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+    // })
+    // return () => backHandler.remove()
   }, [])
 
   const fetchData = () => {
@@ -304,7 +311,7 @@ const BusinessInfo = () => {
           {businessInfo?.addressLine?.length > 0 && (
             <>
               <Text fs16SB lh24 black style={{ fontWeight: "600" }}>
-                Business Name
+                {businessInfo?.name}
               </Text>
               <Text fs16 lh24 black style={{ fontWeight: "400", marginTop: 8 }}>
                 {businessInfo?.addressLine}, {businessInfo?.addressLine2 + "\n"}
@@ -471,27 +478,6 @@ const BusinessInfo = () => {
     );
   };
 
-  const BannerImage = () => {
-    return businessInfo?.bannerImage?.length > 0 ? (
-      Platform.OS === 'android' ?
-        <Image
-          source={{ uri: businessInfo?.bannerImage }}
-          style={styles.bannerImage}
-          resizeMode={"stretch"}
-        /> :
-        <Image
-          source={{ url: businessInfo?.bannerImage }}
-          style={styles.bannerImage}
-          resizeMode={"stretch"}
-        />
-    ) : (
-      <Image
-        source={Images.businessCover}
-        style={styles.bannerImage}
-        resizeMode={"stretch"}
-      />
-    );
-  };
 
   const OfferCard = ({ item, businessDetails }) => {
     const getCardStyles = useMemo(() => {
@@ -696,7 +682,7 @@ const BusinessInfo = () => {
         nestedScrollEnabled={true}
       >
         <CloseIcon />
-        <BannerImage />
+        <BannerImage businessInfo={businessInfo} />
         <View>
           <AvtarView />
           <FollowView />
@@ -828,3 +814,26 @@ const styles = StyleSheet.create({
   loadMoreText: { fontWeight: "500", alignSelf: "center" },
   bottomSafearea: { flex: 0, backgroundColor: Colors.white },
 });
+
+
+const BannerImage = memo(({ businessInfo }) => {
+  return businessInfo?.bannerImage?.length > 0 ? (
+    Platform.OS === 'android' ?
+      <Image
+        source={{ uri: businessInfo?.bannerImage }}
+        style={styles.bannerImage}
+        resizeMode={"stretch"}
+      /> :
+      <Image
+        source={{ url: businessInfo?.bannerImage }}
+        style={styles.bannerImage}
+        resizeMode={"stretch"}
+      />
+  ) : (
+    <Image
+      source={Images.businessCover}
+      style={styles.bannerImage}
+      resizeMode={"stretch"}
+    />
+  );
+})

@@ -60,16 +60,16 @@ const OfferFilter = ({ navigation, route }) => {
                   <RadioButton
                     color={Colors.primary600}
                     value={'latest'}
-                    labelStyle={sortBy == "latest" && { fontWeight: "600" }}
-                    label={<Text fs14 lh20 gray900>Newest to Oldest</Text>} />
+                    // labelStyle={sortBy == "latest" && { fontWeight: "600" }}
+                    label={<Text fs14 fs14SB={sortBy == "latest"} lh20 gray900>Newest to Oldest</Text>} />
                 </View>
                 <View style={styles.borderView} />
                 <View style={styles.radioBoxSort}>
                   <RadioButton
                     color={Colors.primary600}
                     value={'oldest'}
-                    labelStyle={sortBy == "oldest" && { fontWeight: "600" }}
-                    label={<Text fs14 lh20 gray900>Oldest to Newest</Text>} />
+                    // labelStyle={sortBy == "oldest" && { fontWeight: "600" }}
+                    label={<Text fs14 fs14SB={sortBy == "oldest"} lh20 gray900>Oldest to Newest</Text>} />
                 </View>
               </RadioGroup>
             </View>

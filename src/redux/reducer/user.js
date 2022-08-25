@@ -104,7 +104,7 @@ export const registerUser = createAsyncThunk('user/registerUser', async (param, 
       phoneNumber: param?.phoneNumber,
       roles: ["customer"],
       email: param?.email,
-      profilePicture: 'https://cdn.quasar.dev/img/boy-avatar.png',
+      profilePicture: '',
     }
     const user = await apiRequest.post('users', { data })
     showMessage({ message: 'Your account has been created successfully.', type: 'success' })
@@ -236,7 +236,7 @@ export const addCustomerRole = createAsyncThunk('user/addCustomerRole', async (p
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState: { userData: null, defaultHub: {}, deviceToken: {}, userNotification: null, deleteAccountReason: '', password: '', routeNavigationData: {}, showNotificationBadge : false },
+  initialState: { userData: null, defaultHub: {}, deviceToken: {}, userNotification: null, deleteAccountReason: '', password: '', routeNavigationData: {}, showNotificationBadge: false },
   reducers: {
     onGetDeviceToken: (state, { payload }) => {
       state.deviceToken = payload

@@ -1,12 +1,14 @@
 import React, { memo } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { Dimensions, FlatList, StyleSheet } from 'react-native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { Colors } from '@constants';
+
+const { width } = Dimensions.get('screen')
 
 const NotificationSkeleton = () => {
   return (
     <FlatList
-      data={[1, 2, 3, 4, 5, 6]}
+      data={new Array(10)}
       renderItem={({ item }) => {
         return (
           <SkeletonContent
@@ -25,11 +27,30 @@ const NotificationSkeleton = () => {
             isLoading={true}
             layout={
               [
-                { key: 'header1', width: 32, height: 32, marginBottom: 16, borderRadius: 50, },
-                { key: 'header2', width: "60%", height: 20, marginTop: -45, marginLeft: 45, marginBottom: 10, },
-                { key: 'header3', width: "85%", height: 20, marginLeft: 45, marginBottom: 10, },
-                { key: 'header3', width: "35%", height: 20, marginLeft: 45, },
-              ]}
+                {
+                  flex: 1,
+                  flexDirection: 'row',
+                  marginRight: 10,
+                  children: [
+                    {
+                      width: width / 10,
+                      height: width / 10,
+                      borderRadius: width / 2,
+                    },
+                    {
+                      flex: 1,
+                      marginLeft: 10,
+                      marginTop: 5,
+                      children: [
+                        { key: 'someId1', width: "100%", height: 20 },
+                        { key: 'someId1', width: "100%", height: 20, marginTop: 5 },
+                        { key: 'someId1', width: "30%", height: 20, marginTop: 5 },
+                      ]
+                    }
+                  ]
+                },
+              ]
+            }
           ></SkeletonContent>
         )
       }}

@@ -76,6 +76,7 @@ export default {
   hubCover: require("../assets/hubCover.png"),
   hubLogoDefault: require("../assets/hubLogoDefault.png"),
   arrowDown: require("../assets/arrow-down.png"),
+  custom: require("../assets/custom.png"),
   notificationPending: require("../assets/notificationPending.png"),
   giftNotification: require("../assets/giftNotification.png"),
 };

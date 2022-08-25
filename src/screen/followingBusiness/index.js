@@ -41,7 +41,7 @@ const FollowingBusiness = ({ navigation, route }) => {
             _businessData(res?.data || [])
             setNextLink(res?.links?.next)
             dispatch(setLoading(false))
-        }).catch(() => {
+        }).catch((err) => {
             dispatch(setLoading(false))
         })
     }
@@ -78,37 +78,7 @@ const FollowingBusiness = ({ navigation, route }) => {
 
     const moveToTop = () => flatListRef?.current?.scrollToIndex({ index: 0 });
 
-    const Card = ({ item }) => {
-        return (
-            <Pressable style={styles.card} onPress={() => onPressBusiness(item)}>
-                <View row >
-                    <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={{ height: 72, width: 72, borderRadius: 72 }} />
-                    <View marginL-12 flex>
-                        <Text beb24 lh32 black >{item?.name}</Text>
-                        <Text fs12 lh18 gray500 marginT-5 >{item?.category?.label}</Text>
 
-                        <Text fs12 lh18 gray500 numberOfLines={2}>{item?.category?.description}</Text>
-                        <View flex row spread style={{ alignItems: 'center' }} >
-                            <View style={styles.tag} >
-                                <Image source={Images.offers} style={{ height: 12, width: 12 }} />
-                                <Text fs14 ln20 gray700 marginL-4 >Offers: <Text fs14SB  >{item?.totalOffers || 0}</Text></Text>
-                            </View>
-                            <TouchableOpacity
-                                disabled={item?.following}
-                                activeOpacity={0.7}
-                                style={[styles.follow, styles.grayBorder]}
-                                onPress={() => onPressFollow(item)}>
-                                <Text style={item?.following ? styles.followingText : styles.followText}>
-                                    {item?.following ? "Following" : "Follow"}
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-
-            </Pressable >
-        );
-    }
 
     return (
         <View style={{ flex: 1, backgroundColor: Colors.blue, paddingTop: Platform.OS === 'ios' ? 40 : 30 }}>
@@ -165,7 +135,7 @@ const FollowingBusiness = ({ navigation, route }) => {
                             )}
                             ListEmptyComponent={() => (
                                 <View flex center>
-                                    <Text gray700>You are not following any business yet.</Text>
+                                    <Text gray700>{search?.length ? "No matching Business found. Please try again." : "You are not following any business yet"}.</Text>
                                 </View>
                             )}
                         />}
@@ -177,3 +147,36 @@ const FollowingBusiness = ({ navigation, route }) => {
 
 }
 export default memo(FollowingBusiness)
+
+
+const Card = ({ item }) => {
+    return (
+        <Pressable style={styles.card} onPress={() => onPressBusiness(item)}>
+            <View row >
+                <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={{ height: 72, width: 72, borderRadius: 72 }} />
+                <View marginL-12 flex>
+                    <Text beb24 lh32 black >{item?.name}</Text>
+                    <Text fs12 lh18 gray500 marginT-5 >{item?.category?.label}</Text>
+
+                    <Text fs12 lh18 gray500 numberOfLines={2}>{item?.category?.description}</Text>
+                    <View flex row spread style={{ alignItems: 'center' }} >
+                        <View style={styles.tag} >
+                            <Image source={Images.offers} style={{ height: 12, width: 12 }} />
+                            <Text fs14 ln20 gray700 marginL-4 >Offers: <Text fs14SB  >{item?.totalOffers || 0}</Text></Text>
+                        </View>
+                        <TouchableOpacity
+                            disabled={item?.following}
+                            activeOpacity={0.7}
+                            style={[styles.follow, styles.grayBorder]}
+                            onPress={() => onPressFollow(item)}>
+                            <Text style={item?.following ? styles.followingText : styles.followText}>
+                                {item?.following ? "Following" : "Follow"}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+
+        </Pressable >
+    );
+}

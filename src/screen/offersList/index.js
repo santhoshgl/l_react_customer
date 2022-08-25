@@ -30,7 +30,7 @@ const OffersList = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchData(search, filter);
-  }, [defaultHub?.id])
+  }, [defaultHub?.id, param?.title])
 
   const fetchData = (search, filter) => {
     dispatch(setLoading(true))
@@ -159,7 +159,7 @@ const OffersList = ({ navigation, route }) => {
               ref={flatListRef}
               data={offersData || []}
               contentContainerStyle={{ flexGrow: 1 }}
-              renderItem={({ item }) => <Card navigation={navigation} item={item} />}
+              renderItem={({ item }) => <Card navigation={navigation} item={item} source={param?.source} />}
               keyExtractor={(_, index) => index.toString()}
               showsVerticalScrollIndicator={false}
               keyboardDismissMode={'on-drag'}
@@ -189,7 +189,7 @@ const OffersList = ({ navigation, route }) => {
 
 export default memo(OffersList)
 
-export const Card = ({ navigation, item }) => {
+export const Card = ({ navigation, item, source }) => {
 
   const getCardStyles = useMemo(() => {
     let icon = Images.offers;
@@ -217,7 +217,7 @@ export const Card = ({ navigation, item }) => {
   }, [item])
 
   const onPressOffers = () => {
-    navigation.navigate('BusinessInfo', { business: { id: item?.businessID } })
+    navigation.navigate('BusinessInfo', { business: { id: item?.businessID }, sourceFrom: source })
   }
 
   return (

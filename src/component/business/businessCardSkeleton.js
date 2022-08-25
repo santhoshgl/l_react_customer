@@ -25,10 +25,17 @@ const BusinessCardSkeleton = () => {
             }}
             isLoading={true}
             layout={[
-              { key: 'header', width: 240, height: 56, marginBottom: 16, borderTopLeftRadius: 16, borderTopRightRadius: 16 },
-              { key: 'someOtherId', width: 180, height: 20, marginBottom: 6 },
-              { key: 'name', width: 120, height: 20, marginBottom: 6 },
-              { key: 'someId', width: 220, height: 50, marginBottom: 6 },
+              {
+                flex: 1,
+                alignItems: "center",
+                children: [
+                  { key: 'header', width: 240, height: 100, borderTopLeftRadius: 16, borderTopRightRadius: 16 },
+                  { key: 'header', width: 90, height: 45, borderBottomLeftRadius: 45, borderBottomRightRadius: 45 },
+                  { key: 'header', width: "65%", height: 25, marginTop: 10 },
+                  { key: 'header', width: "35%", height: 20, marginTop: 10 },
+                  { key: 'header', width: "45%", height: 20, marginTop: 10, borderRadius: 25 },
+                ]
+              },
             ]}
           ></SkeletonContent>
         )
