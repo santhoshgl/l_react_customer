@@ -1,5 +1,5 @@
-import React, { memo, useEffect } from 'react';
-import { SafeAreaView, FlatList, Pressable, ScrollView, Image, Dimensions } from 'react-native';
+import React, { memo, useEffect, useState } from 'react';
+import { SafeAreaView, FlatList, Pressable, ScrollView, Image, Dimensions, RefreshControl } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'underscore';
@@ -17,16 +17,18 @@ import styles from './styles';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { uniqBy } from 'lodash';
 import { useRoute } from '@react-navigation/native';
+import { getRewardWallet } from '../../redux/reducer/points';
 
 const { width } = Dimensions.get('screen')
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch()
-  const { defaultHub } = useSelector(s => s.user)
+  const { userData, defaultHub } = useSelector(s => s.user)
   const { featuredOfferData, offerLoading } = useSelector(s => s.offers)
   const { featuredBusinessData, businessLoading } = useSelector(s => s.business)
   const userDeviceToken = useSelector(s => s.user?.deviceToken?.token)
   const onNotificationData = useSelector(s => s.user.routeNavigationData)
+  const [isRefresh, onSetRefresh] = useState(false)
   const route = useRoute()
 
   useEffect(() => {
@@ -41,10 +43,7 @@ const Home = ({ navigation }) => {
   }, [])
 
   useEffect(() => {
-    if (defaultHub?.id) {
-      dispatch(getFeaturedOffers(defaultHub?.id))
-      dispatch(getFeaturedBusiness(defaultHub?.id))
-    }
+    getDetails()
   }, [defaultHub?.id])
 
   const onPressBusiness = (business) => {
@@ -59,11 +58,34 @@ const Home = ({ navigation }) => {
     }
   }, [onNotificationData])
 
+
+  const onRefresh = () => {
+    onSetRefresh(true)
+    if (defaultHub?.id) {
+      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
+    }
+    getDetails()
+  }
+
+
+  const getDetails = () => {
+    if (defaultHub?.id) {
+      dispatch(getFeaturedOffers(defaultHub?.id))
+      dispatch(getFeaturedBusiness(defaultHub?.id))
+    }
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <Header navigation={navigation} />
-      <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}>
-        <Qr />
+      <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={offerLoading || businessLoading}
+            onRefresh={onRefresh}
+          />
+        }>
+        <Qr isRefresh={isRefresh} onSetRefresh={onSetRefresh} />
         {
           featuredOfferData?.length > 0 ?
             <View paddingT-24 >

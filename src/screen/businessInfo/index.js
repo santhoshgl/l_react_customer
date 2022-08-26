@@ -96,7 +96,6 @@ const BusinessInfo = () => {
       try {
         _loading(true);
         const res = await apiRequest.get(nextLink);
-        console.log("nextLink", nextLink)
         if (res?.data) {
           setOfferList((old) => [...old, ...res?.data]);
           setNextLink(res?.links?.next);
@@ -478,6 +477,27 @@ const BusinessInfo = () => {
     );
   };
 
+  const BannerImage = useCallback(()  => {
+    return businessInfo?.bannerImage?.length > 0 ? (
+      Platform.OS === 'android' ?
+        <Image
+          source={{ uri: businessInfo?.bannerImage }}
+          style={styles.bannerImage}
+          resizeMode={"stretch"}
+        /> :
+        <Image
+          source={{ url: businessInfo?.bannerImage }}
+          style={styles.bannerImage}
+          resizeMode={"stretch"}
+        />
+    ) : (
+      <Image
+        source={Images.businessCover}
+        style={styles.bannerImage}
+        resizeMode={"stretch"}
+      />
+    );
+  },[businessInfo?.bannerImage?.length])
 
   const OfferCard = ({ item, businessDetails }) => {
     const getCardStyles = useMemo(() => {
