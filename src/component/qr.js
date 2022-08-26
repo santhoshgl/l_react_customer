@@ -10,7 +10,7 @@ const { width } = Dimensions.get('screen')
 import apiRequest from '@services/networkProvider';
 
 
-const Qr = ({ }) => {
+const Qr = ({ isRefresh, onSetRefresh }) => {
   const { walletData } = useSelector(s => s.points)
   const [showQr, _showQr] = useState(false);
   const uid = useMemo(() => auth().currentUser?.uid, [])
@@ -20,11 +20,23 @@ const Qr = ({ }) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
+    onGetDetails()
+  }, [hubId, isFocused])
+
+
+  useEffect(() => {
+    if (isRefresh) {
+      onGetDetails()
+      onSetRefresh(false)
+    }
+  }, [isRefresh])
+
+  const onGetDetails = () => {
     let businessInfoUrl = `hubs/${hubId}`;
     apiRequest.get(businessInfoUrl).then(res => {
       setFollowingBusiness(res?.data?.totalBusinessesFollowing)
     })
-  }, [hubId, isFocused])
+  }
 
   return (
     <>
