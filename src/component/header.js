@@ -184,11 +184,20 @@ const Header = ({ navigation }) => {
                       <View row centerV marginV-8 key={i}>
                         <Image
                           source={_hub?.logo ? { uri: _hub?.logo } : Images.hubLogoDefault}
-                          style={{ height: 32, width: 32, borderRadius: 32 }}
+                          style={{ height: 50, width: 50, borderRadius: 32 }}
                         />
-                        <Text beb24 black marginH-12 lh32 numberOfLines={1}>
-                          {_hub?.name}
-                        </Text>
+                        <View marginH-12>
+                          <Text beb24 black lh32 numberOfLines={1}>
+                            {_hub?.name}
+                          </Text>
+                          <View row marginB-4>
+                            {
+                              (_hub?.city || _hub?.state || _hub?.country) &&
+                              <Image source={Images.pin} style={{ height: 15, width: 12 }} resizeMode={'contain'} />
+                            }
+                            <Text center fa12 gray500 marginL-8 ln18>{_hub?.city}{_hub?.state ? `, ${_hub?.state}` : ''}{_hub?.country ? `, ${_hub?.country}` : ''}</Text>
+                          </View>
+                        </View>
                       </View>
                     </TouchableOpacity>
                   );

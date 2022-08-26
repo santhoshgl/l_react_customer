@@ -20,7 +20,7 @@ import { useRoute } from '@react-navigation/native';
 
 const { width } = Dimensions.get('screen')
 
-const Home = ({ navigation },) => {
+const Home = ({ navigation }) => {
   const dispatch = useDispatch()
   const { defaultHub } = useSelector(s => s.user)
   const { featuredOfferData, offerLoading } = useSelector(s => s.offers)
