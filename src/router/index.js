@@ -193,6 +193,7 @@ export const App = ({ onShowInAppNotification }) => {
   if (userData && (!defaultHub || isEmpty(defaultHub))) {
     intialPage = "hub";
   }
+  
   const dispatch = useDispatch()
   const netInfo = useNetInfo();
 

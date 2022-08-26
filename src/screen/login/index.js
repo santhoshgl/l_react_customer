@@ -37,7 +37,11 @@ const Login = ({ navigation }) => {
     }
     dispatch(loginUser(param)).then(unwrapResult)
       .then((originalPromiseResult) => {
-        navigation.reset({ index: 0, routes: [{ name: 'dashboard' }] })
+        if (originalPromiseResult?.hubs?.length > 0) {
+          navigation.reset({ index: 0, routes: [{ name: 'dashboard' }] })
+        } else {
+          navigation.reset({ index: 0, routes: [{ name: 'hub' }] })
+        }
       })
   }
 

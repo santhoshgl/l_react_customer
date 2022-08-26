@@ -116,7 +116,7 @@ const FollowingBusiness = ({ navigation, route }) => {
                             ref={flatListRef}
                             data={businessData || []}
                             contentContainerStyle={{ flexGrow: 1 }}
-                            renderItem={({ item }) => <Card item={item} />}
+                            renderItem={({ item }) => <Card item={item} onPressBusiness={onPressBusiness} />}
                             keyExtractor={(_, index) => index.toString()}
                             showsVerticalScrollIndicator={false}
                             keyboardDismissMode={'on-drag'}
@@ -149,7 +149,7 @@ const FollowingBusiness = ({ navigation, route }) => {
 export default memo(FollowingBusiness)
 
 
-const Card = ({ item }) => {
+const Card = ({ item, onPressBusiness }) => {
     return (
         <Pressable style={styles.card} onPress={() => onPressBusiness(item)}>
             <View row >
@@ -167,8 +167,7 @@ const Card = ({ item }) => {
                         <TouchableOpacity
                             disabled={item?.following}
                             activeOpacity={0.7}
-                            style={[styles.follow, styles.grayBorder]}
-                            onPress={() => onPressFollow(item)}>
+                            style={[styles.follow, styles.grayBorder]}>
                             <Text style={item?.following ? styles.followingText : styles.followText}>
                                 {item?.following ? "Following" : "Follow"}
                             </Text>

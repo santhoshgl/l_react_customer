@@ -74,17 +74,20 @@ const UserNotification = ({ navigation }) => {
   }
   const NotificationCard = ({ item }) => {
     return (
-      <Pressable style={[styles.notificationContainer, !(item.read) ? { backgroundColor: Colors.primary25 } : {}]} onPress={() => onPressNotificationItem(item)}>
+      <Pressable style={[styles.notificationContainer, !(item?.read) ? { backgroundColor: Colors.primary25 } : {}]} onPress={() => onPressNotificationItem(item)}>
         <Image source={
           (item?.type == "reward" || item?.type == "credit") ? Images?.notificationStar :
             (item?.type == "redeem") ? Images?.redeem :
               (item?.type == "debit") ? Images?.giftNotification :
                 { uri: item?.logo }}
-          style={{ height: 32, width: 32, marginLeft: 16, marginTop: 16 }} />
-        <View flex marginL-10 marginT-16>
-          <Text fs16 lh24 black>{item.message}</Text>
-          <Text fs14 lh20 black> <Text primary700 fs14 lh20>{item.description} </Text> </Text>
-          <Text fs12 lh18 gray500> {moment(item?.created).fromNow()} </Text>
+          style={{ height: 32, width: 32 }} />
+        <View flex marginL-10>
+          <Text fs16 lh24 black>{item?.message}</Text>
+          {
+            item?.description && item?.description?.length ?
+              <Text fs14 lh20 black> <Text primary700 fs14 lh20>{item?.description} </Text> </Text> : null
+          }
+          <Text fs12 lh18 gray500 marginT-2> {moment(item?.created).fromNow()} </Text>
         </View>
       </Pressable>
     );
