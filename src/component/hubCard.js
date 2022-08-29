@@ -34,8 +34,8 @@ const HubCard = ({ item, selectText = 'Select', onSelect = () => { }, addedHub =
       </View>
       <View style={styles.separator} />
       <TouchableOpacity disabled={addedHub?.includes(item?.id)} onPress={() => onSelect(item)} >
-        <Text fs14SB lh20 color={addedHub?.includes(item?.id) ? Colors.gray700 : Colors.primary700} center marginV-12>
-          {selectText}
+        <Text fs14SB lh20 color={addedHub?.includes(item?.id) ? Colors.gray400 : Colors.primary700} center marginV-12>
+          {addedHub?.includes(item?.id) ? "Added" : selectText}
         </Text>
       </TouchableOpacity>
     </View>

@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
-import { SafeAreaView, Image, Pressable, FlatList, Text, ActivityIndicator } from 'react-native';
+import { SafeAreaView, Image, Pressable, FlatList, Text, ActivityIndicator, Keyboard } from 'react-native';
 import { View } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import Config from "react-native-config";
@@ -59,14 +59,17 @@ const Offers = ({ navigation }) => {
   }
 
   const onFilterButtonClick = () => {
-    navigation.navigate("offerFilter", {
-      source: 'all',
-      filter,
-      onApplyFilter: (val) => {
-        _filter(val);
-        fetchFilteredOffers(defaultHub?.id, search, val);
-      }
-    })
+    Keyboard.dismiss()
+    setTimeout(() => {
+      navigation.navigate("offerFilter", {
+        source: 'all',
+        filter,
+        onApplyFilter: (val) => {
+          _filter(val);
+          fetchFilteredOffers(defaultHub?.id, search, val);
+        }
+      })
+    }, 500);
   }
 
   useEffect(() => {

@@ -61,7 +61,7 @@ const History = ({ navigation }) => {
     dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, url: prevLink }));
   }
 
-  const onRefresh = () =>{
+  const onRefresh = () => {
     if (defaultHub?.id) {
       dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
       dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id }));
@@ -77,9 +77,11 @@ const History = ({ navigation }) => {
           <RefreshControl
             refreshing={loading}
             onRefresh={onRefresh}
+            tintColor={Colors.primary600}
+            colors={[Colors.primary600]}
           />
         }
-      >      
+      >
         <View style={{ backgroundColor: Colors.yellow }}>
           <View style={styles.card}>
             <View style={styles.title}>
