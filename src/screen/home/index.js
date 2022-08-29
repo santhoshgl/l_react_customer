@@ -83,6 +83,8 @@ const Home = ({ navigation }) => {
           <RefreshControl
             refreshing={offerLoading || businessLoading}
             onRefresh={onRefresh}
+            tintColor={Colors.primary600}
+            colors={[Colors.primary600]}
           />
         }>
         <Qr isRefresh={isRefresh} onSetRefresh={onSetRefresh} />

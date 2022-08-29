@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
-import { SafeAreaView, Image, Pressable, FlatList, ActivityIndicator, BackHandler } from 'react-native';
+import { SafeAreaView, Image, Pressable, FlatList, ActivityIndicator, BackHandler, Keyboard } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import Config from "react-native-config";
@@ -104,17 +104,20 @@ const OffersList = ({ navigation, route }) => {
   }
 
   const onFilterButtonClick = () => {
-    navigation.navigate("offerFilter", {
-      source: param?.title,
-      filter,
-      onApplyFilter: (val) => {
-        _filter(val);
-        fetchData(search, val);
-        if (offersData.length > 0) {
-          moveToTop()
+    Keyboard.dismiss()
+    setTimeout(() => {
+      navigation.navigate("offerFilter", {
+        source: param?.title,
+        filter,
+        onApplyFilter: (val) => {
+          _filter(val);
+          fetchData(search, val);
+          if (offersData.length > 0) {
+            moveToTop()
+          }
         }
-      }
-    })
+      })
+    }, 500);
   }
 
   const moveToTop = () => flatListRef?.current?.scrollToIndex({ index: 0 });
