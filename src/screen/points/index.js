@@ -19,6 +19,7 @@ const History = ({ navigation }) => {
   const [nextLink, _nextLink] = useState("");
   const [prevLink, _prevLink] = useState("");
   const [page, _page] = useState(1);
+  const [sortBy, _sortBy] = useState('latest');
   const loading = useSelector(s => s.loading.loading);
 
   const setNextLink = (url) => {
@@ -44,9 +45,14 @@ const History = ({ navigation }) => {
   useEffect(() => {
     if (defaultHub?.id) {
       dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
-      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id }));
     }
   }, [defaultHub?.id]);
+
+  useEffect(() => {
+    if (defaultHub?.id) {
+      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, sortBy: sortBy }));
+    }
+  }, [defaultHub?.id, sortBy]);
 
   const moveToTop = () => scrollRef.current?.scrollTo({
     y: 0,
@@ -67,6 +73,11 @@ const History = ({ navigation }) => {
       dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id }));
     }
   }
+
+  const referenceHandler = () => {
+    _sortBy((prevState) => prevState == "latest" ? "oldest" : "latest")
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <Header navigation={navigation} />
@@ -129,11 +140,11 @@ const History = ({ navigation }) => {
           <>
             <View style={{ backgroundColor: Colors.white, paddingHorizontal: 10 }}>
               <View row centerV flex>
-                <TouchableOpacity style={styles.tableTitleRef}>
+                <TouchableOpacity onPress={() => referenceHandler()} style={styles.tableTitleRef}>
                   <Text fs12 lh18 center gray500>
                     Reference
                   </Text>
-                  <Image source={Images.arrowDown} style={{ width: 16, height: 16 }} />
+                  <Image source={Images.arrowDown} style={{ width: 16, height: 16, transform: [{ rotate: sortBy == "latest" ? "180deg" : '360deg' }] }} />
                 </TouchableOpacity>
                 <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
                   Date
