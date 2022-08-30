@@ -132,7 +132,12 @@ const UserNotification = ({ navigation }) => {
               <Text gray700>No new notifications.</Text>
             </View>
           )}
-        />}
+          ListFooterComponent={() => (
+            <View style={{marginTop: 30}}/>
+          )}
+        />
+
+      }
     </SafeAreaView >
   );
 }
