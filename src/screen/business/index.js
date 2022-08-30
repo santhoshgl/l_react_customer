@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { SafeAreaView, Image, Pressable, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { SafeAreaView, Image, Pressable, FlatList, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text } from 'react-native-ui-lib';
 import Header from '../../component/header';
@@ -143,77 +143,98 @@ const Business = ({ navigation }) => {
     setTimeout(() => dispatch(setLoading(false)), 1000)
   }
 
+  const _handleRefresh = () => {
+    dispatch(getBusiness(defaultHub?.id))
+    dispatch(getFilteredBusiness({ hubId, search, filter }))
+  }
+
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <Header navigation={navigation} />
-      <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}>
-        <View style={{ flex: 1, backgroundColor: Colors.gray50 }}>
-          <View style={{ margin: 16, flexDirection: 'row', alignItems: 'center' }}>
-            <SearchBar
-              value={search}
-              style={{ flex: 1, marginVertical: 0 }}
-              placeholder={'Search for Businesses'}
-              onChangeText={(val) => _search(val)}
-              onSearch={(val) => onSearchOffers(val)}
-            />
-            <Pressable onPress={() => onFilterButtonClick()} hitSlop={10}>
-              <Image source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
-              {(filter?.sortBy?.length > 0 || filter?.category?.length > 0) ?
-                <View style={{ backgroundColor: Colors?.primary600, height: 8, width: 8, borderRadius: 8, position: 'absolute', right: 0 }}></View>
-                : null
-              }
-            </Pressable>
-          </View>
-          {isListView ?
-            <FlatList
-              ref={flatListRef}
-              data={businessFilterList || []}
-              contentContainerStyle={{ flexGrow: 1 }}
-              renderItem={({ item }) => <Card item={item} onPressBusiness={onPressBusiness} onPressFollow={onPressFollow} />}
-              keyExtractor={(_, index) => index.toString()}
-              showsVerticalScrollIndicator={false}
-              keyboardDismissMode={'on-drag'}
-              onEndReached={!nomore && fetchMore}
-              scrollEventThrottle={16}
-              onEndReachedThreshold={0.3}
-              refreshing={loading}
-              ListEmptyComponent={() => (
-                <View flex center>
-                  <Text gray700>No matching Business found. Please try again.</Text>
-                </View>
-              )}
-              ListFooterComponent={() => (
-                <View center marginV-20>
-                  {!businessFilterList && nomore ?
-                    <Text gray700>No more results.</Text>
-                    : <ActivityIndicator animating={loading} size={'large'} />
-                  }
-                </View>
-              )}
-            />
-            :
-            <FlatList
-              data={Object.keys(businessList) || []}
-              contentContainerStyle={{ flexGrow: 1 }}
-              renderItem={({ item }) => (
-                <BusinessList
-                  item={businessList?.[item]}
-                  title={item}
-                  onPressBusiness={onPressBusiness}
-                />
-              )}
-              keyExtractor={(_, index) => index.toString()}
-              showsHorizontalScrollIndicator={false}
-              keyboardDismissMode={'on-drag'}
-              ListEmptyComponent={() => (
-                <View flex center>
-                  <Text gray700>No businesses found.</Text>
-                </View>
-              )}
-            />
+      <View style={{ margin: 16, flexDirection: 'row', alignItems: 'center' }}>
+        <SearchBar
+          value={search}
+          style={{ flex: 1, marginVertical: 0 }}
+          placeholder={'Search for Businesses'}
+          onChangeText={(val) => _search(val)}
+          onSearch={(val) => onSearchOffers(val)}
+        />
+        <Pressable onPress={() => onFilterButtonClick()} hitSlop={10}>
+          <Image source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
+          {(filter?.sortBy?.length > 0 || filter?.category?.length > 0) ?
+            <View style={{ backgroundColor: Colors?.primary600, height: 8, width: 8, borderRadius: 8, position: 'absolute', right: 0 }}></View>
+            : null
           }
-        </View>
-      </ScrollView>
+        </Pressable>
+      </View>
+      <View style={{ flex: 1, backgroundColor: Colors.gray50 }}>
+
+        {isListView ?
+          <FlatList
+            ref={flatListRef}
+            data={businessFilterList || []}
+            contentContainerStyle={{ flexGrow: 1 }}
+            renderItem={({ item }) => <Card item={item} onPressBusiness={onPressBusiness} onPressFollow={onPressFollow} />}
+            keyExtractor={(_, index) => index.toString()}
+            showsVerticalScrollIndicator={false}
+            keyboardDismissMode={'on-drag'}
+            onEndReached={!nomore && fetchMore}
+            scrollEventThrottle={16}
+            onEndReachedThreshold={0.3}
+            refreshing={loading}
+            refreshControl={
+              <RefreshControl
+                refreshing={loading}
+                onRefresh={() => _handleRefresh()}
+                tintColor={Colors.primary600}
+                colors={[Colors.primary600]}
+              />
+            }
+            ListEmptyComponent={() => (
+              <View flex center>
+                <Text gray700>No matching Business found. Please try again.</Text>
+              </View>
+            )}
+            ListFooterComponent={() => (
+              <View center marginV-20>
+                {!businessFilterList && nomore ?
+                  <Text gray700>No more results.</Text>
+                  : <ActivityIndicator animating={loading} size={'large'} />
+                }
+              </View>
+            )}
+          />
+          :
+          <FlatList
+            data={Object.keys(businessList) || []}
+            contentContainerStyle={{ flexGrow: 1 }}
+            renderItem={({ item }) => (
+              <BusinessList
+                item={businessList?.[item]}
+                title={item}
+                onPressBusiness={onPressBusiness}
+              />
+            )}
+            keyExtractor={(_, index) => index.toString()}
+            showsHorizontalScrollIndicator={false}
+            keyboardDismissMode={'on-drag'}
+            refreshControl={
+              <RefreshControl
+                refreshing={loading}
+                onRefresh={() => _handleRefresh()}
+                tintColor={Colors.primary600}
+                colors={[Colors.primary600]}
+              />
+            }
+            ListEmptyComponent={() => (
+              <View flex center>
+                <Text gray700>No businesses found.</Text>
+              </View>
+            )}
+          />
+        }
+      </View>
     </SafeAreaView >
   );
 }

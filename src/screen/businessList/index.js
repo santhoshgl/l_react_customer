@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { SafeAreaView, Image, Pressable, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Image, Pressable, FlatList, ActivityIndicator, TouchableOpacity, RefreshControl } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import Config from "react-native-config"
@@ -163,6 +163,12 @@ const BusinessList = ({ navigation, route }) => {
 
   const isFilterApplied = () => filter?.sortBy == 'oldest' || filter?.category;
 
+  const _handleRefresh = () => {
+    fetchData(search, filter);
+  }
+
+
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <Header navigation={navigation} />
@@ -209,6 +215,14 @@ const BusinessList = ({ navigation, route }) => {
               onEndReached={!nomore && fetchMore}
               scrollEventThrottle={16}
               onEndReachedThreshold={0.3}
+              refreshControl={
+                <RefreshControl
+                  refreshing={listLoading}
+                  onRefresh={() => _handleRefresh()}
+                  tintColor={Colors.primary600}
+                  colors={[Colors.primary600]}
+                />
+              }
               refreshing={loading}
               ListFooterComponent={() => (
                 <View center marginV-20>

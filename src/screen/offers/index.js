@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
-import { SafeAreaView, Image, Pressable, FlatList, Text, ActivityIndicator, Keyboard } from 'react-native';
+import { SafeAreaView, Image, Pressable, FlatList, Text, ActivityIndicator, RefreshControl } from 'react-native';
 import { View } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import Config from "react-native-config";
@@ -119,6 +119,12 @@ const Offers = ({ navigation }) => {
     }
   }
 
+  const _handleRefresh = () => {
+    dispatch(getOffers({ hubId: defaultHub?.id }));
+    dispatch(getFilteredOffers({ hubId: defaultHub?.id, search, filter }))
+  }
+
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <Header navigation={navigation} />
@@ -157,6 +163,14 @@ const Offers = ({ navigation }) => {
               </View>
             )}
             refreshing={loading}
+            refreshControl={
+              <RefreshControl
+                refreshing={loading}
+                onRefresh={() => _handleRefresh()}
+                tintColor={Colors.primary600}
+                colors={[Colors.primary600]}
+              />
+            }
             ListFooterComponent={() => (
               <View center marginV-20>
                 {nomore ?
@@ -174,6 +188,14 @@ const Offers = ({ navigation }) => {
             keyExtractor={(_, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             keyboardDismissMode={'on-drag'}
+            refreshControl={
+              <RefreshControl
+                refreshing={loading}
+                onRefresh={() => _handleRefresh()}
+                tintColor={Colors.primary600}
+                colors={[Colors.primary600]}
+              />
+            }
             ListEmptyComponent={() => (
               <View flex center>
                 <Text gray700>No offers found.</Text>

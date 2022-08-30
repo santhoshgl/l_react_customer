@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
-import { SafeAreaView, Image, Pressable, FlatList, ActivityIndicator, BackHandler, Keyboard } from 'react-native';
+import { SafeAreaView, Image, Pressable, FlatList, ActivityIndicator, BackHandler, RefreshControl } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import Config from "react-native-config";
@@ -124,6 +124,10 @@ const OffersList = ({ navigation, route }) => {
 
   const isFilterApplied = () => filter?.sortBy == 'oldest' || filter?.category;
 
+  const _handleRefresh = () =>{
+    fetchData(search, filter);
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <Header navigation={navigation} />
@@ -183,6 +187,14 @@ const OffersList = ({ navigation, route }) => {
                   <Text gray700>No matching offers found. Please try again.</Text>
                 </View>
               )}
+              refreshControl={
+                <RefreshControl
+                  refreshing={loading}
+                  onRefresh={() => _handleRefresh()}
+                  tintColor={Colors.primary600}
+                  colors={[Colors.primary600]}
+                />
+              }
             />
         }
       </View>

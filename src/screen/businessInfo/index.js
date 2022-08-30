@@ -209,6 +209,7 @@ const BusinessInfo = () => {
             </Text>
           </View>
         )}
+
         {businessInfo?.socialLinks?.twitter && (
           <View style={{ flexDirection: "row", marginTop: 18 }}>
             <Image
@@ -331,18 +332,17 @@ const BusinessInfo = () => {
           <Text fs16 lh24 primary700 style={{ fontWeight: "400" }}>
             {businessInfo?.email}
           </Text>
-          {businessInfo?.socialLinks?.length > 0 && (
-            <>
-              <Text
-                fs16SB
-                lh24
-                black
-                style={{ fontWeight: "600", marginTop: 24 }}
-              >
-                Social
-              </Text>
-              <SocialMediaView />
-            </>
+          {businessInfo?.socialLinks && Object.keys(businessInfo?.socialLinks).length > 0 && (<>
+            <Text
+              fs16SB
+              lh24
+              black
+              style={{ fontWeight: "600", marginTop: 24 }}
+            >
+              Social
+            </Text>
+            <SocialMediaView />
+          </>
           )}
         </View>
       </View>
@@ -374,7 +374,7 @@ const BusinessInfo = () => {
                       marginVertical: 1,
                       flex:
                         businessInfo?.openHours[schedule]?.status !== "closed"
-                          ? 0.4
+                          ? 0.5
                           : 0.36,
                     }}
                   >
@@ -477,7 +477,7 @@ const BusinessInfo = () => {
     );
   };
 
-  const BannerImage = useCallback(()  => {
+  const BannerImage = useCallback(() => {
     return businessInfo?.bannerImage?.length > 0 ? (
       Platform.OS === 'android' ?
         <Image
@@ -497,7 +497,7 @@ const BusinessInfo = () => {
         resizeMode={"stretch"}
       />
     );
-  },[businessInfo?.bannerImage?.length])
+  }, [businessInfo?.bannerImage?.length])
 
   const OfferCard = ({ item, businessDetails }) => {
     const getCardStyles = useMemo(() => {
@@ -594,7 +594,7 @@ const BusinessInfo = () => {
           </Text>
           <Text fs12 lh18 gray700 style={{ fontWeight: "600" }}>
             {" "}
-            {businessInfo?.offersRewarded || 0}{" "}
+            {item?.offersRewarded ? item?.offersRewarded : 0}{" "}
           </Text>
           <Text fs12 lh18 gray500 style={{ fontWeight: "400" }}>
             {" "}

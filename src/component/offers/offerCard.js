@@ -51,7 +51,7 @@ const OfferCard = ({ item }) => {
         <Text flex fs16 lh24 gray700 numberOfLines={2}>{item?.description || ''}</Text>
         <View marginT-12 row centerV >
           <Image source={item?.businessLogo ? { uri: item?.businessLogo } : Images.defaultBusinessSmall} style={{ height: 24, width: 24, borderRadius: 24 }} />
-          <Text marginL-6 fs12 lh18 gray700>{item?.businessName}</Text>
+          <Text marginL-6 fs12 lh18 gray700 numberOfLines={1} style={{ width: '80%' }} > {item?.businessName}</Text>
         </View>
       </View>
       <View style={styles.separator} />
