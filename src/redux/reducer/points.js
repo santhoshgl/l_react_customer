@@ -19,7 +19,7 @@ export const getRewardWallet = createAsyncThunk('points/getRewardWallet', async 
 
 export const getRewards = createAsyncThunk('points/getRewards', async (params, { dispatch }) => {
   try {
-    let url = `rewards?customerID=${params?.userID}&hubID=${params?.hubID}`;
+    let url = `rewards?customerID=${params?.userID}&hubID=${params?.hubID}&sortBy=${params?.sortBy}`;
     if (params?.url) {
       url = params?.url
     }
