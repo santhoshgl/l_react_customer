@@ -2,14 +2,14 @@ import React, { memo, useEffect, useRef, useState } from 'react';
 import { Image, FlatList, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text } from 'react-native-ui-lib';
-import SearchBar from '../../component/searchBar';
-import { Colors, Images } from '@constants';
-import { useMemo } from 'react';
+import Config from "react-native-config"
+import FastImage from 'react-native-fast-image';
+import auth from '@react-native-firebase/auth';
 import { setLoading } from '../../redux/reducer/loading';
 import apiRequest from '@services/networkProvider';
-import auth from '@react-native-firebase/auth';
+import SearchBar from '../../component/searchBar';
+import { Colors, Images } from '@constants';
 import styles from './styles';
-import Config from "react-native-config"
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import ListSkeleton from '../../component/listSkeleton';
 
@@ -84,7 +84,7 @@ const FollowingBusiness = ({ navigation, route }) => {
         <View style={{ flex: 1, backgroundColor: Colors.blue, paddingTop: Platform.OS === 'ios' ? 40 : 30 }}>
             <View style={{ flexDirection: 'row', height: 100 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={{ flex: 0.2 }}>
-                    <Image source={Images.backBlack} style={{ height: 20, width: 20, margin: 20 }} />
+                    <FastImage source={Images.backBlack} style={{ height: 20, width: 20, margin: 20 }} />
                 </TouchableOpacity>
                 <View style={{ flex: 0.6 }}>
                     <Text style={{ marginVertical: 20, fontSize: 16, textAlign: 'center', fontWeight: '600' }} fs14 lh24>Following</Text>
@@ -153,7 +153,7 @@ const Card = ({ item, onPressBusiness }) => {
     return (
         <Pressable style={styles.card} onPress={() => onPressBusiness(item)}>
             <View row >
-                <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={{ height: 72, width: 72, borderRadius: 72 }} />
+                <FastImage source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={{ height: 72, width: 72, borderRadius: 72 }} />
                 <View marginL-12 flex>
                     <Text beb24 lh32 black >{item?.name}</Text>
                     <Text fs12 lh18 gray500 marginT-5 >{item?.category?.label}</Text>
@@ -161,7 +161,7 @@ const Card = ({ item, onPressBusiness }) => {
                     <Text fs12 lh18 gray500 numberOfLines={2}>{item?.category?.description}</Text>
                     <View flex row spread style={{ alignItems: 'center' }} >
                         <View style={styles.tag} >
-                            <Image source={Images.offers} style={{ height: 12, width: 12 }} />
+                            <FastImage source={Images.offers} style={{ height: 12, width: 12 }} />
                             <Text fs14 ln20 gray700 marginL-4 >Offers: <Text fs14SB  >{item?.totalOffers || 0}</Text></Text>
                         </View>
                         <TouchableOpacity

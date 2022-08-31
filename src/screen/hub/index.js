@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import {
   SafeAreaView,
-  Image,
   StatusBar,
   Platform,
   UIManager,
@@ -9,6 +8,7 @@ import {
   FlatList,
 } from "react-native";
 import { Text, View } from "react-native-ui-lib";
+import FastImage from "react-native-fast-image";
 import { useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { Images, Colors } from "@constants";
@@ -71,13 +71,13 @@ const Hub = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <StatusBar barStyle={Platform.OS == "ios" ? "dark-content" : "default"} />
       <View margin-24 flex>
-        <Image
+        <FastImage
           source={Images.logo}
           style={styles.logoImg}
           resizeMode={"contain"}
         />
         {showHubImg ? (
-          <Image
+          <FastImage
             source={Images.hub}
             style={styles.hubImg}
             resizeMode={"contain"}
@@ -115,7 +115,7 @@ const Hub = ({ navigation }) => {
           />
         ) : hubs != undefined ? (
           <View flex center>
-            <Image
+            <FastImage
               source={Images.warning}
               style={styles.warningImg}
               resizeMode={"contain"}

@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import {
   SafeAreaView,
-  Image,
   Pressable,
   Modal,
   ScrollView,
@@ -10,6 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Text, View, Button } from "react-native-ui-lib";
+import FastImage from "react-native-fast-image";
 import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { Colors, Images } from "@constants";
@@ -74,18 +74,18 @@ const Header = ({ navigation }) => {
         <View right row centerV marginT-12 marginH-16>
           <Pressable onPress={() => navigation.navigate("userNotification")}>
             {showNotificationBadge ?
-              <Image
+              <FastImage
                 source={Images.notificationPending}
                 style={{ height: 24, width: 24, marginRight: 27 }}
               /> :
-              <Image
+              <FastImage
                 source={Images.bell}
                 style={{ height: 24, width: 24, marginRight: 27 }}
               />}
           </Pressable>
           <Pressable onPress={() => navigation.navigate("account")}>
             {userData?.profilePicture ? (
-              <Image
+              <FastImage
                 source={{ uri: userData?.profilePicture }}
                 style={{ height: 32, width: 32, borderRadius: 32 }}
               />
@@ -99,8 +99,9 @@ const Header = ({ navigation }) => {
                   backgroundColor: Colors.primary50,
                 }}
               >
-                <Image
+                <FastImage
                   source={Images.user}
+                  tintColor={Colors.primary600}
                   style={{
                     height: 20,
                     width: 20,
@@ -120,14 +121,14 @@ const Header = ({ navigation }) => {
               alignItems: "center",
             }}
           >
-            <Image
+            <FastImage
               source={defaultHub?.logo ? { uri: defaultHub?.logo } : Images.hubLogoDefault}
               style={{ height: 40, width: 40, borderRadius: 40 }}
             />
             <Text beb30 black marginH-12 numberOfLines={1}>
               {defaultHub?.name}
             </Text>
-            <Image
+            <FastImage
               source={Images.down}
               style={{ height: 24, width: 24, borderRadius: 24 }}
             />
@@ -170,7 +171,7 @@ const Header = ({ navigation }) => {
                   Cities
                 </Text>
                 <Pressable onPress={() => _showHubs(false)}>
-                  <Image source={Images.x} style={{ height: 24, width: 24 }} />
+                  <FastImage source={Images.x} style={{ height: 24, width: 24 }} />
                 </Pressable>
               </View>
 
@@ -182,7 +183,7 @@ const Header = ({ navigation }) => {
                   return (
                     <TouchableOpacity onPress={() => _onSelectHub(_hub)}>
                       <View row centerV marginV-8 key={i}>
-                        <Image
+                        <FastImage
                           source={_hub?.logo ? { uri: _hub?.logo } : Images.hubLogoDefault}
                           style={{ height: 50, width: 50, borderRadius: 32 }}
                         />
@@ -193,7 +194,7 @@ const Header = ({ navigation }) => {
                           <View row marginB-4>
                             {
                               (_hub?.city || _hub?.state || _hub?.country) &&
-                              <Image source={Images.pin} style={{ height: 15, width: 12 }} resizeMode={'contain'} />
+                              <FastImage source={Images.pin} style={{ height: 15, width: 12 }} resizeMode={'contain'} />
                             }
                             <Text center fa12 gray500 marginL-8 ln18>{_hub?.city}{_hub?.state ? `, ${_hub?.state}` : ''}{_hub?.country ? `, ${_hub?.country}` : ''}</Text>
                           </View>
@@ -241,7 +242,7 @@ const Header = ({ navigation }) => {
                 }}
               >
                 <Pressable onPress={() => _showHubAdded(false)}>
-                  <Image
+                  <FastImage
                     source={Images.x}
                     style={{
                       height: 20,
@@ -253,7 +254,7 @@ const Header = ({ navigation }) => {
                     }}
                   />
                 </Pressable>
-                <Image
+                <FastImage
                   source={addedHub?.logo ? { uri: addedHub?.logo } : Images.hubLogoDefault}
                   style={{
                     height: 72,
@@ -274,7 +275,7 @@ const Header = ({ navigation }) => {
                   black
                 >{`${addedHub?.name} Added!`}</Text>
                 <View row center marginB-4>
-                  <Image source={Images.pin} style={{ height: 15, width: 12 }} resizeMode={'contain'} />
+                  <FastImage source={Images.pin} style={{ height: 15, width: 12 }} resizeMode={'contain'} />
                   <Text center fa12 gray500 marginL-8 ln18>{addedHub?.city}{addedHub?.state ? `, ${addedHub?.state}` : ''}{addedHub?.country ? `, ${addedHub?.country}` : ''}</Text>
                 </View>
                 <Text fs14 ln20 center gray500 marginB-8>

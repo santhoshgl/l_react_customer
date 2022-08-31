@@ -1,10 +1,11 @@
 import React, { memo, useRef, useState } from "react";
 import { SafeAreaView, Image, Dimensions, ScrollView } from "react-native";
+import FastImage from "react-native-fast-image";
 import Swiper from "react-native-swiper";
 import { View, Text, Button } from "react-native-ui-lib";
 import { Images, Colors } from "../../constants";
 import styles from "./styles";
-const { width, height } = Dimensions.get("screen");
+const { width } = Dimensions.get("screen");
 
 const Onboarding = ({ navigation }) => {
   const ref = useRef();
@@ -26,7 +27,7 @@ const Onboarding = ({ navigation }) => {
           bounces={false}
           bouncesZoom={false}
         >
-          <Image
+          <FastImage
             source={Images.onboarding1}
             style={{ width: width, height: width }}
           />
@@ -45,7 +46,7 @@ const Onboarding = ({ navigation }) => {
           bounces={false}
           bouncesZoom={false}
         >
-          <Image
+          <FastImage
             source={Images.onboarding2}
             style={{ width: width, height: width }}
           />
@@ -64,7 +65,7 @@ const Onboarding = ({ navigation }) => {
           bounces={false}
           bouncesZoom={false}
         >
-          <Image
+          <FastImage
             source={Images.onboarding3}
             style={{ width: width, height: width }}
           />

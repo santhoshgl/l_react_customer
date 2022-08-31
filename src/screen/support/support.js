@@ -1,6 +1,7 @@
 import React from "react";
 import { Pressable, SafeAreaView ,Linking, Platform} from "react-native";
-import { Text, View, Image, TouchableOpacity } from "react-native-ui-lib";
+import { Text, View, TouchableOpacity } from "react-native-ui-lib";
+import FastImage from "react-native-fast-image";
 import { Images } from "@constants";
 import style from "./style";
 import Config from "react-native-config";
@@ -31,7 +32,7 @@ const Support = ({ navigation }) => {
       <View style={style.flex1}>
         <View row centerV marginH-16 marginV-16 style={{ justifyContent: "space-between" }} >
           <TouchableOpacity onPress={navigation.goBack} hitSlop={10}>
-            <Image source={Images.back} style={style.backIcon} />
+            <FastImage source={Images.back} style={style.backIcon} />
           </TouchableOpacity>
           <Text fs16 lh24 center black style={style.fontWeight500}>
             Support
@@ -42,35 +43,35 @@ const Support = ({ navigation }) => {
         <View style={style.mainWrapper}>
           <Pressable onPress={() => { navigation.navigate("Faqs") }}
            style={style.supportTextWrapper}>
-            <Image resizeMode={"contain"} source={Images.help_circle} style={style.commonIconDesign} />
+            <FastImage resizeMode={"contain"} source={Images.help_circle} style={style.commonIconDesign} />
             <Text fs16 lh16 marginL-17 black center style={style.fontWeight400}>
               FAQs
             </Text>
             <View style={style.arrowRightWrapper}>
-              <Image source={Images.chevron_right} style={style.arrowRight} />
+              <FastImage source={Images.chevron_right} style={style.arrowRight} />
             </View>
           </Pressable>
           <View style={style.line} />
 
           <Pressable onPress={()=>  Linking.openURL(`mailto:${mailId}`)}
             style={[style.supportTextWrapper, style.marginTop]}>
-            <Image source={Images.mail} resizeMode={"contain"} style={style.commonIconDesign} />
+            <FastImage source={Images.mail} resizeMode={"contain"} style={style.commonIconDesign} />
             <Text fs16 lh16 marginL-17 black center style={[style.fontWeight400, style.top]} >
               Send us feedback
             </Text>
             <View style={style.arrowRightWrapper}>
-              <Image source={Images.chevron_right} style={style.arrowRight} />
+              <FastImage source={Images.chevron_right} style={style.arrowRight} />
             </View>
           </Pressable>
 
           <View style={style.line} />
           <Pressable style={[style.supportTextWrapper, style.marginTop]} onPress={() => onPresRate()}>
-            <Image source={Images.thumbs_up} resizeMode={"contain"} style={style.commonIconDesign} />
+            <FastImage source={Images.thumbs_up} resizeMode={"contain"} style={style.commonIconDesign} />
             <Text fs16 lh16 marginL-17 black center style={style.fontWeight400}>
               Rate the App
             </Text>
             <View style={style.arrowRightWrapper}>
-              <Image source={Images.chevron_right} style={style.arrowRight} />
+              <FastImage source={Images.chevron_right} style={style.arrowRight} />
             </View>
           </Pressable>
           <View style={style.line} />

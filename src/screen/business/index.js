@@ -1,20 +1,19 @@
-import React, { memo, useEffect, useState } from 'react';
-import { SafeAreaView, Image, Pressable, FlatList, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
+import React, { memo, useEffect, useRef, useState, useMemo } from 'react';
+import { SafeAreaView, Pressable, FlatList, ActivityIndicator, RefreshControl, Keyboard } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text } from 'react-native-ui-lib';
+import Config from 'react-native-config';
+import FastImage from 'react-native-fast-image';
+import { cloneDeep } from 'lodash';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { Card } from '../businessList';
 import Header from '../../component/header';
 import SearchBar from '../../component/searchBar';
 import BusinessList from '@component/business/businessList';
 import { Colors, Images } from '@constants';
 import { getBusiness, getFilteredBusiness, onFollowBusiness } from '../../redux/reducer/business';
-import { useMemo } from 'react';
-import { useRef } from 'react';
-import { Card } from '../businessList';
-import Config from 'react-native-config';
 import apiRequest from '@services/networkProvider';
 import { setLoading } from '../../redux/reducer/loading';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { cloneDeep } from 'lodash';
 
 const Business = ({ navigation }) => {
   const dispatch = useDispatch()
@@ -89,14 +88,17 @@ const Business = ({ navigation }) => {
   }
 
   const onFilterButtonClick = () => {
-    navigation.navigate("businessFilter", {
-      source: 'all',
-      filter,
-      onApplyFilter: (val) => {
-        _filter(val);
-        fetchFilteredBusiness(defaultHub?.id, search, val);
-      }
-    })
+    Keyboard.dismiss()
+    setTimeout(() => {
+      navigation.navigate("businessFilter", {
+        source: 'all',
+        filter,
+        onApplyFilter: (val) => {
+          _filter(val);
+          fetchFilteredBusiness(defaultHub?.id, search, val);
+        }
+      })
+    }, 500);
   }
 
   const fetchMore = async () => {
@@ -161,7 +163,7 @@ const Business = ({ navigation }) => {
           onSearch={(val) => onSearchOffers(val)}
         />
         <Pressable onPress={() => onFilterButtonClick()} hitSlop={10}>
-          <Image source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
+          <FastImage source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
           {(filter?.sortBy?.length > 0 || filter?.category?.length > 0) ?
             <View style={{ backgroundColor: Colors?.primary600, height: 8, width: 8, borderRadius: 8, position: 'absolute', right: 0 }}></View>
             : null

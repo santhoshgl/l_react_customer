@@ -1,13 +1,13 @@
 import React from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import {
   Text,
   View,
-  Image,
 } from "react-native-ui-lib";
-import { Images } from "@constants";
+import FastImage from "react-native-fast-image";
 import style from "./style";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { Images } from "@constants";
 import { logout } from "../../redux/reducer/user";
 
 const AccountDeleted = ({ navigation }) => {
@@ -23,7 +23,7 @@ const AccountDeleted = ({ navigation }) => {
 
   return (
     <View style={style.deleteAccountContainer}>
-      <Image source={Images.AccountDeleted} />
+      <FastImage source={Images.AccountDeleted} />
       <Text beb30 black lh-36 marginT-20 style={style.fontWeight}>
         Your Account Deleted.
       </Text>

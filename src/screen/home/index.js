@@ -1,5 +1,6 @@
 import React, { memo, useEffect, useState } from 'react';
-import { SafeAreaView, FlatList, Pressable, ScrollView, Image, Dimensions, RefreshControl } from 'react-native';
+import { SafeAreaView, FlatList, Pressable, ScrollView, Dimensions, RefreshControl } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { View, Text } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'underscore';
@@ -141,7 +142,7 @@ const Home = ({ navigation }) => {
             </View>
             : null
         }
-        <Image
+        <FastImage
           source={Images.heroCard}
           style={{ width: width - 32, height: width - 32, marginVertical: 30, alignSelf: 'center' }}
         />

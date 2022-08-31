@@ -1,6 +1,7 @@
-import React, { memo, useMemo } from 'react';
-import { SafeAreaView, Image, Pressable, StyleSheet, ImageBackground } from 'react-native';
+import React, { memo } from 'react';
+import { Pressable, StyleSheet, ImageBackground } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
+import FastImage from 'react-native-fast-image';
 import { Colors } from '@constants';
 import { Images } from '../../constants';
 
@@ -8,11 +9,11 @@ const BusinessCard = ({ item, onPressBusiness }) => {
   return (
     <Pressable onPress={() => onPressBusiness(item)} style={styles.card}>
       <ImageBackground source={item?.bannerImage ? { uri: item?.bannerImage } : Images.businessCover} imageStyle={styles.backImg} >
-        <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={styles.logo} />
+        <FastImage source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={styles.logo} />
         <Text beb24 ln32 center marginT-8 black >{item?.name}</Text>
         <Text fs14 ln20 center gray500 >{item?.category?.label}</Text>
         <View style={styles.tag} >
-          <Image source={Images.offers} style={{ height: 12, width: 12 }} />
+          <FastImage source={Images.offers} style={{ height: 12, width: 12 }} />
           <Text fs14 ln20 gray700 marginL-4 >Offers: <Text fs14SB >{item?.totalOffers || 0}</Text></Text>
         </View>
       </ImageBackground>

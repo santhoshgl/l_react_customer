@@ -1,11 +1,19 @@
 import React, { useEffect } from 'react';
-import { Image, Pressable, View, Platform } from 'react-native';
+import { Pressable, View, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { isEmpty } from 'underscore';
+import { Text } from 'react-native-ui-lib';
+import { useNetInfo } from '@react-native-community/netinfo';
+import { showMessage } from 'react-native-flash-message';
+import firebase from '@react-native-firebase/app';
+import HighlightText from '@sanar/react-native-highlight-text';
+import FastImage from 'react-native-fast-image';
+import PushNotification from 'react-native-push-notification';
+import '@react-native-firebase/messaging';
 import Login from '../screen/login';
 import Register from '../screen/register';
 import Home from '../screen/home';
@@ -14,7 +22,6 @@ import Onboarding from '../screen/onboarding';
 import ForgotPassword from '../screen/forgotPassword';
 import Hub from '../screen/hub';
 import AddHub from '../screen/hub/addHub';
-import BottomTab from './bottomTab';
 import Offers from '../screen/offers';
 import OffersList from '../screen/offersList';
 import BusinessList from '../screen/businessList';
@@ -32,26 +39,15 @@ import termsAccount from "../screen/termsAccount";
 import privacyPolicyAccount from "../screen/privacyPolicyAccount";
 import userNotification from "../screen/userNotification";
 import BusinessInfo from "../screen/businessInfo";
-import { Support, Faqs } from '../screen/support';
 import OfferFilter from '../screen/offerFilter';
-import {
-  DeleteAccountReason,
-  ConfirDeleAccount,
-  AccountDeleted,
-} from "../screen/DeleteAccount";
-import { useNetInfo } from '@react-native-community/netinfo';
+import store from '../../src/redux/store'
+import BusinessFilter from '../screen/businessFilter';
+import { Support, Faqs } from '../screen/support';
+import { DeleteAccountReason, ConfirDeleAccount, AccountDeleted } from "../screen/DeleteAccount";
+import { handleNotificationBadge, onGetRouteNavigationData } from '../redux/reducer/user';
 import { onGetInternetStatus } from '../redux/reducer/network';
 import { onGetRouteName } from '../services/NotificationServices';
-import { showMessage } from 'react-native-flash-message';
-import firebase from '@react-native-firebase/app';
-import '@react-native-firebase/messaging';
-import { handleNotificationBadge, onGetRouteNavigationData, onReceiveFlashMessage } from '../redux/reducer/user';
-import PushNotification from 'react-native-push-notification';
-import BusinessFilter from '../screen/businessFilter';
-import HighlightText from '@sanar/react-native-highlight-text';
 import { Colors, Images } from '../constants';
-import store from '../../src/redux/store'
-import { Text } from 'react-native-ui-lib';
 
 
 const Stack = createNativeStackNavigator();
@@ -125,7 +121,7 @@ const Dashboard = (props) => {
             <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Home</Text>
           ),
           tabBarIcon: ({ color, size }) => (
-            <Image source={Images.home} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
+            <FastImage tintColor={color} source={Images.home} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
           ),
         }} />
       <Tab.Screen name="offersTab" component={_OffersStack} options={{
@@ -133,7 +129,7 @@ const Dashboard = (props) => {
           <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Offers</Text>
         ),
         tabBarIcon: ({ color, size }) => (
-          <Image source={Images.offers} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
+          <FastImage tintColor={color} source={Images.offers} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
         ),
       }} />
       <Tab.Screen name="businessTab" component={_BusinessStack} options={{
@@ -141,7 +137,7 @@ const Dashboard = (props) => {
           <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Businesses</Text>
         ),
         tabBarIcon: ({ color, size }) => (
-          <Image source={Images.tab_business} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
+          <FastImage tintColor={color} source={Images.tab_business} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
         ),
       }} />
       <Tab.Screen name="pointsTab" component={_PointsStack} options={{
@@ -149,7 +145,7 @@ const Dashboard = (props) => {
           <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Points</Text>
         ),
         tabBarIcon: ({ color, size }) => (
-          <Image source={Images.points} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
+          <FastImage tintColor={color} source={Images.points} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
         ),
       }} />
     </Tab.Navigator >
@@ -181,7 +177,7 @@ export const FlashNotification = (data, onClose) => {
         />
       </Pressable>
       <Pressable style={{ flex: 0.1, alignItems: 'flex-end' }} onPress={() => onClose(false)}>
-        <Image source={Images.x} style={{ height: 16, width: 16 }} />
+        <FastImage source={Images.x} style={{ height: 16, width: 16 }} />
       </Pressable>
     </View>
   )
@@ -193,7 +189,7 @@ export const App = ({ onShowInAppNotification }) => {
   if (userData && (!defaultHub || isEmpty(defaultHub))) {
     intialPage = "hub";
   }
-  
+
   const dispatch = useDispatch()
   const netInfo = useNetInfo();
 

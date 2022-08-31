@@ -1,8 +1,11 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { SafeAreaView, Image, Pressable, FlatList, ActivityIndicator, TouchableOpacity, RefreshControl } from 'react-native';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { SafeAreaView, Pressable, FlatList, ActivityIndicator, TouchableOpacity, RefreshControl, Keyboard } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import Config from "react-native-config"
+import { unwrapResult } from '@reduxjs/toolkit';
+import FastImage from 'react-native-fast-image';
+import { cloneDeep } from 'lodash';
 import _ from 'underscore';
 import apiRequest from '@services/networkProvider';
 import { setLoading } from '../../redux/reducer/loading';
@@ -12,8 +15,6 @@ import { Colors, Images } from '@constants';
 import { fetchBusinessCategory } from '@util'
 import styles from './styles';
 import { onFollowBusiness } from '../../redux/reducer/business';
-import { cloneDeep } from 'lodash';
-import { unwrapResult } from '@reduxjs/toolkit';
 import ListSkeleton from '../../component/listSkeleton';
 
 const BusinessList = ({ navigation, route }) => {
@@ -142,17 +143,20 @@ const BusinessList = ({ navigation, route }) => {
   }
 
   const onFilterButtonClick = () => {
-    navigation.navigate("businessFilter", {
-      source: param?.title,
-      filter,
-      onApplyFilter: (val) => {
-        _filter(val);
-        fetchData(search, val);
-        if (businessData.length > 0) {
-          moveToTop()
+    Keyboard.dismiss()
+    setTimeout(() => {
+      navigation.navigate("businessFilter", {
+        source: param?.title,
+        filter,
+        onApplyFilter: (val) => {
+          _filter(val);
+          fetchData(search, val);
+          if (businessData.length > 0) {
+            moveToTop()
+          }
         }
-      }
-    })
+      })
+    }, 500);
   }
 
   const onPressBusiness = (business) => {
@@ -188,7 +192,7 @@ const BusinessList = ({ navigation, route }) => {
             placeholder={'Search for Businesses'}
           />
           <Pressable hitSlop={10} onPress={() => onFilterButtonClick()} >
-            <Image source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
+            <FastImage source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
             {isFilterApplied() ?
               <View style={{ backgroundColor: Colors?.primary600, height: 8, width: 8, borderRadius: 8, position: 'absolute', right: 0 }}></View>
               : null
@@ -197,7 +201,7 @@ const BusinessList = ({ navigation, route }) => {
         </View>
         <View paddingH-16 row centerV marginB-8 >
           <Pressable onPress={() => navigate(param?.source)} hitSlop={10}>
-            <Image source={Images.back} style={{ height: 24, width: 24 }} />
+            <FastImage source={Images.back} style={{ height: 24, width: 24 }} />
           </Pressable>
           <Text beb24 lh32 black flex marginL-10 numberOfLines={1} >{param?.title}</Text>
         </View>
@@ -249,13 +253,13 @@ export const Card = ({ item, onPressBusiness, onPressFollow }) => {
   return (
     <Pressable style={styles.card} onPress={() => onPressBusiness(item)}>
       <View row >
-        <Image source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={{ height: 72, width: 72, borderRadius: 72 }} />
+        <FastImage source={item?.logo ? { uri: item?.logo } : Images.defaultBusiness} style={{ height: 72, width: 72, borderRadius: 72 }} />
         <View marginL-12 flex>
           <Text beb24 lh32 black >{item?.name}</Text>
           <Text fs12 lh18 gray500 numberOfLines={2}>{item?.category?.label}</Text>
           <View flex row spread marginT-12 >
             <View style={styles.tag} >
-              <Image source={Images.offers} style={{ height: 12, width: 12 }} />
+              <FastImage source={Images.offers} style={{ height: 12, width: 12 }} />
               <Text fs14 ln20 gray700 marginL-4 >Offers: <Text fs14SB >{item?.totalOffers || 0}</Text></Text>
             </View>
             {/* <View style={styles.following} >

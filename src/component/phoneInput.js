@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
-import { TextInput, StyleSheet, Image } from 'react-native';
+import { TextInput, StyleSheet } from 'react-native';
+import FastImage from 'react-native-fast-image';
 // import { Colors, Fonts } from '@constants'
 import { Text, View, Colors } from 'react-native-ui-lib';
 import { Images } from '../constants';
@@ -11,7 +12,7 @@ const PhoneInput = ({ value, label, error, validVal = true, ...props }) => {
       <View centerV row style={[styles.textInput, { borderColor: ((!value?.trim() && error) || !validVal) ? Colors.red40 : Colors.gray300 }]}>
         <View row marginR-6 centerV paddingR-6 style={{ height: 44, borderRightWidth: 1, borderRightColor: ((!value?.trim() && error) || !validVal) ? Colors.red40 : Colors.gray300 }}>
           <Text style={{ color: Colors.gray500 }}>US </Text>
-          <Image
+          <FastImage
             source={Images.down}
             style={{ height: 24, width: 24, borderRadius: 24, tintColor: Colors.gray500 }}
           />

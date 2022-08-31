@@ -1,9 +1,10 @@
-import React, { memo, useEffect, useState } from 'react';
-import { SafeAreaView, Image, ScrollView, StatusBar, Platform, KeyboardAvoidingView, Keyboard } from 'react-native';
-import { Text, Button, View } from 'react-native-ui-lib';
+import React, { memo, useState } from 'react';
+import { SafeAreaView, ScrollView, StatusBar, Platform, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { Text, Button } from 'react-native-ui-lib';
 import { showMessage } from "react-native-flash-message";
 import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
+import FastImage from 'react-native-fast-image';
 import { Images, Colors } from '@constants';
 import Input from '@component/input';
 import { registerUser } from '../../redux/reducer/user';
@@ -57,7 +58,7 @@ const Register = ({ navigation }) => {
       <StatusBar barStyle={Platform.OS == 'ios' ? 'dark-content' : 'default'} />
       <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
         <ScrollView keyboardShouldPersistTaps={'handled'} contentContainerStyle={{ padding: 24, flexGrow: 1 }} >
-          <Image source={Images.logo} style={{ height: 30, width: 30, alignSelf: 'center' }} resizeMode={'contain'} />
+          <FastImage source={Images.logo} style={{ height: 30, width: 30, alignSelf: 'center' }} resizeMode={'contain'} />
           <Text beb30 center marginT-25 black  >Create an account</Text>
           <Text fs14 center marginT-4 gray500 >Sign up today and get started with Lealzy!</Text>
           <Input

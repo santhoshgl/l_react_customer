@@ -1,14 +1,15 @@
 import React, { memo, useState, useMemo, useEffect } from 'react';
-import { SafeAreaView, Image, Pressable, Modal, Dimensions, TouchableOpacity } from 'react-native';
+import { Pressable, Modal, Dimensions, TouchableOpacity } from 'react-native';
 import { Text, View, Button } from 'react-native-ui-lib';
+import FastImage from 'react-native-fast-image';
 import { useSelector } from 'react-redux';
 import QRCode from 'react-native-qrcode-svg';
 import auth from '@react-native-firebase/auth';
-import { Colors, Images, Fonts } from '@constants';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-const { width } = Dimensions.get('screen')
+import { Colors, Images, Fonts } from '@constants';
 import apiRequest from '@services/networkProvider';
 
+const { width } = Dimensions.get('screen')
 
 const Qr = ({ isRefresh, onSetRefresh }) => {
   const { walletData } = useSelector(s => s.points)
@@ -46,7 +47,7 @@ const Qr = ({ isRefresh, onSetRefresh }) => {
             <Text fs12 lh18 gray900>Your Credits</Text>
             <View row centerV>
               <Text beb24 lh32 gray900>{walletData?.attributes?.balance || 0}</Text>
-              <Image source={Images.star} style={{ marginLeft: 8, height: 20, width: 20 }} />
+              <FastImage source={Images.star} style={{ marginLeft: 8, height: 20, width: 20 }} />
             </View>
           </View>
           <TouchableOpacity
@@ -55,7 +56,7 @@ const Qr = ({ isRefresh, onSetRefresh }) => {
             <Text fs12 lh18 gray900>Following</Text>
             <View row centerV>
               <Text beb24 lh32 gray900>{followingBusiness || 0}</Text>
-              <Image source={Images.briefcase} style={{ marginLeft: 8, height: 20, width: 20 }} />
+              <FastImage source={Images.briefcase} style={{ marginLeft: 8, height: 20, width: 20 }} />
             </View>
           </TouchableOpacity>
         </View>
@@ -83,7 +84,7 @@ const Qr = ({ isRefresh, onSetRefresh }) => {
                 <View style={{ height: 24, width: 24 }} />
                 <Text fs24SB black >Your QR Code</Text>
                 <Pressable onPress={() => _showQr(false)} >
-                  <Image source={Images.x} style={{ height: 24, width: 24 }} />
+                  <FastImage source={Images.x} style={{ height: 24, width: 24 }} />
                 </Pressable>
               </View>
               <View style={{ marginTop: 40, alignItems: 'center' }}>

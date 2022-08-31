@@ -1,5 +1,6 @@
 import React, { memo } from "react";
-import { StyleSheet, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import FastImage from "react-native-fast-image";
 import { View, Text } from "react-native-ui-lib";
 import { Colors, Images } from "../constants";
 
@@ -7,25 +8,25 @@ const HubCard = ({ item, selectText = 'Select', onSelect = () => { }, addedHub =
   return (
     <View style={styles.card}>
       <View style={styles.header} >
-        <Image source={item?.logo ? { uri: item?.logo } : Images.hubLogoDefault} style={styles.userImg} />
+        <FastImage source={item?.logo ? { uri: item?.logo } : Images.hubLogoDefault} style={styles.userImg} />
         <View marginL-12>
           <Text beb24 black lh32>{item?.name}</Text>
           <View row centerV>
-            <Image source={Images.pin} style={styles.pinImg} resizeMode={'contain'} />
+            <FastImage source={Images.pin} style={styles.pinImg} resizeMode={'contain'} />
             <Text fa12 gray500 marginL-8 ln18>{item?.city}{item?.state ? `, ${item?.state}` : ''}{item?.country ? `, ${item?.country}` : ''}</Text>
           </View>
         </View>
       </View>
       <View row marginT-12 marginH-16 >
         <View style={[styles.businessBox, { marginRight: 4 }]} >
-          <Image source={Images.business} style={styles.icon} />
+          <FastImage source={Images.business} style={styles.icon} />
           <View marginL-8>
             <Text fs12 gray500 lh18>Businesses</Text>
             <Text fs14 black lh20>{item?.totalBusiness || 0}</Text>
           </View>
         </View>
         <View style={[styles.businessBox, { marginLeft: 4 }]} >
-          <Image source={Images.tag} style={styles.icon} />
+          <FastImage source={Images.tag} style={styles.icon} />
           <View marginL-8>
             <Text fs12 gray500 lh18>Active Offers</Text>
             <Text fs14 black lh20>{item?.totalOffers || 0}</Text>

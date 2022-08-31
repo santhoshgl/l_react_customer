@@ -2,7 +2,6 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   Pressable,
   ScrollView,
   StatusBar,
@@ -14,17 +13,18 @@ import {
 } from "react-native";
 import { View, Text } from "react-native-ui-lib";
 import { Colors } from "@constants";
+import { useDispatch, useSelector } from "react-redux";
+import { capitalize, cloneDeep } from "lodash";
+import { unwrapResult } from "@reduxjs/toolkit";
+import Config from "react-native-config";
+import FastImage from "react-native-fast-image";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { setLoading } from "../../redux/reducer/loading";
-import { useDispatch, useSelector } from "react-redux";
 import { Images } from "../../constants";
-import { capitalize, cloneDeep } from "lodash";
 import { convert24hourTo12HourFormat } from "../../services/DateServices";
 import { onFollowBusiness } from "../../redux/reducer/business";
-import { unwrapResult } from "@reduxjs/toolkit";
 import apiRequest from "@services/networkProvider";
 import images from "../../constants/images";
-import Config from "react-native-config";
 import OfferCardSkeleton from "@component/offers/offerCardSkeleton";
 import { onPhoneCall } from "../../services/PhoneCallServices";
 
@@ -136,7 +136,7 @@ const BusinessInfo = () => {
     return (
       <Pressable onPress={() => source && source.length ? navigation.navigate(source, { isRefresh: Math.floor(Math.random() * 900000) }) : navigation.goBack()}>
         <View style={styles.closeView}>
-          <Image source={Images.x} style={styles.closeIcon} />
+          <FastImage source={Images.x} style={styles.closeIcon} />
         </View>
       </Pressable>
     );
@@ -146,22 +146,14 @@ const BusinessInfo = () => {
     return (
       <View style={styles.avatarView}>
         {Platform.OS === 'android' ?
-          <Image
-            source={
-              businessInfo?.logo?.length > 0
-                ? { uri: businessInfo?.logo }
-                : Images.defaultBusiness
-            }
+          <FastImage
+            source={businessInfo?.logo?.length > 0 ? { uri: businessInfo?.logo } : Images.defaultBusiness}
             style={styles.avatarImg}
             resizeMode={"stretch"}
           />
           :
-          <Image
-            source={
-              businessInfo?.logo?.length > 0
-                ? { url: businessInfo?.logo }
-                : Images.defaultBusiness
-            }
+          <FastImage
+            source={businessInfo?.logo?.length > 0 ? { uri: businessInfo?.logo } : Images.defaultBusiness}
             style={styles.avatarImg}
             resizeMode={"stretch"}
           />}
@@ -189,7 +181,7 @@ const BusinessInfo = () => {
       <View style={{ marginTop: 8 }}>
         {businessInfo?.socialLinks?.facebook && (
           <View style={{ flexDirection: "row" }}>
-            <Image
+            <FastImage
               source={Images.fbIcon}
               style={{ height: 24, width: 24, marginRight: 12 }}
             />
@@ -212,7 +204,7 @@ const BusinessInfo = () => {
 
         {businessInfo?.socialLinks?.twitter && (
           <View style={{ flexDirection: "row", marginTop: 18 }}>
-            <Image
+            <FastImage
               source={Images.twiterIcon}
               style={{ height: 24, width: 24, marginRight: 12 }}
             />
@@ -231,7 +223,7 @@ const BusinessInfo = () => {
         )}
         {businessInfo?.socialLinks?.instagram && (
           <View style={{ flexDirection: "row", marginTop: 18 }}>
-            <Image
+            <FastImage
               source={Images.instaIcon}
               style={{ height: 24, width: 24, marginRight: 12 }}
             />
@@ -266,7 +258,7 @@ const BusinessInfo = () => {
                 onClickWebSite(businessInfo?.contactDetails?.website)
               }
             >
-              <Image
+              <FastImage
                 source={Images.website}
                 resizeMode={"contain"}
                 style={{ height: 56, width: 56, marginHorizontal: 13 }}
@@ -284,12 +276,12 @@ const BusinessInfo = () => {
             </Pressable>
           )}
           {/* <View>
-                        <Image source={Images.direction} resizeMode={'contain'} style={{ height: 56, width: 56, marginHorizontal: 13 }} />
+                        <FastImage source={Images.direction} resizeMode={'contain'} style={{ height: 56, width: 56, marginHorizontal: 13 }} />
                         <Text fs12 lh18 gray500 center style={{ fontWeight: '500', paddingTop: 3 }}> Directions</Text>
                     </View> */}
           {businessInfo?.contactDetails?.phoneNumber && (
             <Pressable onPress={() => onPhoneCall(businessInfo?.contactDetails?.phoneNumber)}>
-              <Image
+              <FastImage
                 source={Images.phone}
                 resizeMode={"contain"}
                 style={{ height: 56, width: 56, marginHorizontal: 13 }}
@@ -480,18 +472,18 @@ const BusinessInfo = () => {
   const BannerImage = useCallback(() => {
     return businessInfo?.bannerImage?.length > 0 ? (
       Platform.OS === 'android' ?
-        <Image
+        <FastImage
           source={{ uri: businessInfo?.bannerImage }}
           style={styles.bannerImage}
           resizeMode={"stretch"}
         /> :
-        <Image
-          source={{ url: businessInfo?.bannerImage }}
+        <FastImage
+          source={{ uri: businessInfo?.bannerImage }}
           style={styles.bannerImage}
           resizeMode={"stretch"}
         />
     ) : (
-      <Image
+      <FastImage
         source={Images.businessCover}
         style={styles.bannerImage}
         resizeMode={"stretch"}
@@ -538,7 +530,8 @@ const BusinessInfo = () => {
               borderRadius: 32,
             }}
           >
-            <Image
+            <FastImage
+              tintColor={Colors.black}
               source={getCardStyles?.icon}
               style={{ height: 16, width: 16, tintColor: "black" }}
             />
@@ -551,7 +544,7 @@ const BusinessInfo = () => {
               {item?.description || ""}
             </Text>
             <View marginT-12 row centerV>
-              <Image
+              <FastImage
                 source={
                   businessDetails?.logo
                     ? { uri: businessDetails?.logo }
@@ -566,7 +559,8 @@ const BusinessInfo = () => {
             </View>
           </View>
           <View style={styles.badge}>
-            <Image
+            <FastImage
+              tintColor={Colors.gray500}
               source={Images.star}
               style={{ height: 12, width: 12, tintColor: Colors.gray500 }}
             />
@@ -579,7 +573,7 @@ const BusinessInfo = () => {
           style={{ height: 1, width: "100%", backgroundColor: Colors.gray200 }}
         />
         <View style={{ flexDirection: "row", marginVertical: 8 }}>
-          <Image
+          <FastImage
             source={Images.check}
             style={{
               height: 17,
@@ -836,24 +830,24 @@ const styles = StyleSheet.create({
 });
 
 
-const BannerImage = memo(({ businessInfo }) => {
-  return businessInfo?.bannerImage?.length > 0 ? (
-    Platform.OS === 'android' ?
-      <Image
-        source={{ uri: businessInfo?.bannerImage }}
-        style={styles.bannerImage}
-        resizeMode={"stretch"}
-      /> :
-      <Image
-        source={{ url: businessInfo?.bannerImage }}
-        style={styles.bannerImage}
-        resizeMode={"stretch"}
-      />
-  ) : (
-    <Image
-      source={Images.businessCover}
-      style={styles.bannerImage}
-      resizeMode={"stretch"}
-    />
-  );
-})
+// const BannerImage = memo(({ businessInfo }) => {
+//   return businessInfo?.bannerImage?.length > 0 ? (
+//     Platform.OS === 'android' ?
+//       <FastImage
+//         source={{ uri: businessInfo?.bannerImage }}
+//         style={styles.bannerImage}
+//         resizeMode={"stretch"}
+//       /> :
+//       <FastImage
+//         source={{ url: businessInfo?.bannerImage }}
+//         style={styles.bannerImage}
+//         resizeMode={"stretch"}
+//       />
+//   ) : (
+//     <FastImage
+//       source={Images.businessCover}
+//       style={styles.bannerImage}
+//       resizeMode={"stretch"}
+//     />
+//   );
+// })

@@ -2,20 +2,18 @@ import React, { useState } from "react";
 import {
   Text,
   View,
-  Image,
   Button,
   TouchableOpacity,
 } from "react-native-ui-lib";
 import style from "./style";
 import { Colors, Images } from "@constants";
 import { SafeAreaView, ScrollView, TextInput, Keyboard } from "react-native";
+import FastImage from "react-native-fast-image";
+import { unwrapResult } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from "react-redux";
 import { onDeleteUser } from "../../redux/reducer/user";
-import { useRoute } from "@react-navigation/native";
-import { unwrapResult } from '@reduxjs/toolkit';
-import { showOfflineMessage } from "../../redux/reducer/network";
 import { showMessage } from "react-native-flash-message";
-import { deleteAccountReason, onsetPassword } from "../../redux/reducer/user";
+import { onsetPassword } from "../../redux/reducer/user";
 
 const ConfirmDeleAccount = ({ navigation }) => {
   const isInternetReachable = useSelector((s) => s?.network?.isInternetReachable)
@@ -61,7 +59,7 @@ const ConfirmDeleAccount = ({ navigation }) => {
       >
         <View style={[style.headerContainer, { marginTop: 15 }]}>
           <TouchableOpacity onPress={navigation.goBack}>
-            <Image source={Images.back} style={style.backIcon} />
+            <FastImage source={Images.back} style={style.backIcon} />
           </TouchableOpacity>
           <View style={style.deletAccountText}>
             <Text fs16 lh24 center black style={style.fontWeight500}>

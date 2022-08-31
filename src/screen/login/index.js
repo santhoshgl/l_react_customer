@@ -1,6 +1,7 @@
 import React, { memo, useState } from 'react';
-import { SafeAreaView, Image, StatusBar, Platform } from 'react-native';
+import { SafeAreaView, StatusBar, Platform } from 'react-native';
 import { Text, View, Button } from 'react-native-ui-lib';
+import FastImage from 'react-native-fast-image';
 import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { showMessage } from 'react-native-flash-message';
@@ -49,7 +50,7 @@ const Login = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <StatusBar barStyle={Platform.OS == 'ios' ? 'dark-content' : 'default'} />
       <View margin-24 flex >
-        <Image source={Images.logo} style={{ height: 30, width: 30, alignSelf: 'center' }} resizeMode={'contain'} />
+        <FastImage source={Images.logo} style={{ height: 30, width: 30, alignSelf: 'center' }} resizeMode={'contain'} />
         <Text beb30 center marginT-25 black >Log in</Text>
         <Text fs14 center marginT-4 gray500 >Welcome back! Please enter your details.</Text>
         <Input

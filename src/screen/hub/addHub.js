@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import {
   SafeAreaView,
-  Image,
   Pressable,
   FlatList,
   ActivityIndicator,
@@ -9,13 +8,14 @@ import {
 import { Text, View } from "react-native-ui-lib";
 import { useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
+import Config from "react-native-config"
+import FastImage from "react-native-fast-image";
 import { Images, Colors } from "@constants";
 import SearchBar from "@component/searchBar";
 import HubCard from "@component/hubCard";
 import Request from "@services/networkProvider";
 import styles from "./styles";
 import { getUser, updateUser } from "../../redux/reducer/user";
-import Config from "react-native-config"
 
 const AddHub = ({ route, navigation }) => {
 
@@ -123,7 +123,7 @@ const AddHub = ({ route, navigation }) => {
             style={{ justifyContent: "space-between" }}
           >
             <Pressable onPress={navigation.goBack} hitSlop={10}>
-              <Image source={Images.back} style={{ height: 24, width: 24 }} />
+              <FastImage source={Images.back} style={{ height: 24, width: 24 }} />
             </Pressable>
             <Text fs16SB center black>
               Cities
@@ -174,7 +174,7 @@ const AddHub = ({ route, navigation }) => {
             />
           ) : hubs != undefined ? (
             <View flex center>
-              <Image
+              <FastImage
                 source={Images.warning}
                 style={styles.warningImg}
                 resizeMode={"contain"}

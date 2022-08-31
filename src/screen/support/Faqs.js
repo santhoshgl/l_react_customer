@@ -1,6 +1,7 @@
-import React, { memo } from 'react';
-import { SafeAreaView, Pressable, ScrollView, Image, Linking, StyleSheet } from 'react-native';
+import React from 'react';
+import { SafeAreaView, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
+import FastImage from 'react-native-fast-image';
 import { Colors, Images } from '@constants';
 
 const Faqs = ({ navigation }) => {
@@ -9,7 +10,7 @@ const Faqs = ({ navigation }) => {
       <View style={{ backgroundColor: Colors.white }}>
         <View row centerV marginH-16 marginV-16 style={{ justifyContent: 'space-between' }}>
           <Pressable onPress={navigation.goBack} hitSlop={10}>
-            <Image source={Images.back} style={{ height: 24, width: 24 }} />
+            <FastImage source={Images.back} style={{ height: 24, width: 24 }} />
           </Pressable>
           <Text fs16SB lh24 center black>FAQ's</Text>
           <View style={{ height: 24, width: 24 }} />
@@ -19,7 +20,7 @@ const Faqs = ({ navigation }) => {
         <View marginT-16 marginH-16>
           <View flex row marginB-24>
             <View center style={styles.imgHanlder}>
-              <Image source={Images.dollarSign} style={styles.iconFaqs} />
+              <FastImage source={Images.dollarSign} style={styles.iconFaqs} tintColor={Colors.primary600} />
             </View>
             <View flex marginL-16>
               <Text fs18SB lh28 black marginB-4 style={styles.fontWeight600}>How much does Lealzy cost?</Text>
@@ -28,7 +29,7 @@ const Faqs = ({ navigation }) => {
           </View>
           <View flex row marginB-24>
             <View center style={styles.imgHanlder}>
-              <Image source={Images.refresh} style={styles.iconFaqs} />
+              <FastImage source={Images.refresh} style={styles.iconFaqs} tintColor={Colors.primary600} />
             </View>
             <View flex marginL-16>
               <Text fs18SB lh28 black marginB-4 style={styles.fontWeight600}>How does lealzy work?</Text>
@@ -37,7 +38,7 @@ const Faqs = ({ navigation }) => {
           </View>
           <View flex row marginB-24>
             <View center style={styles.imgHanlder}>
-              <Image source={Images.star} style={styles.iconFaqs} />
+              <FastImage source={Images.star} style={styles.iconFaqs} tintColor={Colors.primary600} />
             </View>
             <View flex marginL-16>
               <Text fs18SB lh28 black marginB-4 style={styles.fontWeight600}>Where can I use my points?</Text>
@@ -46,7 +47,7 @@ const Faqs = ({ navigation }) => {
           </View>
           <View flex row marginB-24>
             <View center style={styles.imgHanlder}>
-              <Image source={Images.briefcase} style={styles.iconFaqs} />
+              <FastImage source={Images.briefcase} style={styles.iconFaqs} tintColor={Colors.primary600} />
             </View>
             <View flex marginL-16>
               <Text fs18SB lh28 black marginB-4>How can I know if my local business accepts Lealzy?</Text>
