@@ -1,5 +1,6 @@
 import React, { memo } from "react";
-import { StyleSheet, Pressable, View, Image, TextInput } from "react-native";
+import { StyleSheet, Pressable, View, TextInput } from "react-native";
+import FastImage from "react-native-fast-image";
 import { Colors, Images } from "../constants";
 
 const searchBar = ({ onChangeText = () => { }, value, onSearch = () => { }, onFocus = () => { }, ...props }) => {
@@ -9,7 +10,7 @@ const searchBar = ({ onChangeText = () => { }, value, onSearch = () => { }, onFo
   }
   return (
     <View style={[styles.searchBox, props?.style, { borderColor: value ? Colors.black : Colors.gray300 }]}>
-      <Image source={props?.fromFollowingBusiness ? Images.searchRed : Images.search}
+      <FastImage tintColor={Colors.primary600} source={props?.fromFollowingBusiness ? Images.searchRed : Images.search}
         style={[styles.searchIcon, { tintColor: Colors.primary600 }]} resizeMode={'contain'} />
       <TextInput
         placeholder={props?.placeholder || 'Search'}
@@ -23,7 +24,7 @@ const searchBar = ({ onChangeText = () => { }, value, onSearch = () => { }, onFo
       />
       {value ?
         <Pressable hitSlop={10} onPress={() => onCloseClick()} style={{ justifyContent: 'center' }} >
-          <Image source={Images.close} style={styles.searchIcon} resizeMode={'contain'} />
+          <FastImage source={Images.close} style={styles.searchIcon} resizeMode={'contain'} />
         </Pressable>
         : null}
     </View>

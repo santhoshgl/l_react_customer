@@ -1,12 +1,13 @@
 import React, { memo, useEffect, useState } from 'react';
-import { SafeAreaView, Pressable, ScrollView, Image } from 'react-native';
+import { SafeAreaView, Pressable, ScrollView } from 'react-native';
 import { View, Text, Switch } from 'react-native-ui-lib';
+import FastImage from 'react-native-fast-image';
 import _ from 'underscore';
+import { unwrapResult } from '@reduxjs/toolkit';
 import { Colors, Images } from '@constants';
 import styles from './styles'
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, updateUser } from '../../redux/reducer/user';
-import { unwrapResult } from '@reduxjs/toolkit';
 
 const AccountNotification = ({ navigation }) => {
 
@@ -70,7 +71,7 @@ const AccountNotification = ({ navigation }) => {
       <View style={{ backgroundColor: Colors.white }}>
         <View row centerV marginH-16 marginV-16 style={{ justifyContent: 'space-between' }}>
           <Pressable onPress={navigation.goBack} hitSlop={10}>
-            <Image source={Images.back} style={{ height: 24, width: 24 }} />
+            <FastImage source={Images.back} style={{ height: 24, width: 24 }} />
           </Pressable>
           <Text fs16 lh24 center black >Notifications</Text>
           <View style={{ height: 24, width: 24 }} />

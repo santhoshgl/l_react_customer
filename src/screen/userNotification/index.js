@@ -1,14 +1,15 @@
 import React, { memo, useEffect, useState } from 'react';
-import { SafeAreaView, Pressable, Image, SectionList, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Pressable, SectionList, TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
-import { Colors, Images } from '@constants';
-import { useDispatch, useSelector } from 'react-redux';
-import { getNotification, onGetRouteNavigationData, readAllNotifications } from '../../redux/reducer/user';
-import NotificationSkeleton from "../../component/notificationSkleton"
-import styles from './styles';
 import moment from 'moment';
 import { cloneDeep } from 'lodash'
+import FastImage from 'react-native-fast-image';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { useDispatch, useSelector } from 'react-redux';
+import { Colors, Images } from '@constants';
+import { getNotification, readAllNotifications } from '../../redux/reducer/user';
+import NotificationSkeleton from "../../component/notificationSkleton"
+import styles from './styles';
 
 const UserNotification = ({ navigation }) => {
   const { userNotification } = useSelector(s => s.user)
@@ -75,7 +76,7 @@ const UserNotification = ({ navigation }) => {
   const NotificationCard = ({ item }) => {
     return (
       <Pressable style={[styles.notificationContainer, !(item?.read) ? { backgroundColor: Colors.primary25 } : {}]} onPress={() => onPressNotificationItem(item)}>
-        <Image source={
+        <FastImage source={
           (item?.type == "reward" || item?.type == "credit") ? Images?.notificationStar :
             (item?.type == "redeem") ? Images?.redeem :
               (item?.type == "debit") ? Images?.giftNotification :
@@ -99,7 +100,7 @@ const UserNotification = ({ navigation }) => {
       <View style={{ backgroundColor: Colors.white }}>
         <View row centerV marginH-16 marginV-16 style={{ justifyContent: 'space-between' }}>
           <Pressable onPress={navigation.goBack} hitSlop={10}>
-            <Image source={Images.back} style={{ height: 24, width: 24 }} />
+            <FastImage source={Images.back} style={{ height: 24, width: 24 }} />
           </Pressable>
           <Text fs16 lh24 center black >Notifications</Text>
           <View style={{ height: 24, width: 24 }} />
@@ -122,7 +123,7 @@ const UserNotification = ({ navigation }) => {
                   disabled={isCheckedMarkAll}
                   onPress={() => onPressMarkAllRead()}
                   style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-                  <Image source={!isCheckedMarkAll ? Images.checkNotifications : Images.notificationGray} style={{ width: 13, height: 10, marginBottom: 3, alignSelf: 'flex-end', marginRight: 5 }} />
+                  <FastImage source={!isCheckedMarkAll ? Images.checkNotifications : Images.notificationGray} style={{ width: 13, height: 10, marginBottom: 3, alignSelf: 'flex-end', marginRight: 5 }} />
                   <Text fs14 lh20 marginT-16 style={{ color: !isCheckedMarkAll ? Colors.primary700 : Colors.gray500 }} > Mark all as read </Text>
                 </TouchableOpacity>}
             </View>

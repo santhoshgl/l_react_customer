@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
-import { SafeAreaView, Pressable, ScrollView, Image, ImageBackground } from 'react-native';
+import { SafeAreaView, Pressable, ScrollView, ImageBackground } from 'react-native';
 import { View, Text, Button } from 'react-native-ui-lib';
+import FastImage from 'react-native-fast-image';
 import Config from "react-native-config";
 import Share from 'react-native-share';
 import Clipboard from '@react-native-community/clipboard';
@@ -32,7 +33,7 @@ const InviteFriends = ({ navigation }) => {
       <View style={{ backgroundColor: Colors.white }}>
         <View row centerV marginH-16 marginV-16 style={{ justifyContent: 'space-between' }}>
           <Pressable onPress={navigation.goBack} hitSlop={10}>
-            <Image source={Images.back} style={{ height: 24, width: 24 }} />
+            <FastImage source={Images.back} style={{ height: 24, width: 24 }} />
           </Pressable>
           <Text fs16 lh24 center black >Invite friends</Text>
           <View style={{ height: 24, width: 24 }} />
@@ -51,13 +52,13 @@ const InviteFriends = ({ navigation }) => {
           <View marginH-16>
             <Text fs16 lh20 black marginT-24> Send invite </Text>
             <Button onPress={() => shareLinkHandler()} label={'Share'} marginT-8>
-              <Image source={Images.share} style={{ height: 20, width: 20, marginRight: 10 }} />
+              <FastImage source={Images.share} style={{ height: 20, width: 20, marginRight: 10 }} />
             </Button>
           </View>
           <View marginH-16 marginV-24>
             <Text fs16 lh20 black> Or copy link </Text>
             <Button style={styles.copyBtn} marginT-8>
-              <Image source={Images.link} style={{ height: 20, width: 20, marginRight: 10 }} />
+              <FastImage source={Images.link} style={{ height: 20, width: 20, marginRight: 10 }} />
               <Text flex numberOfLines={1} ellipsizeMode='tail' fs16 lh24 gray500> {shareLink} </Text>
               <Text onPress={() => textCopyHandler()} style={{ width: 55, textAlign: "right" }} fs16 lh24 primary700> Copy </Text>
             </Button>

@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
-import { SafeAreaView, Image, Pressable, FlatList, Text, ActivityIndicator, RefreshControl } from 'react-native';
+import { SafeAreaView, Pressable, FlatList, Text, ActivityIndicator, RefreshControl, Keyboard } from 'react-native';
 import { View } from 'react-native-ui-lib';
+import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import Config from "react-native-config";
 import _ from 'underscore';
@@ -138,7 +139,7 @@ const Offers = ({ navigation }) => {
             onSearch={(val) => onSearchOffers(val)}
           />
           <Pressable onPress={() => onFilterButtonClick()} hitSlop={10}>
-            <Image source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
+            <FastImage source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
             {(filter?.sortBy?.length > 0 || filter?.category?.length > 0) ?
               <View style={{ backgroundColor: Colors?.primary600, height: 8, width: 8, borderRadius: 8, position: 'absolute', right: 0 }}></View>
               : null

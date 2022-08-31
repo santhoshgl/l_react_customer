@@ -1,10 +1,11 @@
 import React, { memo, useEffect, useRef, useState } from "react";
-import { SafeAreaView, ScrollView, Image, StyleSheet, TouchableOpacity, RefreshControl, } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, RefreshControl, } from "react-native";
 import { View, Text } from "react-native-ui-lib";
 import { useDispatch, useSelector } from "react-redux";
 import Config from "react-native-config";
 import _ from "underscore";
 import moment from "moment";
+import FastImage from "react-native-fast-image";
 import Header from "@component/header";
 import { Colors, Images } from "@constants";
 import { getRewardWallet, getRewards } from "../../redux/reducer/points";
@@ -104,14 +105,14 @@ const History = ({ navigation }) => {
               <Text beb48 lh60 gray900>
                 {walletData?.attributes?.balance || 0}
               </Text>
-              <Image source={Images.star} style={styles.starIcon} />
+              <FastImage tintColor={Colors.primary600} source={Images.star} style={styles.starIcon} />
             </View>
             <View style={styles.separator} />
             {/* <View row centerV style={styles.footer}>
               <Text fs14 lh20 primary700>
                 Transfer credits to City
               </Text>
-              <Image source={Images.arrowRight} style={styles.rightImg} />
+              <FastImage source={Images.arrowRight} style={styles.rightImg} />
             </View> */}
             <View style={styles.separator2} />
             <TouchableOpacity
@@ -123,7 +124,7 @@ const History = ({ navigation }) => {
               <Text fs14 lh20 primary700>
                 Use your Credits
               </Text>
-              <Image source={Images.externalLink} style={styles.rightImg} />
+              <FastImage source={Images.externalLink} style={styles.rightImg} />
             </TouchableOpacity>
           </View>
         </View>
@@ -144,7 +145,7 @@ const History = ({ navigation }) => {
                   <Text fs12 lh18 center gray500>
                     Reference
                   </Text>
-                  <Image source={Images.arrowDown} style={{ width: 16, height: 16, transform: [{ rotate: sortBy == "latest" ? "180deg" : '360deg' }] }} />
+                  <FastImage source={Images.arrowDown} style={{ width: 16, height: 16, transform: [{ rotate: sortBy == "latest" ? "180deg" : '360deg' }] }} />
                 </TouchableOpacity>
                 <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
                   Date
@@ -183,8 +184,9 @@ const History = ({ navigation }) => {
                       <View fs14 lh20 success700 center flex style={styles.tableBody}>
                         {reward?.attributes?.rewardType == "credit" ? (
                           <View center style={styles.typeText}>
-                            <Image
+                            <FastImage
                               source={Images.star}
+                              tintColor={Colors.success700}
                               style={{
                                 width: 12,
                                 height: 12,
@@ -198,8 +200,9 @@ const History = ({ navigation }) => {
                           </View>
                         ) : (
                           <View center style={styles.typeReward}>
-                            <Image
+                            <FastImage
                               source={Images.gift}
+                              tintColor={Colors.blue700}
                               style={{
                                 width: 12,
                                 height: 12,
@@ -221,13 +224,13 @@ const History = ({ navigation }) => {
 
             <View row centerV flex style={styles.pagination}>
               <TouchableOpacity onPress={() => prevPageHandler()} disabled={prevLink ? false : true} style={[styles.paginationButton, prevLink ? {} : { backgroundColor: "#e3e3e3" }]}>
-                <Image source={Images.back} style={{ height: 20, width: 20 }} />
+                <FastImage source={Images.back} style={{ height: 20, width: 20 }} />
               </TouchableOpacity>
               <Text fs14 lh20 gray700>
                 Page {page} of {rewards?.meta?.totalPages}
               </Text>
               <TouchableOpacity onPress={() => nextPageHandler()} disabled={nextLink ? false : true} style={[styles.paginationButton, nextLink ? {} : { backgroundColor: "#e3e3e3" }]}>
-                <Image
+                <FastImage
                   source={Images.arrowRight}
                   style={{ height: 20, width: 20 }}
                 />

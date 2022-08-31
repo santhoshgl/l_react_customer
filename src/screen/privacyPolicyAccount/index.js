@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
-import { SafeAreaView, Pressable, ScrollView, Image } from 'react-native';
+import { SafeAreaView, Pressable, ScrollView } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
+import FastImage from 'react-native-fast-image';
 import { Colors, Images } from '@constants';
 
 const PrivacyPolicyAccount = ({ navigation }) => {
@@ -10,7 +11,7 @@ const PrivacyPolicyAccount = ({ navigation }) => {
       <View style={{ backgroundColor: Colors.white }}>
         <View row centerV marginH-16 marginV-16 style={{ justifyContent: 'space-between' }}>
           <Pressable onPress={navigation.goBack} hitSlop={10}>
-            <Image source={Images.back} style={{ height: 24, width: 24 }} />
+            <FastImage source={Images.back} style={{ height: 24, width: 24 }} />
           </Pressable>
           <Text fs16 lh24 center black >Privacy Policy</Text>
           <View style={{ height: 24, width: 24 }} />

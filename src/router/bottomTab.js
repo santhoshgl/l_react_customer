@@ -1,9 +1,10 @@
 import React, { memo } from 'react';
-import { Pressable, SafeAreaView, Image, StyleSheet } from 'react-native';
+import { Pressable, SafeAreaView, StyleSheet } from 'react-native';
 import { View, Text, Colors } from 'react-native-ui-lib';
+import FastImage from 'react-native-fast-image';
 import { ifIphoneX } from 'react-native-iphone-x-helper'
-import { Images } from '../constants';
 import { useDispatch } from 'react-redux';
+import { Images } from '../constants';
 import { onGetRouteNavigationData } from '../redux/reducer/user';
 
 const CustomTabBarScreen = ({ state, navigation }) => {
@@ -13,25 +14,25 @@ const CustomTabBarScreen = ({ state, navigation }) => {
     <SafeAreaView style={styles.mainView}>
       <View style={styles.tabView} >
         <Pressable hitSlop={15} onPress={() => { dispatch(onGetRouteNavigationData({})), navigation.navigate('homeTab') }}>
-          <Image source={Images.home} style={[styles.icon, { tintColor: state.index == 0 ? Colors.primary600 : Colors.gray500 }]} />
+          <FastImage source={Images.home} style={[styles.icon, { tintColor: state.index == 0 ? Colors.primary600 : Colors.gray500 }]} />
           <Text fs12 lh18 style={{ color: state.index == 0 ? Colors.black : Colors.gray500 }} >Home</Text>
         </Pressable>
       </View>
       <View style={styles.tabView}  >
         <Pressable hitSlop={15} onPress={() => { dispatch(onGetRouteNavigationData({})), navigation.navigate('offersTab')}}>
-          <Image source={Images.offers} style={[styles.icon, { tintColor: state.index == 1 ? Colors.primary600 : Colors.gray500 }]} />
+          <FastImage source={Images.offers} style={[styles.icon, { tintColor: state.index == 1 ? Colors.primary600 : Colors.gray500 }]} />
           <Text fs12 lh18 style={{ color: state.index == 1 ? Colors.black : Colors.gray500 }} >Offers</Text>
         </Pressable>
       </View>
       <View style={styles.tabView} >
         <Pressable hitSlop={15} onPress={() => { dispatch(onGetRouteNavigationData({})), navigation.navigate('businessTab')}}>
-          <Image source={Images.tab_business} style={[styles.icon, { tintColor: state.index == 2 ? Colors.primary600 : Colors.gray500 }]} />
+          <FastImage source={Images.tab_business} style={[styles.icon, { tintColor: state.index == 2 ? Colors.primary600 : Colors.gray500 }]} />
           <Text fs12 lh18 style={{ color: state.index == 2 ? Colors.black : Colors.gray500 }} >Businesses</Text>
         </Pressable>
       </View>
       <View style={styles.tabView}  >
         <Pressable hitSlop={15} onPress={() => navigation.navigate('pointsTab')}>
-          <Image source={Images.points} style={[styles.icon, { tintColor: state.index == 3 ? Colors.primary600 : Colors.gray500 }]} />
+          <FastImage source={Images.points} style={[styles.icon, { tintColor: state.index == 3 ? Colors.primary600 : Colors.gray500 }]} />
           <Text fs12 lh18 style={{ color: state.index == 3 ? Colors.black : Colors.gray500 }} >Points</Text>
         </Pressable>
       </View>

@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
-import { SafeAreaView, Image, Pressable, FlatList, ActivityIndicator, BackHandler, RefreshControl } from 'react-native';
+import { SafeAreaView,  Pressable, FlatList, ActivityIndicator, BackHandler, RefreshControl, Keyboard } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
+import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import Config from "react-native-config";
 import _ from 'underscore';
@@ -146,7 +147,7 @@ const OffersList = ({ navigation, route }) => {
             placeholder={'Search for Offers'}
           />
           <Pressable hitSlop={10} onPress={() => onFilterButtonClick()} >
-            <Image source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
+            <FastImage source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
             {isFilterApplied() ?
               <View style={{ backgroundColor: Colors?.primary600, height: 8, width: 8, borderRadius: 8, position: 'absolute', right: 0 }}></View>
               : null
@@ -155,7 +156,7 @@ const OffersList = ({ navigation, route }) => {
         </View>
         <View paddingH-16 row centerV marginB-8 >
           <Pressable onPress={() => navigate(param?.source)} hitSlop={10}>
-            <Image source={Images.back} style={{ height: 24, width: 24 }} />
+            <FastImage source={Images.back} style={{ height: 24, width: 24 }} />
           </Pressable>
           <Text beb24 lh32 black flex marginL-10 numberOfLines={1} >{param?.title}</Text>
         </View>
@@ -239,24 +240,24 @@ export const Card = ({ navigation, item, source }) => {
     <Pressable onPress={() => onPressOffers()} style={styles.card}>
       <View row >
         <View style={{ backgroundColor: getCardStyles?.color, height: 32, width: 32, justifyContent: 'center', alignItems: 'center', borderRadius: 32 }}>
-          <Image source={getCardStyles?.icon} style={{ height: 16, width: 16, tintColor: "black" }} />
+          <FastImage tintColor={"black"} source={getCardStyles?.icon} style={{ height: 16, width: 16, tintColor: "black" }} />
         </View>
         <View marginL-16 flex>
           <Text beb24 lh32 black numberOfLines={1} ellipsizeMode='tail'>{item?.title || ''}</Text>
           <Text fs14 lh20 gray500 numberOfLines={2}>{item?.description || ''}</Text>
           <View marginT-12 row centerV >
-            <Image source={item?.businessLogo ? { uri: item?.businessLogo } : Images.defaultBusinessSmall} style={{ height: 24, width: 24, borderRadius: 24 }} />
+            <FastImage source={item?.businessLogo ? { uri: item?.businessLogo } : Images.defaultBusinessSmall} style={{ height: 24, width: 24, borderRadius: 24 }} />
             <Text marginL-6 fs12 lh18 gray500>{item?.businessName}</Text>
           </View>
         </View>
         <View style={styles.badge}>
-          <Image source={Images.star} style={{ height: 12, width: 12, tintColor: Colors.gray500 }} />
+          <FastImage tintColor={Colors.gray500} source={Images.star} style={{ height: 12, width: 12, tintColor: Colors.gray500 }} />
           <Text fs14 lh20 gray700 marginL-4>{item?.credit}</Text>
         </View>
       </View>
       <View style={styles.separator} />
       <View style={styles.bottom}>
-        <Image source={Images.check} style={{ height: 16, width: 16 }} />
+        <FastImage source={Images.check} style={{ height: 16, width: 16 }} />
         <Text fs12 lh18 gray500 marginL-4>{item?.offersRedeemed ? 'Redeemed' : 'Rewarded'}</Text>
         <Text fs12SB lh18 gray700 marginH-4>{(item?.offersRedeemed ? item?.offersRedeemed : item?.offersRewarded) || 0}</Text>
         <Text fs12 lh18 gray500> times </Text>

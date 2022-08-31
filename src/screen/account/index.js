@@ -4,15 +4,16 @@ import {
   ImageBackground,
   Pressable,
   ScrollView,
-  Image,
   Modal,
   Dimensions,
   TouchableOpacity,
 } from "react-native";
 import { View, Text, Button } from "react-native-ui-lib";
+import FastImage from "react-native-fast-image";
 import { useDispatch, useSelector } from "react-redux";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import _ from "underscore";
+import { unwrapResult } from "@reduxjs/toolkit";
 import { Colors, Images } from "@constants";
 import {
   getUser,
@@ -22,7 +23,6 @@ import {
   updateUser,
 } from "../../redux/reducer/user";
 import styles from "./styles";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { setLoading } from "../../redux/reducer/loading";
 
 const windowHeight = Dimensions.get("window").height;
@@ -130,7 +130,7 @@ const Account = ({ navigation }) => {
             style={{ justifyContent: "space-between" }}
           >
             <Pressable onPress={navigation.goBack} hitSlop={10}>
-              <Image source={Images.back} style={{ height: 24, width: 24 }} />
+              <FastImage source={Images.back} style={{ height: 24, width: 24 }} />
             </Pressable>
           </View>
         </View>
@@ -142,7 +142,7 @@ const Account = ({ navigation }) => {
               <ImageBackground source={Images.account} re style={styles.image}>
                 {picture && picture.length ? (
                   <View center style={styles.defaultUser}>
-                    <Image
+                    <FastImage
                       source={{ uri: picture }}
                       style={{
                         width: 100,
@@ -155,7 +155,8 @@ const Account = ({ navigation }) => {
                         hitSlop={10}
                         onPress={() => _pictureModel(true)}
                       >
-                        <Image
+                        <FastImage
+                          tintColor={Colors.primary600}
                           source={Images.camera}
                           style={styles.cameraIcon}
                         />
@@ -164,13 +165,14 @@ const Account = ({ navigation }) => {
                   </View>
                 ) : (
                   <View center style={styles.defaultUser}>
-                    <Image source={Images.user} style={styles.userIcon} />
+                    <FastImage tintColor={Colors.primary600} source={Images.user} style={styles.userIcon} />
                     <View center style={styles.selectPicView}>
                       <Pressable
                         hitSlop={10}
                         onPress={() => _pictureModel(true)}
                       >
-                        <Image
+                        <FastImage
+                          tintColor={Colors.primary600}
                           source={Images.camera}
                           style={styles.cameraIcon}
                         />
@@ -191,12 +193,12 @@ const Account = ({ navigation }) => {
             style={styles.detailContainer}
             onPress={() => navigation.navigate("personalDetails")}
           >
-            <Image source={Images.user} style={styles.featureIcon} />
+            <FastImage source={Images.user} style={styles.featureIcon} />
             <Text fs16 lh24 flex black>
               {" "}
               Personal Details{" "}
             </Text>
-            <Image
+            <FastImage
               source={Images.chevron_right}
               style={styles.chevron_rightIcon}
             />
@@ -205,12 +207,12 @@ const Account = ({ navigation }) => {
             style={styles.detailContainer}
             onPress={() => navigation.navigate("accountSettings")}
           >
-            <Image source={Images.key} style={styles.featureIcon} />
+            <FastImage source={Images.key} style={styles.featureIcon} />
             <Text fs16 lh24 flex black>
               {" "}
               Account Settings{" "}
             </Text>
-            <Image
+            <FastImage
               source={Images.chevron_right}
               style={styles.chevron_rightIcon}
             />
@@ -219,31 +221,31 @@ const Account = ({ navigation }) => {
             style={styles.detailContainer}
             onPress={() => navigation.navigate("accountNotification")}
           >
-            <Image source={Images.bell} style={styles.featureIcon} />
+            <FastImage source={Images.bell} style={styles.featureIcon} />
             <Text fs16 lh24 flex black>
               {" "}
               Notifications{" "}
             </Text>
-            <Image
+            <FastImage
               source={Images.chevron_right}
               style={styles.chevron_rightIcon}
             />
           </TouchableOpacity> */}
           {/* <TouchableOpacity style={styles.detailContainer} onPress={() => navigation.navigate("accountNotification")}>
-            <Image source={Images.bell} style={styles.featureIcon} />
+            <FastImage source={Images.bell} style={styles.featureIcon} />
             <Text fs16 lh24 flex black> Notifications </Text>
-            <Image source={Images.chevron_right} style={styles.chevron_rightIcon} />
+            <FastImage source={Images.chevron_right} style={styles.chevron_rightIcon} />
           </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.detailContainer}
             onPress={() => navigation.navigate("aboutAccount")}
           >
-            <Image source={Images.info} style={styles.featureIcon} />
+            <FastImage source={Images.info} style={styles.featureIcon} />
             <Text fs16 lh24 flex black>
               {" "}
               About Lealzy{" "}
             </Text>
-            <Image
+            <FastImage
               source={Images.chevron_right}
               style={styles.chevron_rightIcon}
             />
@@ -252,24 +254,24 @@ const Account = ({ navigation }) => {
             style={styles.detailContainer}
             onPress={() => navigation.navigate("inviteFriends")}
           >
-            <Image source={Images.send} style={styles.featureIcon} />
+            <FastImage source={Images.send} style={styles.featureIcon} />
             <Text fs16 lh24 flex black>
               {" "}
               Invite friends{" "}
             </Text>
-            <Image
+            <FastImage
               source={Images.chevron_right}
               style={styles.chevron_rightIcon}
             />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Support")}
             style={styles.detailContainer}>
-            <Image source={Images.support} style={styles.featureIcon} />
+            <FastImage source={Images.support} style={styles.featureIcon} />
             <Text fs16 lh24 flex black>
               {" "}
               Support{" "}
             </Text>
-            <Image
+            <FastImage
               source={Images.chevron_right}
               style={styles.chevron_rightIcon}
             />
@@ -280,12 +282,12 @@ const Account = ({ navigation }) => {
               navigation.navigate("DeleteAccountReason");
             }}
           >
-            <Image source={Images.x_close} style={styles.featureIcon} />
+            <FastImage source={Images.x_close} style={styles.featureIcon} />
             <Text fs16 lh24 flex black>
               {" "}
               Delete Account{" "}
             </Text>
-            <Image
+            <FastImage
               source={Images.chevron_right}
               style={styles.chevron_rightIcon}
             />
@@ -332,7 +334,7 @@ const Account = ({ navigation }) => {
                 // height: 284,
               }}
             >
-              <Image source={Images.logout} style={styles.logoutIcon} />
+              <FastImage source={Images.logout} style={styles.logoutIcon} />
               <Text
                 lh32
                 beb24
@@ -396,12 +398,12 @@ const Account = ({ navigation }) => {
               {/* <View style={{ flexDirection: 'row', borderRadius: 24, justifyContent: 'space-between' }} >
                   <View style={{ height: 24, width: 24 }} />
                   <Pressable onPress={() => _pictureModel(false)} >
-                    <Image source={Images.x} style={{ height: 24, width: 24 }} />
+                    <FastImage source={Images.x} style={{ height: 24, width: 24 }} />
                   </Pressable>
                 </View> */}
               <TouchableOpacity onPress={() => takePhotoHandler()}>
                 <View row centerV marginV-8>
-                  <Image source={Images.camera} style={styles.iconModal} />
+                  <FastImage source={Images.camera} style={styles.iconModal} />
                   <Text fs16 black lh24 numberOfLines={1}>
                     Take Photo
                   </Text>
@@ -409,7 +411,7 @@ const Account = ({ navigation }) => {
               </TouchableOpacity>
               <TouchableOpacity onPress={() => choosePhotoHandler()}>
                 <View row centerV marginV-8>
-                  <Image source={Images.select_pic} style={styles.iconModal} />
+                  <FastImage source={Images.select_pic} style={styles.iconModal} />
                   <Text fs16 black lh24 numberOfLines={1}>
                     Choose Photo
                   </Text>
@@ -418,7 +420,7 @@ const Account = ({ navigation }) => {
               <TouchableOpacity onPressIn={() => deleteHandler()}>
                 {picture && picture.length ? (
                   <View row centerV marginV-8>
-                    <Image source={Images.delete} style={styles.iconModal} />
+                    <FastImage source={Images.delete} style={styles.iconModal} />
                     <Text fs16 black lh24 numberOfLines={1}>
                       Delete Photo
                     </Text>

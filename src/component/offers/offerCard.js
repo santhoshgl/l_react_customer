@@ -1,9 +1,10 @@
 import React, { memo, useMemo } from 'react';
-import { Image, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { View, Text } from 'react-native-ui-lib';
+import { useNavigation } from '@react-navigation/native';
 import { Colors } from '@constants';
 import { Images } from '../../constants';
-import { useNavigation } from '@react-navigation/native';
 
 const OfferCard = ({ item }) => {
   const navigation = useNavigation()
@@ -40,9 +41,9 @@ const OfferCard = ({ item }) => {
   return (
     <Pressable onPress={() => onPressOffers()} style={styles.card}>
       <View style={[{ backgroundColor: getCardStyles?.color, ...styles.header }]}>
-        <Image source={getCardStyles?.icon} style={{ height: 24, width: 24, tintColor: "black" }} />
+        <FastImage source={getCardStyles?.icon} style={{ height: 24, width: 24, tintColor: "black" }} />
         <View style={styles.badge}>
-          <Image source={Images.star} style={{ height: 12, width: 12 }} />
+          <FastImage source={Images.star} style={{ height: 12, width: 12 }} />
           <Text fs14 lh20 black marginL-4>{item?.credit}</Text>
         </View>
       </View>
@@ -50,13 +51,13 @@ const OfferCard = ({ item }) => {
         <Text beb24 lh32 black numberOfLines={1} ellipsizeMode='tail'>{item?.title || ''}</Text>
         <Text flex fs16 lh24 gray700 numberOfLines={2}>{item?.description || ''}</Text>
         <View marginT-12 row centerV >
-          <Image source={item?.businessLogo ? { uri: item?.businessLogo } : Images.defaultBusinessSmall} style={{ height: 24, width: 24, borderRadius: 24 }} />
+          <FastImage source={item?.businessLogo ? { uri: item?.businessLogo } : Images.defaultBusinessSmall} style={{ height: 24, width: 24, borderRadius: 24 }} />
           <Text marginL-6 fs12 lh18 gray700 numberOfLines={1} style={{ width: '80%' }} > {item?.businessName}</Text>
         </View>
       </View>
       <View style={styles.separator} />
       <View style={styles.bottom}>
-        <Image source={Images.check} style={{ height: 16, width: 16 }} />
+        <FastImage source={Images.check} style={{ height: 16, width: 16 }} />
         <Text fs12 lh18 gray500 marginL-4>{item?.offersRedeemed ? 'Redeemed' : 'Rewarded'}</Text>
         <Text fs12SB lh18 gray700 marginH-4>{(item?.offersRedeemed ? item?.offersRedeemed : item?.offersRewarded) || 0}</Text>
         <Text fs12 lh18 gray500> times </Text>

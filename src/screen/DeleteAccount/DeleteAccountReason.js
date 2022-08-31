@@ -4,14 +4,14 @@ import style from "./style";
 import {
   Text,
   View,
-  Image,
   Button,
   TouchableOpacity,
 } from "react-native-ui-lib";
+import FastImage from "react-native-fast-image";
+import { useDispatch } from "react-redux";
 import { Colors, Images } from "@constants";
 import RadioButton from "../../component/RadioButton";
 import { radioArray } from "../../constants/RadioArray";
-import { useDispatch } from "react-redux";
 import { deleteAccountReason } from "../../redux/reducer/user";
 
 const DeleteAccountReason = ({ navigation }) => {
@@ -70,7 +70,7 @@ const DeleteAccountReason = ({ navigation }) => {
               navigation.goBack();
             }}
           >
-            <Image source={Images.back} style={{ height: 24, width: 24 }} />
+            <FastImage source={Images.back} style={{ height: 24, width: 24 }} />
           </TouchableOpacity>
           <Text fs16 lh24 center black style={style.fontWeight500}>
             Delete Account

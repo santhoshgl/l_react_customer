@@ -1,8 +1,9 @@
 import React, { memo, useMemo, useState } from 'react';
-import { SafeAreaView, Image, StatusBar, Platform, TouchableOpacity, StyleSheet } from 'react-native';
+import { SafeAreaView, StatusBar, Platform, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { Text, View, Button } from 'react-native-ui-lib';
+import FastImage from 'react-native-fast-image';
 import auth from '@react-native-firebase/auth';
 import { showMessage } from 'react-native-flash-message';
 import { Images, Colors } from '@constants';
@@ -46,7 +47,7 @@ const ForgotPassword = ({ navigation, route }) => {
       {
         !isEmailSent ?
           <View margin-24 flex >
-            <Image source={Images.logo} style={{ height: 30, width: 30, alignSelf: 'center' }} resizeMode={'contain'} />
+            <FastImage source={Images.logo} style={{ height: 30, width: 30, alignSelf: 'center' }} resizeMode={'contain'} />
             <Text beb30 center marginT-25 black >Forgot Password</Text>
             <Text fs14 center marginT-4 gray500 >No worries, we’ll send you reset instructions.</Text>
             <Input
@@ -80,7 +81,7 @@ const ForgotPassword = ({ navigation, route }) => {
           </View >
           :
           <View margin-24 flex >
-            <Image source={Images.logo} style={{ height: 30, width: 30, alignSelf: 'center' }} resizeMode={'contain'} />
+            <FastImage source={Images.logo} style={{ height: 30, width: 30, alignSelf: 'center' }} resizeMode={'contain'} />
             <Text beb30 center marginT-25 black >check your e-mail</Text>
             <Text fs14 center marginT-4 gray500 >We sent a password reset link to {email}</Text>
             <View marginT-52>
@@ -95,7 +96,7 @@ const ForgotPassword = ({ navigation, route }) => {
               else
                 navigation.navigate('login')
             }}>
-              <Image source={Images.back} style={{ height: 20, width: 20, tintColor: Colors.primary600 }} />
+              <FastImage tintColor={Colors.primary600} source={Images.back} style={{ height: 20, width: 20, tintColor: Colors.primary600 }} />
               <Text fs16SB center primary600 marginL-5>Go Back</Text>
             </TouchableOpacity >
           </View>
