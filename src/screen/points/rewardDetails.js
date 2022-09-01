@@ -11,6 +11,7 @@ import { showMessage } from 'react-native-flash-message';
 import { onGetRouteNavigationData, onReadNotification } from '../../redux/reducer/user';
 import { setLoading } from '../../redux/reducer/loading';
 import apiRequest from '@services/networkProvider';
+import RewardDetailListSkeleton from '../../component/rewardDetailListSkeleton';
 
 const RewardDetails = ({ navigation, route }) => {
   const dispatch = useDispatch()
@@ -126,43 +127,53 @@ const RewardDetails = ({ navigation, route }) => {
             {!loading && <Text fs14 lh20 gray500>{`Reference #${rewardDetails?.id}`}</Text>}
           </TouchableOpacity>
         </View>}
-        {rewardDetails?.attributes?.rewardType && <View style={{ margin: 16 }}>
-          {!loading && <Text fs14 lh20 gray700>Business</Text>}
-          <View style={styles.card}>
-            <View row >
-              <FastImage source={rewardDetails?.attributes?.business?.logo?.length ? { uri: rewardDetails?.attributes?.business?.logo } : Images.defaultBusiness}
-                style={{ height: 50, width: 50, borderRadius: 25 }}
-              />
-              <View marginL-12 flex>
-                {!loading && <Text beb24 lh32 black >{rewardDetails?.attributes?.business?.name}</Text>}
-                {!loading && <Text fs12 lh18 gray500 numberOfLines={2}>{rewardDetails?.attributes?.business?.category}</Text>}
-              </View>
-            </View>
 
-          </View>
-          {rewardDetails.attributes?.rewardType == 'credit' ?
-            <>
-              {!loading && <Text fs14 lh20 gray700>Offer used</Text>}
-              <Pressable onPress={() => onPressOffers()} style={styles.card}>
-                <View row >
-                  <View style={{
-                    backgroundColor: getCardStyles?.color, height: 32, width: 32, justifyContent: 'center',
-                    alignItems: 'center', borderRadius: 32
-                  }}>
-                    <FastImage tintColor={Colors.black} source={getCardStyles?.icon} style={{ height: 16, width: 16, tintColor: "black" }} />
-                  </View>
-                  <View marginL-16 flex>
-                    {!loading && <Text beb24 lh32 black numberOfLines={1} ellipsizeMode='tail'>{rewardDetails?.attributes?.offer?.title}</Text>}
-                    {!loading && <Text fs14 lh20 gray500 numberOfLines={2}>{rewardDetails?.attributes?.offer?.description || ''}</Text>}
-                  </View>
-                  <View style={styles.badge}>
-                    <FastImage tintColor={Colors.gray500} source={Images.star} style={{ height: 12, width: 12, tintColor: Colors.gray500 }} />
-                    {!loading && <Text fs14 lh20 gray700 marginL-4>{rewardDetails?.attributes?.offer?.credit}</Text>}
+        {rewardDetails?.attributes?.rewardType && <View style={{ margin: 16 }}>
+          {
+            loading ? <RewardDetailListSkeleton source={"businessList"} /> :
+
+              !loading && <View>
+                <Text fs14 lh20 gray700>Business</Text>
+                <View style={styles.card}>
+                  <View row >
+                    <FastImage source={rewardDetails?.attributes?.business?.logo?.length ? { uri: rewardDetails?.attributes?.business?.logo } : Images.defaultBusiness}
+                      style={{ height: 50, width: 50, borderRadius: 25 }}
+                    />
+                    <View marginL-12 flex>
+                      {!loading && <Text beb24 lh32 black >{rewardDetails?.attributes?.business?.name}</Text>}
+                      {!loading && <Text fs12 lh18 gray500 numberOfLines={2}>{rewardDetails?.attributes?.business?.category}</Text>}
+                    </View>
                   </View>
                 </View>
-              </Pressable>
-            </>
-            : null
+              </View>
+          }
+          {
+            loading ?
+              <RewardDetailListSkeleton source={"offerList"} />
+              :
+              rewardDetails.attributes?.rewardType == 'credit' ?
+                <>
+                  {!loading && <Text fs14 lh20 gray700>Offer used</Text>}
+                  <Pressable onPress={() => onPressOffers()} style={styles.card}>
+                    <View row >
+                      <View style={{
+                        backgroundColor: getCardStyles?.color, height: 32, width: 32, justifyContent: 'center',
+                        alignItems: 'center', borderRadius: 32
+                      }}>
+                        <FastImage tintColor={Colors.black} source={getCardStyles?.icon} style={{ height: 16, width: 16, tintColor: "black" }} />
+                      </View>
+                      <View marginL-16 flex>
+                        {!loading && <Text beb24 lh32 black numberOfLines={1} ellipsizeMode='tail'>{rewardDetails?.attributes?.offer?.title}</Text>}
+                        {!loading && <Text fs14 lh20 gray500 numberOfLines={2}>{rewardDetails?.attributes?.offer?.description || ''}</Text>}
+                      </View>
+                      <View style={styles.badge}>
+                        <FastImage tintColor={Colors.gray500} source={Images.star} style={{ height: 12, width: 12, tintColor: Colors.gray500 }} />
+                        {!loading && <Text fs14 lh20 gray700 marginL-4>{rewardDetails?.attributes?.offer?.credit}</Text>}
+                      </View>
+                    </View>
+                  </Pressable>
+                </>
+                : null
           }
         </View>}
       </ScrollView>}

@@ -9,6 +9,7 @@ import FastImage from "react-native-fast-image";
 import Header from "@component/header";
 import { Colors, Images } from "@constants";
 import { getRewardWallet, getRewards } from "../../redux/reducer/points";
+import TransactionSkleton from "../../component/transactionSkleton";
 
 const History = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -45,13 +46,13 @@ const History = ({ navigation }) => {
 
   useEffect(() => {
     if (defaultHub?.id) {
-      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
+      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }))
     }
   }, [defaultHub?.id]);
 
   useEffect(() => {
     if (defaultHub?.id) {
-      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, sortBy: sortBy }));
+      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, sortBy: sortBy }))
     }
   }, [defaultHub?.id, sortBy]);
 
@@ -137,111 +138,113 @@ const History = ({ navigation }) => {
             account.
           </Text>
         </View>
-        {rewardsData?.length > 0 ? (
-          <>
-            <View style={{ backgroundColor: Colors.white, paddingHorizontal: 10 }}>
-              <View row centerV flex>
-                <TouchableOpacity onPress={() => referenceHandler()} style={styles.tableTitleRef}>
-                  <Text fs12 lh18 center gray500>
-                    Reference
-                  </Text>
-                  <FastImage source={Images.arrowDown} style={{ width: 16, height: 16, transform: [{ rotate: sortBy == "latest" ? "180deg" : '360deg' }] }} />
-                </TouchableOpacity>
-                <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
-                  Date
-                </Text>
-                <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
-                  Credits
-                </Text>
-                <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
-                  Type
-                </Text>
-              </View>
-              {rewardsData?.map((reward, index) => {
-                return (
-                  <TouchableOpacity
-                    key={reward?.id}
-                    onPress={() =>
-                      navigation.navigate("rewardDetails", { rewardId: reward?.id })
-                    }
-                  >
-                    <View
-                      row
-                      centerV
-                      flex
-                      style={{
-                        backgroundColor:
-                          index % 2 == 0 ? Colors.gray50 : Colors.white,
-                      }}
-                    >
-                      <Text fs14 lh20 gray500 center flex style={styles.tableBody}>{`#${reward?.id.substr(reward?.id.length - 4)}`}</Text>
-                      <Text fs14 lh20 gray500 center flex style={styles.tableBody}>
-                        {moment(reward?.attributes?.createdAt).format("ll")}
-                      </Text>
-                      <Text fs14 lh20 gray500 center flex style={styles.tableBody}>
-                        {reward?.attributes?.credits}
-                      </Text>
-                      <View fs14 lh20 success700 center flex style={styles.tableBody}>
-                        {reward?.attributes?.rewardType == "credit" ? (
-                          <View center style={styles.typeText}>
-                            <FastImage
-                              source={Images.star}
-                              tintColor={Colors.success700}
-                              style={{
-                                width: 12,
-                                height: 12,
-                                tintColor: Colors.success700,
-                                marginRight: 4,
-                              }}
-                            />
-                            <Text fs12 lh18 success700>
-                              Reward
-                            </Text>
-                          </View>
-                        ) : (
-                          <View center style={styles.typeReward}>
-                            <FastImage
-                              source={Images.gift}
-                              tintColor={Colors.blue700}
-                              style={{
-                                width: 12,
-                                height: 12,
-                                tintColor: Colors.blue700,
-                                marginRight: 4,
-                              }}
-                            />
-                            <Text fs12 lh18 blue700>
-                              Redeem
-                            </Text>
-                          </View>
-                        )}
-                      </View>
-                    </View>
+        {loading ?
+          <TransactionSkleton /> :
+          rewardsData?.length > 0 ? (
+            <>
+              <View style={{ backgroundColor: Colors.white, paddingHorizontal: 10 }}>
+                <View row centerV flex>
+                  <TouchableOpacity onPress={() => referenceHandler()} style={styles.tableTitleRef}>
+                    <Text fs12 lh18 center gray500>
+                      Reference
+                    </Text>
+                    <FastImage source={Images.arrowDown} style={{ width: 16, height: 16, transform: [{ rotate: sortBy == "latest" ? "180deg" : '360deg' }] }} />
                   </TouchableOpacity>
-                );
-              })}
-            </View>
+                  <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
+                    Date
+                  </Text>
+                  <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
+                    Credits
+                  </Text>
+                  <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
+                    Type
+                  </Text>
+                </View>
+                {rewardsData?.map((reward, index) => {
+                  return (
+                    <TouchableOpacity
+                      key={reward?.id}
+                      onPress={() =>
+                        navigation.navigate("rewardDetails", { rewardId: reward?.id })
+                      }
+                    >
+                      <View
+                        row
+                        centerV
+                        flex
+                        style={{
+                          backgroundColor:
+                            index % 2 == 0 ? Colors.gray50 : Colors.white,
+                        }}
+                      >
+                        <Text fs14 lh20 gray500 center flex style={styles.tableBody}>{`#${reward?.id.substr(reward?.id.length - 4)}`}</Text>
+                        <Text fs14 lh20 gray500 center flex style={styles.tableBody}>
+                          {moment(reward?.attributes?.createdAt).format("ll")}
+                        </Text>
+                        <Text fs14 lh20 gray500 center flex style={styles.tableBody}>
+                          {reward?.attributes?.credits}
+                        </Text>
+                        <View fs14 lh20 success700 center flex style={styles.tableBody}>
+                          {reward?.attributes?.rewardType == "credit" ? (
+                            <View center style={styles.typeText}>
+                              <FastImage
+                                source={Images.star}
+                                tintColor={Colors.success700}
+                                style={{
+                                  width: 12,
+                                  height: 12,
+                                  tintColor: Colors.success700,
+                                  marginRight: 4,
+                                }}
+                              />
+                              <Text fs12 lh18 success700>
+                                Reward
+                              </Text>
+                            </View>
+                          ) : (
+                            <View center style={styles.typeReward}>
+                              <FastImage
+                                source={Images.gift}
+                                tintColor={Colors.blue700}
+                                style={{
+                                  width: 12,
+                                  height: 12,
+                                  tintColor: Colors.blue700,
+                                  marginRight: 4,
+                                }}
+                              />
+                              <Text fs12 lh18 blue700>
+                                Redeem
+                              </Text>
+                            </View>
+                          )}
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
 
-            <View row centerV flex style={styles.pagination}>
-              <TouchableOpacity onPress={() => prevPageHandler()} disabled={prevLink ? false : true} style={[styles.paginationButton, prevLink ? {} : { backgroundColor: "#e3e3e3" }]}>
-                <FastImage source={Images.back} style={{ height: 20, width: 20 }} />
-              </TouchableOpacity>
-              <Text fs14 lh20 gray700>
-                Page {page} of {rewards?.meta?.totalPages}
-              </Text>
-              <TouchableOpacity onPress={() => nextPageHandler()} disabled={nextLink ? false : true} style={[styles.paginationButton, nextLink ? {} : { backgroundColor: "#e3e3e3" }]}>
-                <FastImage
-                  source={Images.arrowRight}
-                  style={{ height: 20, width: 20 }}
-                />
+              <View row centerV flex style={styles.pagination}>
+                <TouchableOpacity onPress={() => prevPageHandler()} disabled={prevLink ? false : true} style={[styles.paginationButton, prevLink ? {} : { backgroundColor: "#e3e3e3" }]}>
+                  <FastImage source={Images.back} style={{ height: 20, width: 20 }} />
+                </TouchableOpacity>
+                <Text fs14 lh20 gray700>
+                  Page {page} of {rewards?.meta?.totalPages}
+                </Text>
+                <TouchableOpacity onPress={() => nextPageHandler()} disabled={nextLink ? false : true} style={[styles.paginationButton, nextLink ? {} : { backgroundColor: "#e3e3e3" }]}>
+                  <FastImage
+                    source={Images.arrowRight}
+                    style={{ height: 20, width: 20 }}
+                  />
 
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
+            </>
+          ) :
+            <View flex center>
+              <Text gray700>No transactions yet.</Text>
             </View>
-          </>
-        ) :
-          <View flex center>
-            <Text gray700>No transactions yet.</Text>
-          </View>
         }
       </ScrollView>
     </SafeAreaView>

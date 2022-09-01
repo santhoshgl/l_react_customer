@@ -16,6 +16,7 @@ import HubCard from "@component/hubCard";
 import Request from "@services/networkProvider";
 import styles from "./styles";
 import { getUser, updateUser } from "../../redux/reducer/user";
+import HubCardSkleton from "../../component/hubCardSkleton";
 
 const AddHub = ({ route, navigation }) => {
 
@@ -26,6 +27,7 @@ const AddHub = ({ route, navigation }) => {
   const [loading, _loading] = useState(false)
   const [nomore, _nomore] = useState(false)
   const [addedHub, _addedHub] = useState([])
+  const [listLoading, _listLoading] = useState(false)
 
   const setNextLink = (url) => {
     _nextLink(url?.replace(Config.API_URL, ''))
@@ -40,6 +42,7 @@ const AddHub = ({ route, navigation }) => {
   }, []);
 
   const _search = () => {
+    _listLoading(true)
     let url = "hubs";
     if (searchVal.trim().length > 0) {
       url = `hubs?search=${searchVal}`;
@@ -47,9 +50,10 @@ const AddHub = ({ route, navigation }) => {
     Request.get(url)
       .then((res) => {
         _hubs(res?.data || []);
+        _listLoading(false)
         setNextLink(res?.links?.next)
       })
-      .catch((err) => { });
+      .catch((err) => _listLoading(false));
   };
 
   const fetchMore = async () => {
@@ -148,48 +152,52 @@ const AddHub = ({ route, navigation }) => {
           <View marginT-24 paddingH-16 row spread centerV></View>
         )}
         <View flex paddingH-16>
-          {hubs?.length ? (
-            <FlatList
-              data={hubs}
-              renderItem={({ item }) => (
-                <HubCard
-                  item={item}
-                  selectText="Add City"
-                  onSelect={(hub) => _onSelectHub(hub)}
-                  addedHub={addedHub}
+          {
+            listLoading ? <HubCardSkleton /> :
+              hubs?.length ? (
+                <FlatList
+                  data={hubs}
+                  renderItem={({ item }) => (
+                    <HubCard
+                      item={item}
+                      selectText="Add City"
+                      onSelect={(hub) => _onSelectHub(hub)}
+                      addedHub={addedHub}
+                    />
+                  )}
+                  keyExtractor={(_, index) => index.toString()}
+                  onEndReached={!nomore && fetchMore}
+                  ListFooterComponent={() => (
+                    <View center marginV-20>
+                      {nomore && hubs.length ?
+                        <Text gray700>No more results.</Text>
+                        : <ActivityIndicator animating={loading} size={'large'} />
+                      }
+                    </View>
+                  )}
+                  showsVerticalScrollIndicator={false}
+                  keyboardDismissMode={"on-drag"}
                 />
-              )}
-              keyExtractor={(_, index) => index.toString()}
-              onEndReached={!nomore && fetchMore}
-              ListFooterComponent={() => (
-                <View center marginV-20>
-                  {nomore && hubs.length ?
-                    <Text gray700>No more results.</Text>
-                    : <ActivityIndicator animating={loading} size={'large'} />
-                  }
+              ) : hubs != undefined ? (
+                <View flex center>
+                  <FastImage
+                    source={Images.warning}
+                    style={styles.warningImg}
+                    resizeMode={"contain"}
+                  />
+                  <Text beb24 lh32 black marginT-12>
+                    City not found
+                  </Text>
+                  <Text fs14 lh20 gray500 center>
+                    Looks like there are no city with this name
+                  </Text>
+                  <Text fs14 lh20 gray500 center>
+                    Try searching for a different city.
+                  </Text>
                 </View>
-              )}
-              showsVerticalScrollIndicator={false}
-              keyboardDismissMode={"on-drag"}
-            />
-          ) : hubs != undefined ? (
-            <View flex center>
-              <FastImage
-                source={Images.warning}
-                style={styles.warningImg}
-                resizeMode={"contain"}
-              />
-              <Text beb24 lh32 black marginT-12>
-                City not found
-              </Text>
-              <Text fs14 lh20 gray500 center>
-                Looks like there are no city with this name
-              </Text>
-              <Text fs14 lh20 gray500 center>
-                Try searching for a different city.
-              </Text>
-            </View>
-          ) : null}
+              ) : null
+          }
+
         </View>
       </SafeAreaView>
     </>
