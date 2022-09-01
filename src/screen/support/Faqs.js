@@ -1,8 +1,11 @@
 import React from 'react';
-import { SafeAreaView, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaView, Pressable, ScrollView, StyleSheet, Linking } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import FastImage from 'react-native-fast-image';
+import Config from 'react-native-config';
 import { Colors, Images } from '@constants';
+
+const mailId = Config.MAILBOXID;
 
 const Faqs = ({ navigation }) => {
   return (
@@ -55,7 +58,7 @@ const Faqs = ({ navigation }) => {
             </View>
           </View>
           <Text marginB-16 fs14 lh20 black>
-            Everything you need to know about the product and billing. Can’t find the answer you’re looking for? Please <Text underline={true}>chat to our friendly team.</Text>
+            Everything you need to know about the product and billing. Can’t find the answer you’re looking for? Please <Text onPress={()=>  Linking.openURL(`mailto:${mailId}`)} underline={true}>chat to our friendly team.</Text>
           </Text>
         </View>
       </ScrollView>

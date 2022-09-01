@@ -19,6 +19,7 @@ import Request from "@services/networkProvider";
 import styles from "./styles";
 import { setLoading } from "../../redux/reducer/loading";
 import { getUser, updateUser } from "../../redux/reducer/user";
+import HubCardSkleton from "../../component/hubCardSkleton";
 
 const Hub = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ const Hub = ({ navigation }) => {
   const [hubs, _hubs] = useState(undefined);
   const [searchVal, _searchVal] = useState("");
   const [showHubImg, _showHubImg] = useState(true);
+  const [listLoading, _listLoading] = useState(false)
 
   useEffect(() => {
     if (Platform.OS === "android") {
@@ -35,11 +37,13 @@ const Hub = ({ navigation }) => {
 
   const _search = () => {
     if (searchVal.trim().length > 0) {
+      _listLoading(true)
       Request.get(`hubs?search=${searchVal}`)
         .then((res) => {
+          _listLoading(false)
           _hubs(res?.data || []);
         })
-        .catch((err) => { });
+        .catch((err) => _listLoading(false));
     } else _hubs(undefined);
   };
 
@@ -103,34 +107,36 @@ const Hub = ({ navigation }) => {
           }}
           style={{ marginTop: 24 }}
         />
-        {hubs?.length ? (
-          <FlatList
-            data={hubs}
-            renderItem={({ item }) => (
-              <HubCard item={item} onSelect={(hub) => _onSelectHub(hub?.id)} />
-            )}
-            keyExtractor={(_, index) => index.toString()}
-            showsVerticalScrollIndicator={false}
-            keyboardDismissMode={"on-drag"}
-          />
-        ) : hubs != undefined ? (
-          <View flex center>
-            <FastImage
-              source={Images.warning}
-              style={styles.warningImg}
-              resizeMode={"contain"}
-            />
-            <Text beb24 lh32 black marginT-12>
-              City not found
-            </Text>
-            <Text fs14 lh20 gray500 center>
-              Looks like there are no city with this name.
-            </Text>
-            <Text fs14 lh20 gray500 center>
-              Try searching for a different city.
-            </Text>
-          </View>
-        ) : null}
+        {
+          listLoading ? <HubCardSkleton /> :
+            hubs?.length ? (
+              <FlatList
+                data={hubs}
+                renderItem={({ item }) => (
+                  <HubCard item={item} onSelect={(hub) => _onSelectHub(hub?.id)} />
+                )}
+                keyExtractor={(_, index) => index.toString()}
+                showsVerticalScrollIndicator={false}
+                keyboardDismissMode={"on-drag"}
+              />
+            ) : hubs != undefined ? (
+              <View flex center>
+                <FastImage
+                  source={Images.warning}
+                  style={styles.warningImg}
+                  resizeMode={"contain"}
+                />
+                <Text beb24 lh32 black marginT-12>
+                  City not found
+                </Text>
+                <Text fs14 lh20 gray500 center>
+                  Looks like there are no city with this name.
+                </Text>
+                <Text fs14 lh20 gray500 center>
+                  Try searching for a different city.
+                </Text>
+              </View>
+            ) : null}
       </View>
     </SafeAreaView>
   );

@@ -25,8 +25,8 @@ import { convert24hourTo12HourFormat } from "../../services/DateServices";
 import { onFollowBusiness } from "../../redux/reducer/business";
 import apiRequest from "@services/networkProvider";
 import images from "../../constants/images";
-import OfferCardSkeleton from "@component/offers/offerCardSkeleton";
 import { onPhoneCall } from "../../services/PhoneCallServices";
+import ListSkeleton from "../../component/listSkeleton";
 
 const BusinessInfo = () => {
   const navigation = useNavigation();
@@ -633,14 +633,8 @@ const BusinessInfo = () => {
           OFFERS
         </Text>
         {offerLoading ? (
-          <View style={{ marginTop: 16 }}>
-            <OfferCardSkeleton
-              isHorizontal={false}
-              skeletonStyle={{
-                containerWidth: "90%",
-                layoutHeaderWidth: "100%",
-              }}
-            />
+          <View style={{ marginTop: 32 }}>
+            <ListSkeleton source="offerList" />
           </View>
         ) : (
           <>
