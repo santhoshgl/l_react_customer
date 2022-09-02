@@ -11,6 +11,7 @@ import { showMessage } from "react-native-flash-message";
 import { getUser, updateUser } from '../../redux/reducer/user';
 import { unwrapResult } from '@reduxjs/toolkit';
 import PhoneInput from '../../component/phoneInput';
+import { setLoading } from '../../redux/reducer/loading';
 
 const PersonalDetails = ({ navigation }) => {
 
@@ -41,14 +42,15 @@ const PersonalDetails = ({ navigation }) => {
       showMessage({ message: "Enter valid Phone Number.", type: "warning" });
       return;
     }
-
+    dispatch(setLoading(true))
     const updatedUser = { ...userData }
     updatedUser["firstName"] = firstName?.trim()
     updatedUser["lastName"] = lastName?.trim()
     updatedUser["phoneNumber"] = `+1${phoneNumber?.trim()}`
-
+    
     dispatch(updateUser(updatedUser)).then(unwrapResult).then((originalPromiseResult) => {
       dispatch(getUser()).then(unwrapResult).then((response) => {
+        dispatch(setLoading(false))
         showMessage({ message: "Personal Details Updated.", type: "success" });
       })
     })

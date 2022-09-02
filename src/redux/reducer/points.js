@@ -6,13 +6,10 @@ import { setLoading } from "./loading";
 
 export const getRewardWallet = createAsyncThunk('points/getRewardWallet', async (params, { dispatch }) => {
   try {
-    !params?.fromRefresh  && dispatch(setLoading(true))
     const data = await apiRequest.get(`rewardWallet?id=${params?.userID}&hubID=${params?.hubID}&userType=customer`)
-    !params?.fromRefresh  && dispatch(setLoading(false))
     return data?.data;
   } catch (error) {
     // showMessage({ message: error?.message, type: 'danger' })
-    dispatch(setLoading(false))
     throw (error)
   }
 })
@@ -23,26 +20,20 @@ export const getRewards = createAsyncThunk('points/getRewards', async (params, {
     if (params?.url) {
       url = params?.url
     }
-    !params?.fromRefresh  && dispatch(setLoading(true))
     const data = await apiRequest.get(url)
-    !params?.fromRefresh  && dispatch(setLoading(false))
     return data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
-    dispatch(setLoading(false))
     throw (error)
   }
 })
 
 export const getRewardDetails = createAsyncThunk('points/getRewardDetails', async (rewardID, { dispatch }) => {
   try {
-    dispatch(setLoading(true))
     const data = await apiRequest.get(`rewards/${rewardID}`)
-    dispatch(setLoading(false))
     return data?.data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
-    dispatch(setLoading(false))
     throw (error)
   }
 })

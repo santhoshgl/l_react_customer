@@ -18,7 +18,7 @@ import { setLoading } from '../../redux/reducer/loading';
 const Business = ({ navigation }) => {
   const dispatch = useDispatch()
   const { defaultHub } = useSelector(s => s.user)
-  const { businessData, filteredBusiness } = useSelector(s => s.business)
+  const { businessData, filteredBusiness, businessLoading } = useSelector(s => s.business)
   const hubId = useSelector(s => s?.user?.defaultHub?.id)
   const flatListRef = useRef()
 
@@ -187,7 +187,7 @@ const Business = ({ navigation }) => {
             refreshing={loading}
             refreshControl={
               <RefreshControl
-                refreshing={loading}
+                refreshing={businessLoading}
                 onRefresh={() => _handleRefresh()}
                 tintColor={Colors.primary600}
                 colors={[Colors.primary600]}
@@ -216,6 +216,7 @@ const Business = ({ navigation }) => {
                 item={businessList?.[item]}
                 title={item}
                 onPressBusiness={onPressBusiness}
+                businessLoading={businessLoading}
               />
             )}
             keyExtractor={(_, index) => index.toString()}
@@ -223,7 +224,7 @@ const Business = ({ navigation }) => {
             keyboardDismissMode={'on-drag'}
             refreshControl={
               <RefreshControl
-                refreshing={loading}
+                refreshing={businessLoading}
                 onRefresh={() => _handleRefresh()}
                 tintColor={Colors.primary600}
                 colors={[Colors.primary600]}

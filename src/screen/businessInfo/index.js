@@ -19,7 +19,6 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import Config from "react-native-config";
 import FastImage from "react-native-fast-image";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { setLoading } from "../../redux/reducer/loading";
 import { Images } from "../../constants";
 import { convert24hourTo12HourFormat } from "../../services/DateServices";
 import { onFollowBusiness } from "../../redux/reducer/business";
@@ -71,7 +70,6 @@ const BusinessInfo = () => {
   const fetchData = () => {
     let businessInfoUrl = `business/${id}`;
     let offerListUrl = `business/${id}/offers?active=true`;
-    dispatch(setLoading(true));
     setOfferLoading(true);
     apiRequest
       .get(businessInfoUrl)
@@ -83,10 +81,8 @@ const BusinessInfo = () => {
         });
         setOfferLoading(false);
         setBusinessInfo(cloneDeep(res?.data) || {});
-        dispatch(setLoading(false));
       })
       .catch(() => {
-        dispatch(setLoading(false));
         setOfferLoading(false);
       });
   };
@@ -600,7 +596,6 @@ const BusinessInfo = () => {
   };
 
   const onPressFollow = (business) => {
-    // dispatch(setLoading(true))
     let updatedBusinessData = {};
     updatedBusinessData = business;
     updatedBusinessData.following = true;
@@ -613,7 +608,6 @@ const BusinessInfo = () => {
       .then((data) => {
         data?.created && setBusinessInfo(cloneDeep(updatedBusinessData));
       });
-    dispatch(setLoading(false));
   };
 
   const NoOffersFound = () => {

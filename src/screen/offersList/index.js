@@ -1,12 +1,11 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
-import { SafeAreaView,  Pressable, FlatList, ActivityIndicator, BackHandler, RefreshControl, Keyboard } from 'react-native';
+import { SafeAreaView, Pressable, FlatList, ActivityIndicator, BackHandler, RefreshControl, Keyboard } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import Config from "react-native-config";
 import _ from 'underscore';
 import apiRequest from '@services/networkProvider';
-import { setLoading } from '../../redux/reducer/loading';
 import Header from '../../component/header';
 import SearchBar from '../../component/searchBar';
 import { Colors, Images } from '@constants';
@@ -16,9 +15,7 @@ import { useRef } from 'react';
 import ListSkeleton from '../../component/listSkeleton';
 
 const OffersList = ({ navigation, route }) => {
-  const dispatch = useDispatch()
   const { defaultHub } = useSelector(s => s.user)
-  const listLoading = useSelector(s => s.loading.loading)
   const flatListRef = useRef()
 
   const param = useMemo(() => { return route?.params }, [route])
@@ -28,13 +25,14 @@ const OffersList = ({ navigation, route }) => {
   const [nomore, _nomore] = useState(false)
   const [search, _search] = useState(null)
   const [filter, _filter] = useState(null)
+  const [offerListLoading, _offerListLoading] = useState(false)
 
   useEffect(() => {
     fetchData(search, filter);
   }, [defaultHub?.id, param?.title])
 
   const fetchData = (search, filter) => {
-    dispatch(setLoading(true))
+    _offerListLoading(true)
     const category = fetchBusinessCategory(param?.title);
     let url = `hubs/${defaultHub?.id}/offers?sortBy=${filter?.sortBy ? filter?.sortBy : 'latest'}`;
 
@@ -55,9 +53,9 @@ const OffersList = ({ navigation, route }) => {
     apiRequest.get(url).then(res => {
       _offersData(res?.data || [])
       setNextLink(res?.links?.next)
-      dispatch(setLoading(false))
+      _offerListLoading(false)
     }).catch((err) => {
-      dispatch(setLoading(false))
+      _offerListLoading(false)
     })
   }
 
@@ -125,7 +123,7 @@ const OffersList = ({ navigation, route }) => {
 
   const isFilterApplied = () => filter?.sortBy == 'oldest' || filter?.category;
 
-  const _handleRefresh = () =>{
+  const _handleRefresh = () => {
     fetchData(search, filter);
   }
 
@@ -161,7 +159,7 @@ const OffersList = ({ navigation, route }) => {
           <Text beb24 lh32 black flex marginL-10 numberOfLines={1} >{param?.title}</Text>
         </View>
         {
-          listLoading ?
+          offerListLoading ?
             <ListSkeleton source="offerList" /> :
             <FlatList
               ref={flatListRef}

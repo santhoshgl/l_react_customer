@@ -62,7 +62,7 @@ const Home = ({ navigation }) => {
   const onRefresh = () => {
     onSetRefresh(true)
     if (defaultHub?.id) {
-      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id, fromRefresh: true  }));
+      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id  }));
     }
     getDetails()
   }
@@ -81,7 +81,7 @@ const Home = ({ navigation }) => {
       <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}
         refreshControl={
           <RefreshControl
-            refreshing={offerLoading || businessLoading}
+            refreshing={isRefresh}
             onRefresh={onRefresh}
             tintColor={Colors.primary600}
             colors={[Colors.primary600]}

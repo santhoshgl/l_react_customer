@@ -17,7 +17,7 @@ import { Card } from '../offersList';
 const Offers = ({ navigation }) => {
   const dispatch = useDispatch()
   const { defaultHub } = useSelector(s => s.user)
-  const { offerData, filteredOffers } = useSelector(s => s.offers)
+  const { offerData, filteredOffers, offerLoading } = useSelector(s => s.offers)
   const flatListRef = useRef()
 
   const [offerFilterList, _offerFilterList] = useState([])
@@ -40,7 +40,7 @@ const Offers = ({ navigation }) => {
 
   useEffect(() => {
     if (filteredOffers) {
-      _offerFilterList(filteredOffers?.data || [])
+      _offerFilterList(filteredOffers?.data  || [])
       setNextLink(filteredOffers?.links?.next)
     }
   }, [filteredOffers])
@@ -166,7 +166,7 @@ const Offers = ({ navigation }) => {
             refreshing={loading}
             refreshControl={
               <RefreshControl
-                refreshing={loading}
+                refreshing={offerLoading}
                 onRefresh={() => _handleRefresh()}
                 tintColor={Colors.primary600}
                 colors={[Colors.primary600]}
@@ -185,13 +185,13 @@ const Offers = ({ navigation }) => {
           <FlatList
             data={Object.keys(offersList) || []}
             contentContainerStyle={{ flexGrow: 1 }}
-            renderItem={({ item }) => <OfferList item={offersList?.[item]} title={item} />}
+            renderItem={({ item }) => <OfferList item={offersList?.[item]} title={item} offerLoading={offerLoading} />}
             keyExtractor={(_, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             keyboardDismissMode={'on-drag'}
             refreshControl={
               <RefreshControl
-                refreshing={loading}
+                refreshing={offerLoading}
                 onRefresh={() => _handleRefresh()}
                 tintColor={Colors.primary600}
                 colors={[Colors.primary600]}

@@ -4,8 +4,9 @@ import { View, Text } from 'react-native-ui-lib';
 import { Colors } from '@constants';
 import BusinessCard from './card';
 import { useNavigation } from '@react-navigation/native';
+import BusinessCardSkeleton from '../business/businessCardSkeleton';
 
-const BusinessList = ({ title, item, onPressBusiness }) => {
+const BusinessList = ({ title, item, onPressBusiness, businessLoading }) => {
   const navigation = useNavigation()
   return (
     <View marginT-8 >
@@ -17,14 +18,19 @@ const BusinessList = ({ title, item, onPressBusiness }) => {
           }
         </Pressable>
       </View>
-      <FlatList
-        horizontal
-        data={item || []}
-        renderItem={({ item }) => <BusinessCard item={item} onPressBusiness={onPressBusiness} />}
-        keyExtractor={(_, index) => index.toString()}
-        showsHorizontalScrollIndicator={false}
-        keyboardDismissMode={'on-drag'}
-      />
+      {
+        businessLoading ?
+          <BusinessCardSkeleton />
+          :
+          <FlatList
+            horizontal
+            data={item || []}
+            renderItem={({ item }) => <BusinessCard item={item} onPressBusiness={onPressBusiness} />}
+            keyExtractor={(_, index) => index.toString()}
+            showsHorizontalScrollIndicator={false}
+            keyboardDismissMode={'on-drag'}
+          />
+      }
       <View style={styles.separator} />
     </View>
   );
