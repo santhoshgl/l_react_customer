@@ -20,7 +20,6 @@ import ListSkeleton from '../../component/listSkeleton';
 const BusinessList = ({ navigation, route }) => {
   const dispatch = useDispatch()
   const { defaultHub } = useSelector(s => s.user)
-  const listLoading = useSelector(s => s.loading.loading)
   const param = useMemo(() => { return route?.params }, [route])
   const [businessData, _businessData] = useState([])
   const [nextLink, _nextLink] = useState('')
@@ -29,6 +28,7 @@ const BusinessList = ({ navigation, route }) => {
   const [search, _search] = useState(null)
   const hubId = useSelector(s => s?.user?.defaultHub?.id)
   const [filter, _filter] = useState(null)
+  const [businessListLoading, _businessListLoading] = useState(false)
 
   const flatListRef = useRef()
 
@@ -62,7 +62,7 @@ const BusinessList = ({ navigation, route }) => {
   // }
 
   const fetchData = (search, filter) => {
-    dispatch(setLoading(true))
+    _businessListLoading(true)
     const category = fetchBusinessCategory(param?.title);
     let url = `hubs/${defaultHub?.id}/business?sortBy=${filter?.sortBy ? filter?.sortBy : 'latest'}`;
 
@@ -83,9 +83,9 @@ const BusinessList = ({ navigation, route }) => {
     apiRequest.get(url).then(res => {
       _businessData(res?.data || [])
       setNextLink(res?.links?.next)
-      dispatch(setLoading(false))
+      _businessListLoading(false)
     }).catch((err) => {
-      dispatch(setLoading(false))
+      _businessListLoading(false)
     })
   }
 
@@ -206,7 +206,7 @@ const BusinessList = ({ navigation, route }) => {
           <Text beb24 lh32 black flex marginL-10 numberOfLines={1} >{param?.title}</Text>
         </View>
         {
-          listLoading ?
+          businessListLoading ?
             <ListSkeleton source="businessList" /> :
             <FlatList
               ref={flatListRef}
@@ -221,7 +221,7 @@ const BusinessList = ({ navigation, route }) => {
               onEndReachedThreshold={0.3}
               refreshControl={
                 <RefreshControl
-                  refreshing={listLoading}
+                  refreshing={businessListLoading}
                   onRefresh={() => _handleRefresh()}
                   tintColor={Colors.primary600}
                   colors={[Colors.primary600]}

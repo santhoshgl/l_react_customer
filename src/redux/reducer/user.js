@@ -8,29 +8,23 @@ import _ from 'lodash';
 
 export const getUser = createAsyncThunk('user/getUser', async (param, { getState, requestId, dispatch }) => {
   try {
-    !param?.fromRefresh && dispatch(setLoading(true))
     const userId = await auth().currentUser?.uid;
     const user = await apiRequest.get(`users/${userId}`)
-    !param?.fromRefresh && dispatch(setLoading(false))
     return user?.data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
-    dispatch(setLoading(false))
     throw (error)
   }
 })
 
 export const updateUser = createAsyncThunk('user/updateUser', async (param, { getState, requestId, dispatch }) => {
   try {
-    // dispatch(setLoading(true))
     const userId = await auth().currentUser?.uid;
     const data = { ...param }
     const user = await apiRequest.put(`users/${userId}`, { data })
-    // dispatch(setLoading(false))
     return user?.data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
-    dispatch(setLoading(false))
     throw (error)
   }
 })
@@ -130,13 +124,10 @@ export const registerNotificationToken = createAsyncThunk('user/registerNotifica
     pushNotificationTokens: param
   }
   try {
-    dispatch(setLoading(true))
     const userNotificationToken = await apiRequest.patch(`users/${userId}`, { data });
     const user = await apiRequest.get(`users/${userId}`)
-    dispatch(setLoading(false))
     return user?.data;
   } catch (error) {
-    dispatch(setLoading(false))
     throw (error)
   }
 })

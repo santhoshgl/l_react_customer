@@ -4,8 +4,9 @@ import { View, Text } from 'react-native-ui-lib';
 import { Colors } from '@constants';
 import OfferCard from './offerCard';
 import { useNavigation } from '@react-navigation/native';
+import OfferCardSkeleton from "../offers/offerCardSkeleton"
 
-const Offerlist = ({ title, item }) => {
+const Offerlist = ({ title, item, offerLoading }) => {
   const navigation = useNavigation()
   return (
     <View marginT-8 >
@@ -18,14 +19,19 @@ const Offerlist = ({ title, item }) => {
           }
         </Pressable>
       </View>
-      <FlatList
-        horizontal
-        data={item || []}
-        renderItem={({ item }) => <OfferCard item={item} />}
-        keyExtractor={(_, index) => index.toString()}
-        showsHorizontalScrollIndicator={false}
-        keyboardDismissMode={'on-drag'}
-      />
+      {
+        offerLoading ?
+          <OfferCardSkeleton />
+          :
+          <FlatList
+            horizontal
+            data={item || []}
+            renderItem={({ item }) => <OfferCard item={item} />}
+            keyExtractor={(_, index) => index.toString()}
+            showsHorizontalScrollIndicator={false}
+            keyboardDismissMode={'on-drag'}
+          />
+      }
       <View style={styles.separator} />
     </View>
   );

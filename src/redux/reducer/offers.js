@@ -79,11 +79,25 @@ export const offersSlice = createSlice({
     [getFeaturedOffers.rejected]: (state, { payload }) => {
       state.offerLoading = false
     },
+    [getOffers.pending]: (state, { payload }) => {
+      state.offerLoading = true
+    },
     [getOffers.fulfilled]: (state, { payload }) => {
       state.offerData = payload
+      state.offerLoading = false
+    },
+    [getOffers.rejected]: (state, { payload }) => {
+      state.offerLoading = false
+    },
+    [getFilteredOffers.pending]: (state, { payload }) => {
+      state.offerLoading = true
     },
     [getFilteredOffers.fulfilled]: (state, { payload }) => {
       state.filteredOffers = payload
+      state.offerLoading = false
+    },
+    [getFilteredOffers.rejected]: (state, { payload }) => {
+      state.offerLoading = false
     },
   }
 })

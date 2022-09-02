@@ -86,11 +86,25 @@ export const businessSlice = createSlice({
     [getFeaturedBusiness.rejected]: (state, { payload }) => {
       state.businessLoading = false
     },
+    [getBusiness.pending]: (state, { payload }) => {
+      state.businessLoading = true
+    },
     [getBusiness.fulfilled]: (state, { payload }) => {
       state.businessData = payload
+      state.businessLoading = false
+    },
+    [getBusiness.rejected]: (state, { payload }) => {
+      state.businessLoading = false
+    },
+    [getFilteredBusiness.pending]: (state, { payload }) => {
+      state.businessLoading = true
     },
     [getFilteredBusiness.fulfilled]: (state, { payload }) => {
       state.filteredBusiness = payload
+      state.businessLoading = false
+    },
+    [getFilteredBusiness.rejected]: (state, { payload }) => {
+      state.businessLoading = false
     },
   }
 })

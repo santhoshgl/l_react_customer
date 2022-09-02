@@ -57,7 +57,7 @@ const RewardDetails = ({ navigation, route }) => {
 
   const changeUserHub = () => {
     let receivedHubId = navigationData?.hubID?.length > 1 ? navigationData?.hubID : param?.hubId
-    dispatch(getUser({ fromRefresh: true }))
+    dispatch(getUser())
       .then(unwrapResult)
       .then((res) => {
         var updatedUser = { ...res };
@@ -71,7 +71,7 @@ const RewardDetails = ({ navigation, route }) => {
         dispatch(updateUser(updatedUser))
           .then(unwrapResult)
           .then((originalPromiseResult) => {
-            dispatch(getUser({ fromRefresh: true }))
+            dispatch(getUser())
               .then(unwrapResult)
               .then((response) => {
                 getRewardDetails(param?.rewardId?.length > 1 ? param?.rewardId : id)

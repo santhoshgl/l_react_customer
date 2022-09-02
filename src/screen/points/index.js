@@ -22,6 +22,7 @@ const History = ({ navigation }) => {
   const [prevLink, _prevLink] = useState("");
   const [page, _page] = useState(1);
   const [sortBy, _sortBy] = useState('latest');
+  const [listLoading, _listLoading] = useState(false);
   const loading = useSelector(s => s.loading.loading);
 
   const setNextLink = (url) => {
@@ -52,7 +53,10 @@ const History = ({ navigation }) => {
 
   useEffect(() => {
     if (defaultHub?.id) {
-      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, sortBy: sortBy }))
+      _listLoading(true)
+      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, sortBy: sortBy })).then(() => {
+        _listLoading(false)
+      })
     }
   }, [defaultHub?.id, sortBy]);
 
@@ -71,8 +75,11 @@ const History = ({ navigation }) => {
 
   const onRefresh = () => {
     if (defaultHub?.id) {
-      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id , fromRefresh : true}));
-      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, fromRefresh : true }));
+      _listLoading(true)
+      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
+      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id })).then(() => {
+        _listLoading(false)
+      })
     }
   }
 
@@ -88,7 +95,7 @@ const History = ({ navigation }) => {
         contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}
         refreshControl={
           <RefreshControl
-            refreshing={loading}
+            refreshing={listLoading}
             onRefresh={onRefresh}
             tintColor={Colors.primary600}
             colors={[Colors.primary600]}
@@ -138,7 +145,7 @@ const History = ({ navigation }) => {
             account.
           </Text>
         </View>
-        {loading ?
+        {listLoading ?
           <TransactionSkleton /> :
           rewardsData?.length > 0 ? (
             <>

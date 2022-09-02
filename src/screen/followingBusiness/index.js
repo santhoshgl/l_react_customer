@@ -1,11 +1,10 @@
 import React, { memo, useEffect, useRef, useState } from 'react';
-import { Image, FlatList, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { FlatList, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import { useSelector } from 'react-redux';
 import { View, Text } from 'react-native-ui-lib';
 import Config from "react-native-config"
 import FastImage from 'react-native-fast-image';
 import auth from '@react-native-firebase/auth';
-import { setLoading } from '../../redux/reducer/loading';
 import apiRequest from '@services/networkProvider';
 import SearchBar from '../../component/searchBar';
 import { Colors, Images } from '@constants';
@@ -15,14 +14,13 @@ import ListSkeleton from '../../component/listSkeleton';
 
 
 const FollowingBusiness = ({ navigation, route }) => {
-    const dispatch = useDispatch()
     const hubID = useSelector(s => s.user?.defaultHub?.id)
-    const listLoading = useSelector(s => s.loading.loading)
     const [businessData, _businessData] = useState([])
     const [nextLink, _nextLink] = useState('')
     const [loading, _loading] = useState(false)
     const [nomore, _nomore] = useState(false)
     const [search, _search] = useState("")
+    const [listLoading, _listLoading] = useState(false)
     const userId = auth().currentUser?.uid;
     const flatListRef = useRef()
 
@@ -31,7 +29,7 @@ const FollowingBusiness = ({ navigation, route }) => {
     }, [])
 
     const fetchData = (search) => {
-        dispatch(setLoading(true))
+        _listLoading(true)
         let url = `followers/business?hubID=${hubID}&userID=${userId}`;
 
         if (search)
@@ -40,9 +38,9 @@ const FollowingBusiness = ({ navigation, route }) => {
         apiRequest.get(url).then(res => {
             _businessData(res?.data || [])
             setNextLink(res?.links?.next)
-            dispatch(setLoading(false))
+            _listLoading(false)
         }).catch((err) => {
-            dispatch(setLoading(false))
+            _listLoading(false)
         })
     }
 
