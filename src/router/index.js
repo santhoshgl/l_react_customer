@@ -174,7 +174,7 @@ const onCreateNotificationObj = ({ data }) => {
     type: data?.type,
     firstRow: (data?.rewardCredits) + (' Credits ') + (data?.type === 'debit' ? 'Redeemed!' : 'Rewarded!'),
     secondRow: {
-      identification: data?.type === 'debit' ? 'by ' : 'at ',
+      identification: data?.type === 'debit' ? 'at ' : 'by ',
       businessName: data?.businessName,
     },
     thirdRow: data?.hubName,
