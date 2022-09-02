@@ -79,4 +79,7 @@ export default {
   custom: require("../assets/custom.png"),
   notificationPending: require("../assets/notificationPending.png"),
   giftNotification: require("../assets/giftNotification.png"),
+  disableDelete: require("../assets/disableDelete.png"),
+  starWhite: require("../assets/starWhite.png"),
+  giftWhite: require("../assets/giftWhite.png")
 };

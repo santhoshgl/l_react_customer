@@ -276,14 +276,19 @@ const Account = ({ navigation }) => {
               style={styles.chevron_rightIcon}
             />
           </TouchableOpacity>
+
           <TouchableOpacity
+            disabled={userData?.roles?.length > 1}
             style={styles.detailContainer}
             onPress={() => {
               navigation.navigate("DeleteAccountReason");
             }}
           >
-            <FastImage source={Images.x_close} style={styles.featureIcon} />
-            <Text fs16 lh24 flex black>
+
+            {userData?.roles?.length > 1 ?
+              <FastImage source={Images.disableDelete} style={styles.featureIcon} /> :
+              <FastImage source={Images.x_close} style={styles.featureIcon} />}
+            <Text fs16 lh24 flex style={{ color: userData?.roles?.length > 1 ? Colors.gray400 : Colors.black }}>
               {" "}
               Delete Account{" "}
             </Text>

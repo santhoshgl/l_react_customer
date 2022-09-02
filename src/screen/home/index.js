@@ -51,7 +51,6 @@ const Home = ({ navigation }) => {
     navigation.navigate('BusinessInfo', businessInfo = { business })
   }
 
-
   useEffect(() => {
     if (onNotificationData?.isNavigate) {
       route?.params?.onShowInAppNotification(false)
@@ -63,7 +62,7 @@ const Home = ({ navigation }) => {
   const onRefresh = () => {
     onSetRefresh(true)
     if (defaultHub?.id) {
-      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
+      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id, fromRefresh: true  }));
     }
     getDetails()
   }

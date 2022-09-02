@@ -8,36 +8,87 @@ import moment from 'moment';
 import { Colors, Images } from '@constants';
 import Clipboard from '@react-native-community/clipboard';
 import { showMessage } from 'react-native-flash-message';
-import { onGetRouteNavigationData, onReadNotification } from '../../redux/reducer/user';
+import { getUser, onGetRouteNavigationData, onReadNotification, updateUser } from '../../redux/reducer/user';
 import { setLoading } from '../../redux/reducer/loading';
 import apiRequest from '@services/networkProvider';
+import { unwrapResult } from '@reduxjs/toolkit';
 import RewardDetailListSkeleton from '../../component/rewardDetailListSkeleton';
+import { useIsFocused } from '@react-navigation/native';
 
 const RewardDetails = ({ navigation, route }) => {
   const dispatch = useDispatch()
+  const { defaultHub } = useSelector(s => s.user)
   const param = useMemo(() => { return route?.params }, [route])
   const [rewardDetails, setDetails] = useState({})
   const navigationData = useSelector(s => s?.user?.routeNavigationData?.navigationData)
   const id = useSelector(s => s?.user?.routeNavigationData?.navigationData?.rewardID)
   const loading = useSelector(s => s.loading.loading)
   const [loadingPage, setLoadingPage] = useState(true)
-
+  const focus = useIsFocused()
 
   useEffect(() => {
     if (param?.rewardId) {
-      param?.rewardId && getRewardDetails(param?.rewardId);
-      param?.notificationID && dispatch(onReadNotification(param?.notificationID))
+      if (param?.hubId !== undefined && defaultHub?.id !== param?.hubId) {
+        changeUserHub()
+      } else {
+        param?.rewardId && getRewardDetails(param?.rewardId);
+        param?.notificationID && dispatch(onReadNotification(param?.notificationID))
+      }
     }
-    setLoadingPage(false)
   }, [param])
 
+  useEffect(()=>{
+    if(focus){
+      setLoadingPage(true)
+      dispatch(setLoading(true))
+    }
+  },[focus])
 
   useEffect(() => {
     if (id) {
-      getRewardDetails(id)
-      dispatch(onReadNotification(navigationData?.notificationID))
+      if (navigationData?.hubID && defaultHub?.id !== navigationData?.hubID) {
+        changeUserHub()
+      } else {
+        getRewardDetails(id)
+        dispatch(onReadNotification(navigationData?.notificationID))
+      }
     }
   }, [navigationData, id])
+
+  const changeUserHub = () => {
+    let receivedHubId = navigationData?.hubID?.length > 1 ? navigationData?.hubID : param?.hubId
+    dispatch(getUser({ fromRefresh: true }))
+      .then(unwrapResult)
+      .then((res) => {
+        var updatedUser = { ...res };
+        var hubs =
+          updatedUser?.hubs?.map((hub) => {
+            var temp = Object.assign({}, hub);
+            temp.default = receivedHubId == temp?.id ? true : false;
+            return temp;
+          }) || [];
+        updatedUser["hubs"] = hubs;
+        dispatch(updateUser(updatedUser))
+          .then(unwrapResult)
+          .then((originalPromiseResult) => {
+            dispatch(getUser({ fromRefresh: true }))
+              .then(unwrapResult)
+              .then((response) => {
+                getRewardDetails(param?.rewardId?.length > 1 ? param?.rewardId : id)
+                dispatch(onReadNotification(param?.notificationID ? param?.notificationID : navigationData?.notificationID))
+              });
+          });
+      });
+  }
+
+  useEffect(() => {
+    const _unsubscribe = navigation.addListener('focus', () => {
+      if(param?.notificationID || navigationData?.notificationID){
+        setDetails({})
+      }
+    });
+    return _unsubscribe
+  }, [])
 
 
   const getRewardDetails = async (rewardID) => {
@@ -49,7 +100,6 @@ const RewardDetails = ({ navigation, route }) => {
     setDetails(data?.data)
     setLoadingPage(false)
     dispatch(setLoading(false))
-
   }
 
   const getCardStyles = useMemo(() => {
@@ -90,7 +140,9 @@ const RewardDetails = ({ navigation, route }) => {
   }
 
   const onPressBack = () => {
-    dispatch(onGetRouteNavigationData({}))
+    const navigationObj = { isNavigate: false }
+
+    dispatch(onGetRouteNavigationData(navigationObj))
     navigation.goBack()
   }
 
@@ -112,7 +164,7 @@ const RewardDetails = ({ navigation, route }) => {
         <View style={{ height: 312 }}>
           {rewardDetails?.attributes?.rewardType && <ImageBackground source={Images.rewardDetails} re style={styles.image}>
             <View center marginT-50>
-              <FastImage tintColor={Colors.white} source={rewardDetails?.attributes?.rewardType == 'credit' ? Images.star : Images.gift} style={{ height: 26, width: 26, tintColor: "white", marginBottom: 10 }} />
+              <FastImage source={rewardDetails?.attributes?.rewardType == 'credit' ? Images.starWhite : Images.giftWhite} style={{ height: 26, width: 26, tintColor: "white", marginBottom: 10 }} />
               {!loading && rewardDetails?.attributes?.rewardType && <Text fs16 lh24 white >{`Credits ${rewardDetails?.attributes?.rewardType == 'credit' ? 'Rewarded' :
                 rewardDetails?.attributes?.rewardType == 'debit' ? 'Redeemed' : ''}!`}</Text>}
               <Text beb48 lh60 white>{rewardDetails?.attributes?.credits}</Text>
