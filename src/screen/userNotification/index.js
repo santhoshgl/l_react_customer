@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { SafeAreaView, Pressable, SectionList, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Pressable, Image, SectionList, TouchableOpacity, RefreshControl } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import moment from 'moment';
 import { cloneDeep } from 'lodash'
@@ -16,14 +16,18 @@ const UserNotification = ({ navigation }) => {
   const dispatch = useDispatch()
   const [groupData, _groupData] = useState([])
   const [isCheckedMarkAll, setMarkAll] = useState(false)
-  const [isDisableMark, setDisableMark] = useState(false)
   const [loader, setLoader] = useState(false)
 
-  useEffect(() => {
+
+  const onGetNotificationList = () => {
     setLoader(true)
     dispatch(getNotification()).then(() => {
       setLoader(false)
     }).catch(() => setLoader(false))
+  }
+
+  useEffect(() => {
+    onGetNotificationList()
   }, [])
 
   useEffect(() => {
@@ -37,17 +41,77 @@ const UserNotification = ({ navigation }) => {
       ]
       userNotification?.forEach(item => {
         if (moment(item.created).isSame(moment(), 'day') && item?.read == false) {
-          updated[0]?.data?.push(item)
+          updated[0]?.data?.push(
+            {
+              type: item?.reward?.type,
+              firstRow: (item?.reward?.credits) + (' Credits ') + (item?.reward?.type === 'debit' ? 'Redeemed!' : 'Rewarded!'),
+              secondRow: {
+                identification: item?.reward?.type === 'debit' ? 'by ' : 'at ',
+                businessName: item?.business?.name,
+              },
+              thirdRow: item?.hub?.name,
+              forthRow: item?.created,
+              read: item?.read,
+              rewardId: item?.reward?.id, notificationID: item?.id, hubId: item?.hub?.id
+            }
+          )
         } else if (moment(item.created).isSame(moment(), 'day') && item?.read == true) {
-          updated[1]?.data?.push(item)
+          updated[1]?.data?.push({
+            type: item?.reward?.type,
+            firstRow: (item?.reward?.credits) + (' Credits ') + (item?.reward?.type === 'debit' ? 'Redeemed!' : 'Rewarded!'),
+            secondRow: {
+              identification: item?.reward?.type === 'debit' ? 'by ' : 'at ',
+              businessName: item?.business?.name,
+            },
+            thirdRow: item?.hub?.name,
+            forthRow: item?.created,
+            read: item?.read,
+            rewardId: item?.reward?.id, notificationID: item?.id, hubId: item?.hub?.id
+          })
+
         } else if (moment(item.created).isBetween(moment().startOf('week'), moment().endOf('week'))) {
-          updated[2]?.data?.push(item)
+          updated[2]?.data?.push({
+            type: item?.reward?.type,
+            firstRow: (item?.reward?.credits) + (' Credits ') + (item?.reward?.type === 'debit' ? 'Redeemed!' : 'Rewarded!'),
+            secondRow: {
+              identification: item?.reward?.type === 'debit' ? 'by ' : 'at ',
+              businessName: item?.business?.name,
+            },
+            thirdRow: item?.hub?.name,
+            forthRow: item?.created,
+            read: item?.read,
+            rewardId: item?.reward?.id, notificationID: item?.id, hubId: item?.hub?.id
+          })
         } else if (moment(item.created).isBetween(moment().startOf('month'), moment().endOf('month'))) {
-          updated[3]?.data?.push(item)
+          updated[3]?.data?.push({
+            type: item?.reward?.type,
+            firstRow: (item?.reward?.credits) + (' Credits ') + (item?.reward?.type === 'debit' ? 'Redeemed!' : 'Rewarded!'),
+            secondRow: {
+              identification: item?.reward?.type === 'debit' ? 'by ' : 'at ',
+              businessName: item?.business?.name,
+              read: item?.read
+            },
+            thirdRow: item?.hub?.name,
+            forthRow: item?.created,
+            read: item?.read,
+            rewardId: item?.reward?.id, notificationID: item?.id, hubId: item?.hub?.id
+          })
         } else {
-          updated[4]?.data?.push(item)
+          updated[4]?.data?.push({
+            type: item?.reward?.type,
+            firstRow: (item?.reward?.credits) + (' Credits ') + (item?.reward?.type === 'debit' ? 'Redeemed!' : 'Rewarded!'),
+            secondRow: {
+              identification: item?.reward?.type === 'debit' ? 'by ' : 'at ',
+              businessName: item?.business?.name
+            },
+            thirdRow: item?.hub?.name,
+            forthRow: item?.created,
+            read: item?.read,
+            rewardId: item?.reward?.id, notificationID: item?.id, hubId: item?.hub?.id
+          })
         }
       })
+
 
       let notificationData = updated.filter((item) => item.data.length > 0)
       let isRequireMarkAll = updated.filter((item) => item?.data[0]?.read === false)
@@ -70,9 +134,10 @@ const UserNotification = ({ navigation }) => {
 
   const onPressNotificationItem = (item) => {
     if (item?.type === 'reward' || item?.type === 'credit' || item?.type === "debit") {
-      navigation.navigate("rewardDetails", { rewardId: item?.rewardID, notificationID: item?.id })
+      navigation.navigate("rewardDetails", { rewardId: item?.rewardId, notificationID: item?.notificationID, hubId: item?.hubId })
     }
   }
+
   const NotificationCard = ({ item }) => {
     return (
       <Pressable style={[styles.notificationContainer, !(item?.read) ? { backgroundColor: Colors.primary25 } : {}]} onPress={() => onPressNotificationItem(item)}>
@@ -81,19 +146,24 @@ const UserNotification = ({ navigation }) => {
             (item?.type == "redeem") ? Images?.redeem :
               (item?.type == "debit") ? Images?.giftNotification :
                 { uri: item?.logo }}
-          style={{ height: 32, width: 32 }} />
+          style={{ height: 32, width: 32, marginTop: 2 }} />
         <View flex marginL-10>
-          <Text fs16 lh24 black>{item?.message}</Text>
-          {
-            item?.description && item?.description?.length ?
-              <Text fs14 lh20 black> <Text primary700 fs14 lh20>{item?.description} </Text> </Text> : null
-          }
-          <Text fs12 lh18 gray500 marginT-2> {moment(item?.created).fromNow()} </Text>
+          <Text fs16 black lh24>{item?.firstRow}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text fs14L lh20 gray700 style={{ fontWeight: '400' }}>{item?.secondRow?.identification}</Text>
+            <Text fs14 lh20 primary700 style={{ fontWeight: '400' }}>{item?.secondRow?.businessName}</Text>
+          </View>
+          <Text fs14 ls20 gray700 style={{ fontWeight: '500' }}>{item?.thirdRow} </Text>
+          <Text fs12 lh18 gray500 style={{ marginLeft: -2 }}> {moment(item?.forthRow).fromNow()} </Text>
         </View>
       </Pressable>
     );
   }
 
+  const onRefresh = () => {
+    _groupData([])
+    onGetNotificationList()
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -107,7 +177,8 @@ const UserNotification = ({ navigation }) => {
         </View>
       </View>
       {loader ?
-        <NotificationSkeleton /> : <SectionList
+        <NotificationSkeleton /> :
+        <SectionList
           contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50, paddingHorizontal: 16 }}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
@@ -134,8 +205,16 @@ const UserNotification = ({ navigation }) => {
             </View>
           )}
           ListFooterComponent={() => (
-            <View style={{marginTop: 30}}/>
+            <View style={{ marginTop: 30 }} />
           )}
+          refreshControl={
+            <RefreshControl
+              refreshing={loader}
+              onRefresh={onRefresh}
+              tintColor={Colors.primary600}
+              colors={[Colors.primary600]}
+            />
+          }
         />
 
       }

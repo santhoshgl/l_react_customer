@@ -71,8 +71,8 @@ const History = ({ navigation }) => {
 
   const onRefresh = () => {
     if (defaultHub?.id) {
-      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
-      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id }));
+      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id , fromRefresh : true}));
+      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, fromRefresh : true }));
     }
   }
 

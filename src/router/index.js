@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
-import { Pressable, View, Platform } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { Pressable, Platform } from 'react-native';
+import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { isEmpty } from 'underscore';
-import { Text } from 'react-native-ui-lib';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { showMessage } from 'react-native-flash-message';
 import firebase from '@react-native-firebase/app';
@@ -48,6 +47,8 @@ import { handleNotificationBadge, onGetRouteNavigationData } from '../redux/redu
 import { onGetInternetStatus } from '../redux/reducer/network';
 import { onGetRouteName } from '../services/NotificationServices';
 import { Colors, Images } from '../constants';
+import { View, Text } from 'react-native-ui-lib';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -123,7 +124,8 @@ const Dashboard = (props) => {
           tabBarIcon: ({ color, size }) => (
             <FastImage tintColor={color} source={Images.home} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
           ),
-        }} />
+        }}
+      />
       <Tab.Screen name="offersTab" component={_OffersStack} options={{
         tabBarLabel: ({ focused }) => (
           <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Offers</Text>
@@ -147,34 +149,56 @@ const Dashboard = (props) => {
         tabBarIcon: ({ color, size }) => (
           <FastImage tintColor={color} source={Images.points} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
         ),
-      }} />
+      }}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            navigation.reset({ index: 0, routes: [{ name: 'history' }] })
+          }
+        })
+        }
+      />
     </Tab.Navigator >
   );
 };
 
 const handlePressNotification = () => {
-  const route = onGetRouteName(flashNotifictionData?.data?.type)
-  const navigationData = flashNotifictionData?.data
+  const route = onGetRouteName(flashNotifictionData?.type)
+  const navigationData = flashNotifictionData
   const navigationObj = { route, navigationData, isNavigate: true }
   store.dispatch(onGetRouteNavigationData(navigationObj))
   // store.dispatch(handleNotificationBadge(false))
 }
 
+const onCreateNotificationObj = ({ data }) => {
+  flashNotifictionData = {
+    type: data?.type,
+    firstRow: (data?.rewardCredits) + (' Credits ') + (data?.type === 'debit' ? 'Redeemed!' : 'Rewarded!'),
+    secondRow: {
+      identification: data?.type === 'debit' ? 'by ' : 'at ',
+      businessName: data?.businessName,
+    },
+    thirdRow: data?.hubName,
+    rewardID: data?.rewardID,
+    notificationID: data?.notificationID,
+    hubID: data?.hubID
+  }
+}
+
 export const FlashNotification = (data, onClose) => {
-  let highlightWords = []
-  flashNotifictionData?.data?.highlightText?.length > 0 && highlightWords.push(flashNotifictionData?.data?.highlightText)
   return (
     <View style={{
       padding: 16, borderColor: Colors.primary200, backgroundColor: Colors.primary25, borderRadius: 8, flexDirection: 'row', borderWidth: 1,
       top: flashNotifictionData?.data?.type === 'debit' ? 25 : 10
     }}>
       <Pressable style={{ flex: 0.9 }} onPress={() => handlePressNotification()} >
-        <HighlightText
-          highlightStyle={{ color: Colors.primary700 }}
-          searchWords={highlightWords}
-          style={{ fontFamily: 'NotoSans-Regular', fontWeight: '400', fontSize: 16, lineHeight: 24, }}
-          textToHighlight={data?.message}
-        />
+        <View flex marginL-10>
+          <Text fs16 black lh24>{flashNotifictionData?.firstRow}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text fs14L lh20 gray700 style={{ fontWeight: '400' }}>{flashNotifictionData?.secondRow?.identification}</Text>
+            <Text fs14 lh20 primary700 style={{ fontWeight: '400' }}>{flashNotifictionData?.secondRow?.businessName}</Text>
+          </View>
+          <Text fs14 ls20 gray700 style={{ fontWeight: '500' }}>{flashNotifictionData?.thirdRow} </Text>
+        </View>
       </Pressable>
       <Pressable style={{ flex: 0.1, alignItems: 'flex-end' }} onPress={() => onClose(false)}>
         <FastImage source={Images.x} style={{ height: 16, width: 16 }} />
@@ -196,14 +220,14 @@ export const App = ({ onShowInAppNotification }) => {
 
   const onReceiveInAppNotification = () => {
     firebase.messaging().onMessage(response => {
-      onShowInAppNotification(true)
-      dispatch(handleNotificationBadge(true))
-      flashNotifictionData = response
-      showMessage({ message: response?.notification?.body })
+      if (response !== null) {
+        onShowInAppNotification(true)
+        dispatch(handleNotificationBadge(true))
+        onCreateNotificationObj(response)
+        showMessage({ message: response?.notification?.body })
+      }
     });
   };
-
-
 
   const onPressNotification = (notificationDetails) => {
     const route = onGetRouteName(notificationDetails?.data?.type)
@@ -217,6 +241,8 @@ export const App = ({ onShowInAppNotification }) => {
       .messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
+        remoteMessage !== null &&
+          onCreateNotificationObj(remoteMessage)
         onPressNotification(remoteMessage)
       });
   }
@@ -224,7 +250,7 @@ export const App = ({ onShowInAppNotification }) => {
 
   const onForegroundNotification = () => {
     firebase.messaging().onNotificationOpenedApp(response => {
-      onPressNotification(response)
+      response !== null && onPressNotification(response)
     });
   }
 

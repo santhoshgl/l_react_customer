@@ -311,7 +311,7 @@ const BusinessInfo = () => {
               </Text>
             </>
           )}
-          {businessInfo?.email && (
+          {businessInfo?.contactDetails?.businessEmail && (
             <Text
               fs16SB
               lh24
@@ -322,7 +322,7 @@ const BusinessInfo = () => {
             </Text>
           )}
           <Text fs16 lh24 primary700 style={{ fontWeight: "400" }}>
-            {businessInfo?.email}
+            {businessInfo?.contactDetails?.businessEmail}
           </Text>
           {businessInfo?.socialLinks && Object.keys(businessInfo?.socialLinks).length > 0 && (<>
             <Text

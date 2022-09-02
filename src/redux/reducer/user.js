@@ -8,10 +8,10 @@ import _ from 'lodash';
 
 export const getUser = createAsyncThunk('user/getUser', async (param, { getState, requestId, dispatch }) => {
   try {
-    dispatch(setLoading(true))
+    !param?.fromRefresh && dispatch(setLoading(true))
     const userId = await auth().currentUser?.uid;
     const user = await apiRequest.get(`users/${userId}`)
-    dispatch(setLoading(false))
+    !param?.fromRefresh && dispatch(setLoading(false))
     return user?.data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
@@ -22,11 +22,11 @@ export const getUser = createAsyncThunk('user/getUser', async (param, { getState
 
 export const updateUser = createAsyncThunk('user/updateUser', async (param, { getState, requestId, dispatch }) => {
   try {
-    dispatch(setLoading(true))
+    // dispatch(setLoading(true))
     const userId = await auth().currentUser?.uid;
     const data = { ...param }
     const user = await apiRequest.put(`users/${userId}`, { data })
-    dispatch(setLoading(false))
+    // dispatch(setLoading(false))
     return user?.data;
   } catch (error) {
     showMessage({ message: error?.message, type: 'danger' })
@@ -156,15 +156,12 @@ export const getNotification = createAsyncThunk('user/getNotification', async (p
 export const onReadNotification = createAsyncThunk('user/onReadNotification', async (param, { getState, requestId, dispatch }) => {
   try {
     let notificationId = param
-    dispatch(setLoading(true))
     let data = {
       read: true
     }
     const readResponse = await apiRequest.patch(`notifications/${notificationId}`, { data });
-    dispatch(setLoading(false))
     return readResponse
   } catch (error) {
-    dispatch(setLoading(false))
     throw (error)
   }
 })
@@ -236,7 +233,7 @@ export const addCustomerRole = createAsyncThunk('user/addCustomerRole', async (p
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState: { userData: null, defaultHub: {}, deviceToken: {}, userNotification: null, deleteAccountReason: '', password: '', routeNavigationData: {}, showNotificationBadge: false },
+  initialState: { userData: null, defaultHub: {}, deviceToken: {}, userNotification: null, deleteAccountReason: '', password: '', routeNavigationData: { isNavigate: false, navigationData: undefined, route: null }, showNotificationBadge: false },
   reducers: {
     onGetDeviceToken: (state, { payload }) => {
       state.deviceToken = payload
