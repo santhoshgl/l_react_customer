@@ -46,7 +46,7 @@ const UserNotification = ({ navigation }) => {
               type: item?.reward?.type,
               firstRow: (item?.reward?.credits) + (' Credits ') + (item?.reward?.type === 'debit' ? 'Redeemed!' : 'Rewarded!'),
               secondRow: {
-                identification: item?.reward?.type === 'debit' ? 'by ' : 'at ',
+                identification: item?.reward?.type === 'debit' ? 'at ' : 'by ',
                 businessName: item?.business?.name,
               },
               thirdRow: item?.hub?.name,
@@ -60,7 +60,7 @@ const UserNotification = ({ navigation }) => {
             type: item?.reward?.type,
             firstRow: (item?.reward?.credits) + (' Credits ') + (item?.reward?.type === 'debit' ? 'Redeemed!' : 'Rewarded!'),
             secondRow: {
-              identification: item?.reward?.type === 'debit' ? 'by ' : 'at ',
+              identification: item?.reward?.type === 'debit' ? 'at ' : 'by ',
               businessName: item?.business?.name,
             },
             thirdRow: item?.hub?.name,
@@ -74,7 +74,7 @@ const UserNotification = ({ navigation }) => {
             type: item?.reward?.type,
             firstRow: (item?.reward?.credits) + (' Credits ') + (item?.reward?.type === 'debit' ? 'Redeemed!' : 'Rewarded!'),
             secondRow: {
-              identification: item?.reward?.type === 'debit' ? 'by ' : 'at ',
+              identification: item?.reward?.type === 'debit' ? 'at ' : 'by ',
               businessName: item?.business?.name,
             },
             thirdRow: item?.hub?.name,
@@ -87,7 +87,7 @@ const UserNotification = ({ navigation }) => {
             type: item?.reward?.type,
             firstRow: (item?.reward?.credits) + (' Credits ') + (item?.reward?.type === 'debit' ? 'Redeemed!' : 'Rewarded!'),
             secondRow: {
-              identification: item?.reward?.type === 'debit' ? 'by ' : 'at ',
+              identification: item?.reward?.type === 'debit' ? 'at ' : 'by ',
               businessName: item?.business?.name,
               read: item?.read
             },
@@ -101,7 +101,7 @@ const UserNotification = ({ navigation }) => {
             type: item?.reward?.type,
             firstRow: (item?.reward?.credits) + (' Credits ') + (item?.reward?.type === 'debit' ? 'Redeemed!' : 'Rewarded!'),
             secondRow: {
-              identification: item?.reward?.type === 'debit' ? 'by ' : 'at ',
+              identification: item?.reward?.type === 'debit' ? 'at ' : 'by ',
               businessName: item?.business?.name
             },
             thirdRow: item?.hub?.name,
