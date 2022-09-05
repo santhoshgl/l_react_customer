@@ -23,7 +23,6 @@ const History = ({ navigation }) => {
   const [page, _page] = useState(1);
   const [sortBy, _sortBy] = useState('latest');
   const [listLoading, _listLoading] = useState(false);
-  const loading = useSelector(s => s.loading.loading);
 
   const setNextLink = (url) => {
     _nextLink(url?.replace(Config.API_URL, ''))
@@ -34,15 +33,17 @@ const History = ({ navigation }) => {
   }
 
   useEffect(() => {
-    moveToTop();
-    if (rewards?.meta?.offset) {
-      _page((rewards?.meta?.offset / rewards?.meta?.limit) + 1);
-    } else {
-      _page(1);
+    if (rewards?.data) {
+      moveToTop();
+      if (rewards?.meta?.offset) {
+        _page((rewards?.meta?.offset / rewards?.meta?.limit) + 1);
+      } else {
+        _page(1);
+      }
+      _rewardsData(rewards?.data);
+      setNextLink(rewards?.links?.next);
+      setPrevLink(rewards?.links?.prev);
     }
-    _rewardsData(rewards?.data);
-    setNextLink(rewards?.links?.next);
-    setPrevLink(rewards?.links?.prev);
   }, [rewards])
 
   useEffect(() => {
@@ -66,18 +67,20 @@ const History = ({ navigation }) => {
   });
 
   const nextPageHandler = () => {
-    dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, url: nextLink }));
+    if (userData?.id && defaultHub?.id && nextLink)
+      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, url: nextLink }));
   }
 
   const prevPageHandler = () => {
-    dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, url: prevLink }));
+    if (userData?.id && defaultHub?.id && prevLink)
+      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, url: prevLink }));
   }
 
   const onRefresh = () => {
     if (defaultHub?.id) {
       _listLoading(true)
       dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
-      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id })).then(() => {
+      dispatch(getRewards({ userID: userData?.id, hubID: defaultHub?.id, sortBy: sortBy })).then(() => {
         _listLoading(false)
       })
     }
@@ -96,7 +99,7 @@ const History = ({ navigation }) => {
         refreshControl={
           <RefreshControl
             refreshing={listLoading}
-            onRefresh={onRefresh}
+            onRefresh={() => onRefresh()}
             tintColor={Colors.primary600}
             colors={[Colors.primary600]}
           />
