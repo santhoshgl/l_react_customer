@@ -40,7 +40,7 @@ export const getRewardDetails = createAsyncThunk('points/getRewardDetails', asyn
 
 export const pointsSlice = createSlice({
   name: 'points',
-  initialState: { walletData: [], rewards: [], rewardDetails: {} },
+  initialState: { walletData: [], rewards: {}, rewardDetails: {} },
   reducers: {},
   extraReducers: {
     [getRewardWallet.fulfilled]: (state, { payload }) => {
