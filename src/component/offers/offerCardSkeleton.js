@@ -27,14 +27,14 @@ const OfferCardSkeleton = ({ isHorizontal = true, skeletonStyle = {} }) => {
             }}
             isLoading={true}
             layout={[
-              { key: 'header', width: 240, height: 56, borderTopLeftRadius: 16, borderTopRightRadius: 16 },
+              { key: '001', width: 240, height: 56, borderTopLeftRadius: 16, borderTopRightRadius: 16 },
               {
                 marginHorizontal: 16,
                 children: [
-                  { key: 'header', width: "65%", height: 25, marginTop: 16, },
-                  { key: 'header', width: "100%", height: 40, marginTop: 10, },
+                  { key: '002', width: "65%", height: 25, marginTop: 16, },
+                  { key: '003', width: "100%", height: 40, marginTop: 10, },
                   {
-                    key: 'someOtherId', flexDirection: 'row', marginTop: 10,
+                    key: '004', flexDirection: 'row', marginTop: 10,
                     children: [
                       { width: width / 10, height: width / 10, borderRadius: width / 2, marginRight: 10 },
                       { width: "40%", height: 20, marginTop: 10 }

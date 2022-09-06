@@ -42,9 +42,9 @@ const NotificationSkeleton = () => {
                       marginLeft: 10,
                       marginTop: 5,
                       children: [
-                        { key: 'someId1', width: "100%", height: 20 },
-                        { key: 'someId1', width: "100%", height: 20, marginTop: 5 },
-                        { key: 'someId1', width: "30%", height: 20, marginTop: 5 },
+                        { key: 'someId100', width: "100%", height: 20 },
+                        { key: 'someId200', width: "100%", height: 20, marginTop: 5 },
+                        { key: 'someId300', width: "30%", height: 20, marginTop: 5 },
                       ]
                     }
                   ]

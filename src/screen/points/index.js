@@ -154,15 +154,15 @@ const History = ({ navigation }) => {
             <>
               <View style={{ backgroundColor: Colors.white, paddingHorizontal: 10 }}>
                 <View row centerV flex>
+                  <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
+                    Reference
+                  </Text>
                   <TouchableOpacity onPress={() => referenceHandler()} style={styles.tableTitleRef}>
                     <Text fs12 lh18 center gray500>
-                      Reference
+                      Date
                     </Text>
                     <FastImage source={Images.arrowDown} style={{ width: 16, height: 16, transform: [{ rotate: sortBy == "latest" ? "180deg" : '360deg' }] }} />
                   </TouchableOpacity>
-                  <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
-                    Date
-                  </Text>
                   <Text fs12 lh18 gray500 flex center style={styles.tableTitle}>
                     Credits
                   </Text>

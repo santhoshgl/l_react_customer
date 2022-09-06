@@ -295,6 +295,7 @@ const Account = ({ navigation }) => {
             <FastImage
               source={Images.chevron_right}
               style={styles.chevron_rightIcon}
+              tintColor={userData?.roles?.length > 1 ? Colors.gray400 : Colors.black}
             />
           </TouchableOpacity>
           <View style={styles.logoutBtn}>

@@ -34,7 +34,7 @@ const Business = ({ navigation }) => {
     if (defaultHub?.id) {
       dispatch(getBusiness(defaultHub?.id))
     }
-  }, [defaultHub])
+  }, [defaultHub?.id])
 
   useEffect(() => {
     if (filteredBusiness) {

@@ -25,8 +25,8 @@ const { width } = Dimensions.get('screen')
 const Home = ({ navigation }) => {
   const dispatch = useDispatch()
   const { userData, defaultHub } = useSelector(s => s.user)
-  const { featuredOfferData, offerLoading } = useSelector(s => s.offers)
-  const { featuredBusinessData, businessLoading } = useSelector(s => s.business)
+  const { featuredOfferData, featuredOffersLoading } = useSelector(s => s.offers)
+  const { featuredBusinessData, featuredBusinessLoading } = useSelector(s => s.business)
   const userDeviceToken = useSelector(s => s.user?.deviceToken?.token)
   const onNotificationData = useSelector(s => s.user.routeNavigationData)
   const [isRefresh, onSetRefresh] = useState(false)
@@ -62,7 +62,7 @@ const Home = ({ navigation }) => {
   const onRefresh = () => {
     onSetRefresh(true)
     if (defaultHub?.id) {
-      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id  }));
+      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
     }
     getDetails()
   }
@@ -99,11 +99,11 @@ const Home = ({ navigation }) => {
                   {featuredOfferData?.length == 1 ? <Text></Text> : <Text fs14M lh20 primary700 >See all</Text>}
                 </Pressable>
               </View>
-              {offerLoading ? <OfferCardSkeleton /> :
+              {featuredOffersLoading ? <OfferCardSkeleton /> :
                 <FlatList
                   horizontal
                   data={featuredOfferData || []}
-                  renderItem={({ item }) => <OfferCard item={item} loading={offerLoading} />}
+                  renderItem={({ item }) => <OfferCard item={item} loading={featuredOffersLoading} />}
                   keyExtractor={(_, index) => index.toString()}
                   showsHorizontalScrollIndicator={false}
                   keyboardDismissMode={'on-drag'}
@@ -127,7 +127,7 @@ const Home = ({ navigation }) => {
                   }
                 </Pressable>
               </View>
-              {businessLoading ? <BusinessCardSkeleton /> :
+              {featuredBusinessLoading ? <BusinessCardSkeleton /> :
                 <FlatList
                   horizontal
                   data={featuredBusinessData || []}

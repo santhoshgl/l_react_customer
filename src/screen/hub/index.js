@@ -48,6 +48,7 @@ const Hub = ({ navigation }) => {
   };
 
   const _onSelectHub = (hubId) => {
+    dispatch(setLoading(true))
     const selectedHub = { id: hubId, default: true };
     dispatch(getUser())
       .then(unwrapResult)
@@ -57,6 +58,7 @@ const Hub = ({ navigation }) => {
         dispatch(updateUser(updatedUser))
           .then(unwrapResult)
           .then((originalPromiseResult) => {
+            dispatch(setLoading(false))
             navigation.reset({ index: 0, routes: [{ name: "dashboard" }] });
           });
       });

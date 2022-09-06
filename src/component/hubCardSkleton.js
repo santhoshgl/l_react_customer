@@ -41,13 +41,13 @@ const hubCardSkleton = () => {
                                             flex: 1,
                                             marginLeft: 10,
                                             children: [
-                                                { key: 'someOtherId', width: '90%', height: 30 },
+                                                { key: 'new', width: '90%', height: 30 },
                                                 {
                                                     flexDirection: 'row',
                                                     marginTop: 5,
                                                     children: [
-                                                        { key: 'someOtherId', width: '10%', height: 20 },
-                                                        { key: 'someOtherId', width: '50%', height: 20, marginLeft: 10 }
+                                                        { key: 'small', width: '10%', height: 20 },
+                                                        { key: 'side', width: '50%', height: 20, marginLeft: 10 }
                                                     ]
                                                 }
                                             ]
@@ -61,8 +61,8 @@ const hubCardSkleton = () => {
                                     marginRight: 10,
                                     marginTop: 10,
                                     children: [
-                                        { key: 'someOtherId', width: '50%', height: 50, borderRadius: 12 },
-                                        { key: 'someOtherId', width: '50%', height: 50, borderRadius: 12, marginLeft: 10 },
+                                        { key: 'middle', width: '50%', height: 50, borderRadius: 12 },
+                                        { key: 'middleSide', width: '50%', height: 50, borderRadius: 12, marginLeft: 10 },
                                     ]
                                 },
                                 {
@@ -76,7 +76,7 @@ const hubCardSkleton = () => {
                                     justifyContent: "center",
                                     alignItems: "center",
                                     children: [
-                                        { key: 'someOtherId', width: '30%', height: 20 }
+                                        { key: 'bottom', width: '30%', height: 20 }
                                     ]
                                 }
                             ]

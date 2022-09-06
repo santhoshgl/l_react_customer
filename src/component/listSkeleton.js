@@ -41,8 +41,8 @@ const ListSkeleton = ({ source }) => {
                       flex: 1,
                       marginLeft: 10,
                       children: [
-                        { key: 'someOtherId', width: '90%', height: 30 },
-                        { key: 'someId1', width: "60%", height: 20, marginTop: 10 },
+                        { key: 'someOtherId12121', width: '90%', height: 30 },
+                        { key: 'someIdHe1', width: "60%", height: 20, marginTop: 10 },
                         {
                           flex: 1, flexDirection: 'row', justifyContent: "space-between", marginTop: 10,
                           children: [
@@ -73,15 +73,15 @@ const ListSkeleton = ({ source }) => {
                       marginTop: 5,
                       children: [
                         {
-                          key: 'someOtherId', flexDirection: 'row', justifyContent: "space-between",
+                          key: 'someOtherId5656', flexDirection: 'row', justifyContent: "space-between",
                           children: [
                             { width: "50%", height: 25 },
                             { width: "15%", height: 25, borderRadius: 25 }
                           ]
                         },
-                        { key: 'someId1', width: "80%", height: 20, marginTop: 8 },
+                        { key: 'someId132', width: "80%", height: 20, marginTop: 8 },
                         {
-                          key: 'someOtherId', flexDirection: 'row', marginTop: 10,
+                          key: 'someOtherIdweeee', flexDirection: 'row', marginTop: 10,
                           children: [
                             { width: width / 10, height: width / 10, borderRadius: width / 2, marginRight: 10 },
                             { width: "40%", height: 20, marginTop: 10 }
