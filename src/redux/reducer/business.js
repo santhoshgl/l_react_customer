@@ -73,18 +73,18 @@ export const onFollowBusiness = createAsyncThunk('followers/business', async (pa
 
 export const businessSlice = createSlice({
   name: 'business',
-  initialState: { businessData: [], featuredBusinessData: [], businessLoading: false, filteredBusiness: {} },
+  initialState: { businessData: [], featuredBusinessData: [], businessLoading: false, featuredBusinessLoading: false, filteredBusiness: {} },
   reducers: {},
   extraReducers: {
     [getFeaturedBusiness.pending]: (state, { payload }) => {
-      state.businessLoading = true
+      state.featuredBusinessLoading = true
     },
     [getFeaturedBusiness.fulfilled]: (state, { payload }) => {
       state.featuredBusinessData = payload
-      state.businessLoading = false
+      state.featuredBusinessLoading = false
     },
     [getFeaturedBusiness.rejected]: (state, { payload }) => {
-      state.businessLoading = false
+      state.featuredBusinessLoading = false
     },
     [getBusiness.pending]: (state, { payload }) => {
       state.businessLoading = true

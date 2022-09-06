@@ -66,18 +66,18 @@ export const getFeaturedOffers = createAsyncThunk('offers/getFeaturedOffers', as
 
 export const offersSlice = createSlice({
   name: 'offers',
-  initialState: { offerData: [], featuredOfferData: [], offerLoading: false, filteredOffers: {} },
+  initialState: { offerData: [], featuredOfferData: [], offerLoading: false, featuredOffersLoading: false, filteredOffers: {} },
   reducers: {},
   extraReducers: {
     [getFeaturedOffers.pending]: (state, { payload }) => {
-      state.offerLoading = true
+      state.featuredOffersLoading = true
     },
     [getFeaturedOffers.fulfilled]: (state, { payload }) => {
       state.featuredOfferData = payload
-      state.offerLoading = false
+      state.featuredOffersLoading = false
     },
     [getFeaturedOffers.rejected]: (state, { payload }) => {
-      state.offerLoading = false
+      state.featuredOffersLoading = false
     },
     [getOffers.pending]: (state, { payload }) => {
       state.offerLoading = true

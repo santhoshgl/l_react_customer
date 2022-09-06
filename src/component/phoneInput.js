@@ -24,6 +24,7 @@ const PhoneInput = ({ value, label, error, validVal = true, ...props }) => {
           placeholderTextColor={Colors.gray500}
           autoCapitalize="none"
           maxLength={10}
+          style={{ height: 44, width: "85%", color: Colors.black }}
         />
       </View>
     </View>

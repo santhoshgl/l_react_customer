@@ -17,6 +17,7 @@ import Request from "@services/networkProvider";
 import styles from "./styles";
 import { getUser, updateUser } from "../../redux/reducer/user";
 import HubCardSkleton from "../../component/hubCardSkleton";
+import { setLoading } from "../../redux/reducer/loading";
 
 const AddHub = ({ route, navigation }) => {
 
@@ -79,6 +80,7 @@ const AddHub = ({ route, navigation }) => {
 
   const _onSelectHub = (hub) => {
     const selectedHub = { id: hub?.id, default: true };
+    dispatch(setLoading(true))
     dispatch(getUser())
       .then(unwrapResult)
       .then((res) => {
@@ -97,6 +99,7 @@ const AddHub = ({ route, navigation }) => {
             dispatch(getUser())
               .then(unwrapResult)
               .then((response) => {
+                dispatch(setLoading(false))
                 route.params.handleItem(true, hub);
                 navigation.goBack();
               });

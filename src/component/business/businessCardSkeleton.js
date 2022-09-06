@@ -29,11 +29,11 @@ const BusinessCardSkeleton = () => {
                 flex: 1,
                 alignItems: "center",
                 children: [
-                  { key: 'header', width: 240, height: 100, borderTopLeftRadius: 16, borderTopRightRadius: 16 },
-                  { key: 'header', width: 90, height: 45, borderBottomLeftRadius: 45, borderBottomRightRadius: 45 },
-                  { key: 'header', width: "65%", height: 25, marginTop: 10 },
-                  { key: 'header', width: "35%", height: 20, marginTop: 10 },
-                  { key: 'header', width: "45%", height: 20, marginTop: 10, borderRadius: 25 },
+                  { key: 'header1', width: 240, height: 100, borderTopLeftRadius: 16, borderTopRightRadius: 16 },
+                  { key: 'header2', width: 90, height: 45, borderBottomLeftRadius: 45, borderBottomRightRadius: 45 },
+                  { key: 'header3', width: "65%", height: 25, marginTop: 10 },
+                  { key: 'header4', width: "35%", height: 20, marginTop: 10 },
+                  { key: 'header5', width: "45%", height: 20, marginTop: 10, borderRadius: 25 },
                 ]
               },
             ]}

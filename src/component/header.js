@@ -12,10 +12,11 @@ import { Text, View, Button } from "react-native-ui-lib";
 import FastImage from "react-native-fast-image";
 import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { Colors, Images } from "@constants";
 import { getNotification, getUser, handleNotificationBadge, updateUser } from "../redux/reducer/user";
 import { useIsFocused } from "@react-navigation/native";
 import _ from "lodash";
+import { Colors, Images } from "@constants";
+import { setLoading } from "../redux/reducer/loading";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -28,6 +29,8 @@ const Header = ({ navigation }) => {
   const focus = useIsFocused()
 
   const _onSelectHub = (_hub) => {
+    _showHubs(false);
+    dispatch(setLoading(true))
     dispatch(getUser())
       .then(unwrapResult)
       .then((res) => {
@@ -39,13 +42,14 @@ const Header = ({ navigation }) => {
             return temp;
           }) || [];
         updatedUser["hubs"] = hubs;
-        _showHubs(false);
         dispatch(updateUser(updatedUser))
           .then(unwrapResult)
           .then((originalPromiseResult) => {
             dispatch(getUser())
               .then(unwrapResult)
-              .then((response) => { });
+              .then((response) => {
+                dispatch(setLoading(false))
+              });
           });
       });
   };

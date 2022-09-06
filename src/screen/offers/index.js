@@ -32,7 +32,7 @@ const Offers = ({ navigation }) => {
     if (defaultHub?.id) {
       dispatch(getOffers({ hubId: defaultHub?.id }));
     }
-  }, [defaultHub])
+  }, [defaultHub?.id])
 
   const setNextLink = (url) => {
     _nextLink(url?.replace(Config.API_URL, ''))
@@ -40,7 +40,7 @@ const Offers = ({ navigation }) => {
 
   useEffect(() => {
     if (filteredOffers) {
-      _offerFilterList(filteredOffers?.data  || [])
+      _offerFilterList(filteredOffers?.data || [])
       setNextLink(filteredOffers?.links?.next)
     }
   }, [filteredOffers])

@@ -22,7 +22,7 @@ const onGetRouteName = (notificationType) => {
             break;
     
         default:
-            return 'Home'
+            return 'homeTab'
 
     }
 }
