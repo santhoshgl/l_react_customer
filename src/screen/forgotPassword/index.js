@@ -1,6 +1,6 @@
 import React, { memo, useMemo, useState } from 'react';
-import { SafeAreaView, StatusBar, Platform, TouchableOpacity, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import { SafeAreaView, StatusBar, Platform, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { Text, View, Button } from 'react-native-ui-lib';
 import FastImage from 'react-native-fast-image';
@@ -8,10 +8,14 @@ import auth from '@react-native-firebase/auth';
 import { showMessage } from 'react-native-flash-message';
 import { Images, Colors } from '@constants';
 import Input from '@component/input';
+import apiRequest from '@services/networkProvider';
 import { mailRegex } from '@util';
+import { setLoading } from '../../redux/reducer/loading';
 
 const ForgotPassword = ({ navigation, route }) => {
   const { userData } = useSelector(s => s.user);
+  const dispatch = useDispatch();
+
   const param = useMemo(() => { return route?.params }, [route])
 
   const [email, _email] = useState('')
@@ -20,18 +24,34 @@ const ForgotPassword = ({ navigation, route }) => {
   const [isEditable, _isEditable] = useState(true)
   const [isEmailSent, _isEmailSent] = useState(false);
 
-  const _reset = () => {
+  const _reset = async () => {
     if (!mailRegex.test(email)) {
       showMessage({ message: "Enter valid email address.", type: "warning" });
       return;
     }
-    auth().sendPasswordResetEmail(email).then((res) => {
+    try {
+      dispatch(setLoading(true))
+      const data = await apiRequest.post(`users/resetPassword`, { data: { email: email, roles: "customer" } })
+      dispatch(setLoading(false))
       showMessage({ message: "Password reset link has been sent to your mail address successfully.", type: "success" });
-      // navigation.navigate('login')
-      _isEmailSent(true)
-    }).catch((err) => {
-      showMessage({ message: err?.userInfo?.message, type: "danger" });
-    })
+      navigation.navigate('login')
+    } catch (error) {
+      dispatch(setLoading(false))
+      if (error.response.status) {
+        showMessage({ message: "E-mail entered doesn't match any account. Try signing up!", type: 'danger' })
+      } else {
+        showMessage({ message: error?.message, type: 'danger' })
+        throw (error)
+      }
+    }
+
+    // auth().sendPasswordResetEmail(email).then((res) => {
+    //   showMessage({ message: "Password reset link has been sent to your mail address successfully.", type: "success" });
+    //   // navigation.navigate('login')
+    //   _isEmailSent(true)
+    // }).catch((err) => {
+    //   showMessage({ message: err?.userInfo?.message, type: "danger" });
+    // })
   }
 
   useFocusEffect(() => {

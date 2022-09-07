@@ -303,7 +303,7 @@ const BusinessInfo = () => {
               </Text>
               <Text fs16 lh24 black style={{ fontWeight: "400", marginTop: 8 }}>
                 {businessInfo?.addressLine}, {businessInfo?.addressLine2 + "\n"}
-                {businessInfo?.city}, {businessInfo?.zipCode}
+                {businessInfo?.city}, {businessInfo?.state}, {businessInfo?.zipCode}
               </Text>
             </>
           )}
@@ -336,7 +336,6 @@ const BusinessInfo = () => {
       </View>
     );
   };
-
   const OpeningHours = () => {
     return (
       <View style={{ paddingBottom: 30 }}>

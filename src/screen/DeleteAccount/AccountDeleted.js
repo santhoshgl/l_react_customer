@@ -23,7 +23,7 @@ const AccountDeleted = ({ navigation }) => {
 
   return (
     <View style={style.deleteAccountContainer}>
-      <FastImage source={Images.AccountDeleted} />
+      <FastImage style={{ width: 80, height: 80 }} source={Images.AccountDeleteImage} />
       <Text beb30 black lh-36 marginT-20 style={style.fontWeight}>
         Your Account Deleted.
       </Text>
