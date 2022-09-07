@@ -66,7 +66,7 @@ export default {
   help_circle: require("../assets/help_circle.png"),
   mail: require("../assets/mail.png"),
   thumbs_up: require("../assets/thumbs_up.png"),
-  AccountDeleted: require("../assets/AccountDeleted.png"),
+  AccountDeleteImage: require("../assets/AccountDeleted.png"),
   logout: require("../assets/logout.png"),
   refresh: require("../assets/refresh.png"),
   checkNotifications: require("../assets/checkNotifications.png"),
