@@ -34,7 +34,7 @@ const ForgotPassword = ({ navigation, route }) => {
       const data = await apiRequest.post(`users/resetPassword`, { data: { email: email, roles: "customer" } })
       dispatch(setLoading(false))
       showMessage({ message: "Password reset link has been sent to your mail address successfully.", type: "success" });
-      navigation.navigate('login')
+      _isEmailSent(true)
     } catch (error) {
       dispatch(setLoading(false))
       if (error.response.status) {
