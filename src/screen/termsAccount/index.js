@@ -902,15 +902,6 @@ const AboutAccount = ({ navigation }) => {
             <Text fs16SB black lh24 >  Support Local. Reward Local </Text>
             <Text fs14 black lh20 >  © 2022 Lealzy. All rights reserved. Powered by </Text>
             <Text fs14 black lh20 underline> Project 10K. </Text>
-
-          </View>
-          <View marginT-10 row>
-            <Text fs14 lh20 gray700>{'\u2022'}</Text>
-            <Text fs14 lh20 underline gray700 style={{ paddingLeft: 5, color: "#0000EE" }} > TERMS AND CONDITIONS </Text>
-          </View>
-          <View marginT-3 row>
-            <Text fs14 lh20 gray700>{'\u2022'}</Text>
-            <Text fs14 lh20 underline style={{ paddingLeft: 5, color: "#0000EE" }} >  PRIVACY POLICY </Text>
           </View>
         </View>
       </ScrollView>

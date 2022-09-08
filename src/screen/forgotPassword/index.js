@@ -1,16 +1,15 @@
-import React, { memo, useMemo, useState } from 'react';
-import { SafeAreaView, StatusBar, Platform, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import React, { memo, useEffect, useMemo, useState } from 'react';
+import { SafeAreaView, StatusBar, Platform, TouchableOpacity, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFocusEffect } from '@react-navigation/native';
 import { Text, View, Button } from 'react-native-ui-lib';
 import FastImage from 'react-native-fast-image';
-import auth from '@react-native-firebase/auth';
 import { showMessage } from 'react-native-flash-message';
 import { Images, Colors } from '@constants';
 import Input from '@component/input';
 import apiRequest from '@services/networkProvider';
 import { mailRegex } from '@util';
 import { setLoading } from '../../redux/reducer/loading';
+import { logout } from '../../redux/reducer/user';
 
 const ForgotPassword = ({ navigation, route }) => {
   const { userData } = useSelector(s => s.user);
@@ -35,6 +34,9 @@ const ForgotPassword = ({ navigation, route }) => {
       dispatch(setLoading(false))
       showMessage({ message: "Password reset link has been sent to your mail address successfully.", type: "success" });
       _isEmailSent(true)
+      if (param?.source == 'accountSettings') {
+        dispatch(logout());
+      }
     } catch (error) {
       dispatch(setLoading(false))
       if (error.response.status) {
@@ -44,22 +46,19 @@ const ForgotPassword = ({ navigation, route }) => {
         throw (error)
       }
     }
-
-    // auth().sendPasswordResetEmail(email).then((res) => {
-    //   showMessage({ message: "Password reset link has been sent to your mail address successfully.", type: "success" });
-    //   // navigation.navigate('login')
-    //   _isEmailSent(true)
-    // }).catch((err) => {
-    //   showMessage({ message: err?.userInfo?.message, type: "danger" });
-    // })
   }
 
-  useFocusEffect(() => {
+  useEffect(() => {
     if (param?.source == 'accountSettings') {
       _email(userData?.email)
       _isEditable(false)
+    } else {
+      _email("")
+      _isEditable(true)
     }
-  }, [])
+  }, [param?.source])
+
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -93,7 +92,7 @@ const ForgotPassword = ({ navigation, route }) => {
             <Text fs16SB marginT-28 center primary600
               onPress={() => {
                 if (param?.source == 'accountSettings')
-                  navigation.goBack()
+                  navigation.navigate('accountSettings')
                 else
                   navigation.navigate('login')
               }}
@@ -111,10 +110,9 @@ const ForgotPassword = ({ navigation, route }) => {
             </View>
 
             <TouchableOpacity style={styles.goBackView} onPress={() => {
-              if (param?.source == 'accountSettings')
-                navigation.goBack()
-              else
-                navigation.navigate('login')
+              // navigation.navigate('login')
+              navigation.reset({ index: 0, routes: [{ name: 'login' }] })
+              _isEmailSent(false)
             }}>
               <FastImage tintColor={Colors.primary600} source={Images.back} style={{ height: 20, width: 20, tintColor: Colors.primary600 }} />
               <Text fs16SB center primary600 marginL-5>Go Back</Text>

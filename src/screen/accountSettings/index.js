@@ -110,7 +110,7 @@ const AccountSettings = ({ navigation }) => {
             }}
           />
           <View>
-            <Text style={styles.sampleStyle} fs14 black lh20 onPress={() => navigation.navigate("forgotPassword", { source: 'accountSettings' })}>Forgot Password</Text>
+            <Text style={styles.sampleStyle} fs14 black lh20 onPress={() => navigation.reset({ index: 0, routes: [{ name: 'forgotPassword', params: { source: 'accountSettings' } }] })}>Forgot Password</Text>
           </View>
 
           <Input
@@ -151,7 +151,7 @@ const AccountSettings = ({ navigation }) => {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 }
 
