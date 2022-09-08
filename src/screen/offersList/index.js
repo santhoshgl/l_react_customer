@@ -36,6 +36,10 @@ const OffersList = ({ navigation, route }) => {
     const category = fetchBusinessCategory(param?.title);
     let url = `hubs/${defaultHub?.id}/offers?sortBy=${filter?.sortBy ? filter?.sortBy : 'latest'}`;
 
+    if (param?.title == 'Latest Offers') {
+      url = `hubs/${defaultHub?.id}/offers?sort=latestOffers&sortBy=${filter?.sortBy ? filter?.sortBy : 'latest'}`;
+    }
+
     if (category)
       url = `${url}&category=${category}`;
     else if (param?.title == 'Featured Offers')
