@@ -20,7 +20,7 @@ import { setLoading } from "../redux/reducer/loading";
 
 const windowHeight = Dimensions.get("window").height;
 
-const Header = ({ navigation }) => {
+const Header = ({ navigation, activeNotification }) => {
   const dispatch = useDispatch();
   const { userData, defaultHub, userNotification, showNotificationBadge } = useSelector((s) => s.user);
   const [showHubs, _showHubs] = useState(false);
@@ -52,7 +52,8 @@ const Header = ({ navigation }) => {
               });
           });
       });
-  };
+    }
+
 
   useEffect(() => {
     dispatch(getNotification())

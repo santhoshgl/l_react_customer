@@ -11,7 +11,7 @@ import apiRequest from '@services/networkProvider';
 
 const { width } = Dimensions.get('screen')
 
-const Qr = ({ isRefresh, onSetRefresh }) => {
+const Qr = ({ isRefresh, onSetRefresh, activeNotification }) => {
   const { walletData } = useSelector(s => s.points)
   const [showQr, _showQr] = useState(false);
   const uid = useMemo(() => auth().currentUser?.uid, [])
@@ -21,7 +21,7 @@ const Qr = ({ isRefresh, onSetRefresh }) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    onGetDetails()
+      onGetDetails()
   }, [hubId, isFocused])
 
 

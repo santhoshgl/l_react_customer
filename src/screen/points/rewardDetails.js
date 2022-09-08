@@ -8,55 +8,71 @@ import moment from 'moment';
 import { Colors, Images } from '@constants';
 import Clipboard from '@react-native-community/clipboard';
 import { showMessage } from 'react-native-flash-message';
-import { getUser, onGetRouteNavigationData, onReadNotification, updateUser } from '../../redux/reducer/user';
+import { getUser, onGetRouteNavigationData, onReadNotification, requireRefreshData, updateUser } from '../../redux/reducer/user';
 import { setLoading } from '../../redux/reducer/loading';
-import apiRequest from '@services/networkProvider';
 import { unwrapResult } from '@reduxjs/toolkit';
 import RewardDetailListSkeleton from '../../component/rewardDetailListSkeleton';
+import { clearPassData, clearRewardData, getRewardDetails, onRewardInfo } from '../../redux/reducer/points';
+import SplashScreen from 'react-native-splash-screen';
 import { useIsFocused } from '@react-navigation/native';
 
 const RewardDetails = ({ navigation, route }) => {
   const dispatch = useDispatch()
   const { defaultHub } = useSelector(s => s.user)
-  const param = useMemo(() => { return route?.params }, [route])
-  const [rewardDetails, setDetails] = useState({})
+  const rewardDetails = useSelector(s => s?.points?.rewardData)
   const navigationData = useSelector(s => s?.user?.routeNavigationData?.navigationData)
-  const id = useSelector(s => s?.user?.routeNavigationData?.navigationData?.rewardID)
   const loading = useSelector(s => s.loading.loading)
-  const [loadingPage, setLoadingPage] = useState(true)
+  const _activeNotification = route?.params?._activeNotification
   const focus = useIsFocused()
 
   useEffect(() => {
-    if (param?.rewardId) {
-      if (param?.hubId !== undefined && defaultHub?.id !== param?.hubId) {
+    if (route?.params?.fromNotificationList) {
+      console.log("fromNotificationList", route?.params)
+      if (route?.params?.hubId !== undefined && defaultHub?.id !== route?.params?.hubId) {
         changeUserHub()
       } else {
-        param?.rewardId && getRewardDetails(param?.rewardId);
-        param?.notificationID && dispatch(onReadNotification(param?.notificationID))
+        let obj = {
+          fnc: '',
+          rewardId: route?.params?.rewardId
+        }
+        dispatch(onRewardInfo(obj))
+        route?.params?.notificationID && dispatch(onReadNotification(route?.params?.notificationID))
       }
     }
-  }, [param])
-
-  useEffect(()=>{
-    if(focus){
-      setLoadingPage(true)
-      dispatch(setLoading(true))
-    }
-  },[focus])
+  }, [route?.params?.fromNotificationList, focus])
 
   useEffect(() => {
-    if (id) {
+    if (route?.params?.fromHistroy) {
+      console.log("fromHistroy", route?.params)
+
+      let obj = {
+        fnc: '',
+        rewardId: route?.params?.rewardId
+      }
+      dispatch(onRewardInfo(obj))
+    }
+  }, [route?.params?.fromHistroy, focus])
+
+  useEffect(() => {
+    if (navigationData?.inAppNotification &&  !route?.params?.fromNotificationList && !route?.params?.fromHistroy) {
       if (navigationData?.hubID && defaultHub?.id !== navigationData?.hubID) {
         changeUserHub()
-      } else {
-        getRewardDetails(id)
+      }
+      else {
+        console.log('call wlse', navigationData)
+        let obj = {
+          fnc: _activeNotification,
+          rewardId: navigationData?.rewardID
+        }
+        dispatch(onRewardInfo(obj))
         dispatch(onReadNotification(navigationData?.notificationID))
       }
     }
-  }, [navigationData, id])
+  }, [navigationData?.inAppNotification, focus])
 
   const changeUserHub = () => {
-    let receivedHubId = navigationData?.hubID?.length > 1 ? navigationData?.hubID : param?.hubId
+    dispatch(setLoading(true))
+    let receivedHubId = navigationData?.hubID?.length > 1 ? navigationData?.hubID : route?.params?.hubId
     dispatch(getUser())
       .then(unwrapResult)
       .then((res) => {
@@ -74,33 +90,72 @@ const RewardDetails = ({ navigation, route }) => {
             dispatch(getUser())
               .then(unwrapResult)
               .then((response) => {
-                getRewardDetails(param?.rewardId?.length > 1 ? param?.rewardId : id)
-                dispatch(onReadNotification(param?.notificationID ? param?.notificationID : navigationData?.notificationID))
+                let obj = {
+                  fnc: '',
+                  rewardId: route?.params?.rewardId ? route?.params?.rewardId : navigationData?.rewardID
+                }
+                dispatch(onRewardInfo(obj)).then(unwrapResult)
+                  .then((res) => {
+                    dispatch(requireRefreshData(true))
+                    dispatch(setLoading(false))
+                    dispatch(onReadNotification(route?.params?.notificationID ? route?.param?.notificationID : navigationData?.notificationID))
+                  })
               });
           });
       });
   }
 
   useEffect(() => {
-    const _unsubscribe = navigation.addListener('focus', () => {
-      if(param?.notificationID || navigationData?.notificationID){
-        setDetails({})
+    if (route?.params?.passData?.data?.rewardID?.length > 1 && !route?.params?.fromNotificationList && !route?.params?.fromHistroy) {
+      console.log("psuh ", route?.params)
+
+      let obj = {
+        fnc: _activeNotification,
+        rewardId: route?.params?.passData?.data?.rewardID
       }
-    });
-    return _unsubscribe
-  }, [])
+      if (defaultHub?.id !== route?.params?.passData?.data?.hubID) {
+        dispatch(getUser())
+          .then(unwrapResult)
+          .then((res) => {
+            var updatedUser = { ...res };
+            var hubs =
+              updatedUser?.hubs?.map((hub) => {
+                var temp = Object.assign({}, hub);
+                temp.default = route?.params?.passData?.data?.hubID == temp?.id ? true : false;
+                return temp;
+              }) || [];
+            updatedUser["hubs"] = hubs;
+            dispatch(updateUser(updatedUser))
+              .then(unwrapResult)
+              .then((originalPromiseResult) => {
+                dispatch(getUser())
+                  .then(unwrapResult)
+                  .then((response) => {
+                    dispatch(onRewardInfo(obj)).then(unwrapResult)
+                      .then((res) => {
+                        SplashScreen.hide();
+                        dispatch(setLoading(false))
+                        dispatch(requireRefreshData(true))
+                        dispatch(onReadNotification(route?.params?.passData?.data?.notificationID))
+                        route?.params?._passData('')
+                        route?.params?._activeNotification(false)
 
 
-  const getRewardDetails = async (rewardID) => {
-    setLoadingPage(true)
-    dispatch(setLoading(true))
-    const data = await apiRequest.get(`rewards/${rewardID}`)
-    dispatch(setLoading(true))
-    // return data?.data;
-    setDetails(data?.data)
-    setLoadingPage(false)
-    dispatch(setLoading(false))
-  }
+                      })
+                  });
+              });
+          });
+      } else {
+        dispatch(onRewardInfo(obj)).then(unwrapResult)
+          .then((res) => {
+            SplashScreen.hide();
+            dispatch(setLoading(false))
+            dispatch(onReadNotification(route?.params?.passData?.data?.notificationID))
+            route?.params?._passData('')
+          })
+      }
+    }
+  }, [route?.params?.passData?.data?.rewardID])
 
   const getCardStyles = useMemo(() => {
     let icon = Images.offers;
@@ -141,9 +196,11 @@ const RewardDetails = ({ navigation, route }) => {
 
   const onPressBack = () => {
     const navigationObj = { isNavigate: false }
-
     dispatch(onGetRouteNavigationData(navigationObj))
-    navigation.goBack()
+    dispatch(clearRewardData())
+    dispatch(clearPassData())
+
+    navigation.navigate('history', {});
   }
 
   return (
@@ -160,31 +217,30 @@ const RewardDetails = ({ navigation, route }) => {
           <View style={{ height: 24, width: 24 }} />
         </View>
       </View>
-      {!loadingPage && !loading && <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}>
         <View style={{ height: 312 }}>
-          {rewardDetails?.attributes?.rewardType && <ImageBackground source={Images.rewardDetails} re style={styles.image}>
+          <ImageBackground source={Images.rewardDetails} re style={styles.image}>
             <View center marginT-50>
-              <FastImage source={rewardDetails?.attributes?.rewardType == 'credit' ? Images.starWhite : Images.giftWhite} style={{ height: 26, width: 26, tintColor: "white", marginBottom: 10 }} />
-              {!loading && rewardDetails?.attributes?.rewardType && <Text fs16 lh24 white >{`Credits ${rewardDetails?.attributes?.rewardType == 'credit' ? 'Rewarded' :
+              {!loading && <FastImage source={rewardDetails?.attributes?.rewardType == 'credit' ? Images.starWhite : Images.giftWhite} style={{ height: 26, width: 26, tintColor: "white", marginBottom: 10 }} />}
+              {!loading && <Text fs16 lh24 white >{`Credits ${rewardDetails?.attributes?.rewardType == 'credit' ? 'Rewarded' :
                 rewardDetails?.attributes?.rewardType == 'debit' ? 'Redeemed' : ''}!`}</Text>}
-              <Text beb48 lh60 white>{rewardDetails?.attributes?.credits}</Text>
+              {!loading && <Text beb48 lh60 white>{rewardDetails?.attributes?.credits}</Text>}
             </View>
-          </ImageBackground>}
+          </ImageBackground>
         </View>
-        {rewardDetails?.attributes?.rewardType && <View style={styles.listContainer}>
-          {!loading && <Text beb24 lh32 black flex numberOfLines={1}>{rewardDetails?.attributes?.rewardType == 'credit' ? 'Rewarded' :
-            rewardDetails?.attributes?.rewardType == 'debit' ? 'Redeemed' : ''}</Text>}
-          {!loading && <Text fs14 lh20 gray500>{`${moment(rewardDetails?.attributes?.createdAt).format('ll')}  ·  ${moment(rewardDetails?.attributes?.createdAt).format('LT')}`}</Text>}
+        {!loading && <View style={styles.listContainer}>
+          <Text beb24 lh32 black flex numberOfLines={1}>{rewardDetails?.attributes?.rewardType == 'credit' ? 'Rewarded' :
+            rewardDetails?.attributes?.rewardType == 'debit' ? 'Redeemed' : ''}</Text>
+          <Text fs14 lh20 gray500>{`${moment(rewardDetails?.attributes?.createdAt).format('ll')}  ·  ${moment(rewardDetails?.attributes?.createdAt).format('LT')}`}</Text>
           <TouchableOpacity marginT-4 onPress={() => copyRefernceHandler()}>
-            {!loading && <Text fs14 lh20 gray500>{`Reference #${rewardDetails?.id}`}</Text>}
+            <Text fs14 lh20 gray500>{`Reference #${rewardDetails?.id}`}</Text>
           </TouchableOpacity>
         </View>}
 
-        {rewardDetails?.attributes?.rewardType && <View style={{ margin: 16 }}>
+        <View style={{ margin: 16 }}>
           {
             loading ? <RewardDetailListSkeleton source={"businessList"} /> :
-
-              !loading && <View>
+              <View>
                 <Text fs14 lh20 gray700>Business</Text>
                 <View style={styles.card}>
                   <View row >
@@ -192,8 +248,8 @@ const RewardDetails = ({ navigation, route }) => {
                       style={{ height: 50, width: 50, borderRadius: 25 }}
                     />
                     <View marginL-12 flex>
-                      {!loading && <Text beb24 lh32 black >{rewardDetails?.attributes?.business?.name}</Text>}
-                      {!loading && <Text fs12 lh18 gray500 numberOfLines={2}>{rewardDetails?.attributes?.business?.category}</Text>}
+                      <Text beb24 lh32 black >{rewardDetails?.attributes?.business?.name}</Text>
+                      <Text fs12 lh18 gray500 numberOfLines={2}>{rewardDetails?.attributes?.business?.category}</Text>
                     </View>
                   </View>
                 </View>
@@ -205,7 +261,7 @@ const RewardDetails = ({ navigation, route }) => {
               :
               rewardDetails.attributes?.rewardType == 'credit' ?
                 <>
-                  {!loading && <Text fs14 lh20 gray700>Offer used</Text>}
+                  <Text fs14 lh20 gray700>Offer used</Text>
                   <Pressable onPress={() => onPressOffers()} style={styles.card}>
                     <View row >
                       <View style={{
@@ -215,25 +271,25 @@ const RewardDetails = ({ navigation, route }) => {
                         <FastImage tintColor={Colors.black} source={getCardStyles?.icon} style={{ height: 16, width: 16, tintColor: "black" }} />
                       </View>
                       <View marginL-16 flex>
-                        {!loading && <Text beb24 lh32 black numberOfLines={1} ellipsizeMode='tail'>{rewardDetails?.attributes?.offer?.title}</Text>}
-                        {!loading && <Text fs14 lh20 gray500 numberOfLines={2}>{rewardDetails?.attributes?.offer?.description || ''}</Text>}
+                        <Text beb24 lh32 black numberOfLines={1} ellipsizeMode='tail'>{rewardDetails?.attributes?.offer?.title}</Text>
+                        <Text fs14 lh20 gray500 numberOfLines={2}>{rewardDetails?.attributes?.offer?.description || ''}</Text>
                       </View>
                       <View style={styles.badge}>
                         <FastImage tintColor={Colors.gray500} source={Images.star} style={{ height: 12, width: 12, tintColor: Colors.gray500 }} />
-                        {!loading && <Text fs14 lh20 gray700 marginL-4>{rewardDetails?.attributes?.offer?.credit}</Text>}
+                        <Text fs14 lh20 gray700 marginL-4>{rewardDetails?.attributes?.offer?.credit}</Text>
                       </View>
                     </View>
                   </Pressable>
                 </>
                 : null
           }
-        </View>}
-      </ScrollView>}
+        </View>
+      </ScrollView>
     </SafeAreaView >
   );
 }
 
-export default memo(RewardDetails)
+export default RewardDetails
 
 const styles = StyleSheet.create({
   card: {

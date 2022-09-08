@@ -11,13 +11,13 @@ import OfferCardSkeleton from '@component/offers/offerCardSkeleton';
 import BusinessCard from '@component/business/card';
 import BusinessCardSkeleton from '@component/business/businessCardSkeleton';
 import { Colors, Images } from '@constants';
-import { getUser, registerNotificationToken } from '../../redux/reducer/user';
+import { getUser, registerNotificationToken, requireRefreshData } from '../../redux/reducer/user';
 import { getFeaturedOffers } from '../../redux/reducer/offers';
 import { getFeaturedBusiness } from '../../redux/reducer/business';
 import styles from './styles';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { uniqBy } from 'lodash';
-import { useRoute } from '@react-navigation/native';
+import { useIsFocused, useRoute } from '@react-navigation/native';
 import { getRewardWallet } from '../../redux/reducer/points';
 
 const { width } = Dimensions.get('screen')
@@ -31,53 +31,101 @@ const Home = ({ navigation }) => {
   const onNotificationData = useSelector(s => s.user.routeNavigationData)
   const [isRefresh, onSetRefresh] = useState(false)
   const route = useRoute()
+  const [onGetRefresh, setRefresh] = useState(false)
+  const focus = useIsFocused()
+  const requireRefresh = useSelector(s => s.user.requireRefresh)
+  let activeNotification = route?.params?.activeNotification
 
   useEffect(() => {
-    var pushNotificationTokens = []
-    dispatch(getUser()).then(unwrapResult).then((res) => {
-      pushNotificationTokens = [...res?.pushNotificationTokens || [], userDeviceToken]
-      pushNotificationTokens = uniqBy(pushNotificationTokens, function (tokens) {
-        return tokens
-      });
-      dispatch(registerNotificationToken(pushNotificationTokens))
-    })
+    if (!activeNotification) {
+      var pushNotificationTokens = []
+      dispatch(getUser()).then(unwrapResult).then((res) => {
+        pushNotificationTokens = [...res?.pushNotificationTokens || [], userDeviceToken]
+        pushNotificationTokens = uniqBy(pushNotificationTokens, function (tokens) {
+          return tokens
+        });
+        dispatch(registerNotificationToken(pushNotificationTokens))
+      })
+    }
   }, [])
 
   useEffect(() => {
-    getDetails()
+    if (!activeNotification) {
+      getDetails()
+    }
   }, [defaultHub?.id])
+
+  useEffect(() => {
+    if (onGetRefresh) {
+      dispatch(getFeaturedOffers(defaultHub?.id))
+      dispatch(getFeaturedBusiness(defaultHub?.id))
+      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
+    }
+  }, [onGetRefresh])
+
+
+  useEffect(() => {
+    if (activeNotification && onNotificationData?.isNavigate) {
+      navigation.navigate("pointsTab")
+    }
+  }, [activeNotification])
+
+
+  useEffect(() => {
+    if (activeNotification && !onNotificationData?.isNavigate) {
+      route?.params?._activeNotification(false)
+      setRefresh(true)
+      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
+
+    }
+  }, [activeNotification])
 
   const onPressBusiness = (business) => {
     navigation.navigate('BusinessInfo', businessInfo = { business })
   }
 
   useEffect(() => {
-    if (onNotificationData?.isNavigate) {
+    if (onNotificationData?.isNavigate && !activeNotification) {
       route?.params?.onShowInAppNotification(false)
       navigation.navigate(onNotificationData?.route)
     }
   }, [onNotificationData])
 
 
+  useEffect(() => {
+    if (requireRefresh) {
+      dispatch(getRewardWallet({ userID: userData?.id, hubID: route?.params?.passData?.data?.hubID }));
+      dispatch(getFeaturedOffers(route?.params?.passData?.data?.hubID))
+      dispatch(getFeaturedBusiness(route?.params?.passData?.data?.hubID)).then(unwrapResult)
+        .then((response) => {
+          dispatch(requireRefreshData(false))
+        })
+    }
+  }, [requireRefresh, focus])
+
+
+
   const onRefresh = () => {
     onSetRefresh(true)
     if (defaultHub?.id) {
       dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
-    }
-    getDetails()
-  }
-
-
-  const getDetails = () => {
-    if (defaultHub?.id) {
       dispatch(getFeaturedOffers(defaultHub?.id))
       dispatch(getFeaturedBusiness(defaultHub?.id))
     }
   }
 
+
+  const getDetails = () => {
+    if (defaultHub?.id && !activeNotification) {
+      dispatch(getFeaturedOffers(defaultHub?.id))
+      dispatch(getFeaturedBusiness(defaultHub?.id))
+      dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
+    }
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
-      <Header navigation={navigation} />
+      <Header navigation={navigation} activeNotification={activeNotification} />
       <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.gray50 }}
         refreshControl={
           <RefreshControl
@@ -87,7 +135,7 @@ const Home = ({ navigation }) => {
             colors={[Colors.primary600]}
           />
         }>
-        <Qr isRefresh={isRefresh} onSetRefresh={onSetRefresh} />
+        <Qr isRefresh={isRefresh} onSetRefresh={onSetRefresh} activeNotification={null} />
         {
           featuredOfferData?.length > 0 ?
             <View paddingT-24 >
