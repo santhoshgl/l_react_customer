@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { SafeAreaView, Pressable, ScrollView } from 'react-native';
+import { SafeAreaView, Pressable, ScrollView, ImageBackground } from 'react-native';
 import { View, Text } from 'react-native-ui-lib';
 import FastImage from 'react-native-fast-image';
 import { Colors, Images } from '@constants';
@@ -382,6 +382,12 @@ const PrivacyPolicyAccount = ({ navigation }) => {
             For any questions or concerns regarding your privacy, you may contact us at
             team@Lealzy.com.
           </Text>
+        </View>
+        <View marginT-24 marginH-16>
+          <ImageBackground source={Images.lealzy} style={{ height: 100 }} resizeMode={'contain'} />
+          <Text fs16SB black lh24 >  Support Local. Reward Local </Text>
+          <Text fs14 black lh20 >  © 2022 Lealzy. All rights reserved. Powered by </Text>
+          <Text fs14 black lh20 underline> Project 10K. </Text>
         </View>
       </ScrollView>
     </SafeAreaView >
