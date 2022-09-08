@@ -78,6 +78,7 @@ export const businessSlice = createSlice({
   extraReducers: {
     [getFeaturedBusiness.pending]: (state, { payload }) => {
       state.featuredBusinessLoading = true
+      state.featuredBusinessData = []
     },
     [getFeaturedBusiness.fulfilled]: (state, { payload }) => {
       state.featuredBusinessData = payload

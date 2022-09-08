@@ -10,6 +10,7 @@ import { Colors, Images } from '@constants';
 import { getNotification, readAllNotifications } from '../../redux/reducer/user';
 import NotificationSkeleton from "../../component/notificationSkleton"
 import styles from './styles';
+import { clearPassData, clearRewardData } from '../../redux/reducer/points';
 
 const UserNotification = ({ navigation }) => {
   const { userNotification } = useSelector(s => s.user)
@@ -134,7 +135,9 @@ const UserNotification = ({ navigation }) => {
 
   const onPressNotificationItem = (item) => {
     if (item?.type === 'reward' || item?.type === 'credit' || item?.type === "debit") {
-      navigation.navigate("rewardDetails", { rewardId: item?.rewardId, notificationID: item?.notificationID, hubId: item?.hubId })
+      dispatch(clearRewardData())
+      dispatch(clearPassData())
+      navigation.navigate("rewardDetails", { rewardId: item?.rewardId, notificationID: item?.notificationID, hubId: item?.hubId, fromNotificationList: true })
     }
   }
 

@@ -71,6 +71,7 @@ export const offersSlice = createSlice({
   extraReducers: {
     [getFeaturedOffers.pending]: (state, { payload }) => {
       state.featuredOffersLoading = true
+      state.featuredOfferData = []
     },
     [getFeaturedOffers.fulfilled]: (state, { payload }) => {
       state.featuredOfferData = payload

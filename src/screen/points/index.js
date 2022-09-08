@@ -8,8 +8,9 @@ import moment from "moment";
 import FastImage from "react-native-fast-image";
 import Header from "@component/header";
 import { Colors, Images } from "@constants";
-import { getRewardWallet, getRewards } from "../../redux/reducer/points";
+import { getRewardWallet, getRewards, clearRewardData } from "../../redux/reducer/points";
 import TransactionSkleton from "../../component/transactionSkleton";
+import { useRoute } from "@react-navigation/native";
 
 const History = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const History = ({ navigation }) => {
   const [page, _page] = useState(1);
   const [sortBy, _sortBy] = useState('latest');
   const [listLoading, _listLoading] = useState(false);
+  const route = useRoute()
 
   const setNextLink = (url) => {
     _nextLink(url?.replace(Config.API_URL, ''))
@@ -89,6 +91,11 @@ const History = ({ navigation }) => {
   const referenceHandler = () => {
     _sortBy((prevState) => prevState == "latest" ? "oldest" : "latest")
   }
+  
+  useEffect(()=>{
+      route?.params?._passData(null)
+  },[route?.params])
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -175,7 +182,7 @@ const History = ({ navigation }) => {
                     <TouchableOpacity
                       key={reward?.id}
                       onPress={() =>
-                        navigation.navigate("rewardDetails", { rewardId: reward?.id })
+                        navigation.navigate("rewardDetails", { rewardId: reward?.id, fromHistroy: true })
                       }
                     >
                       <View

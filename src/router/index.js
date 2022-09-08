@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Pressable, Platform } from 'react-native';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -48,6 +48,8 @@ import { onGetInternetStatus } from '../redux/reducer/network';
 import { onGetRouteName } from '../services/NotificationServices';
 import { Colors, Images } from '../constants';
 import { View, Text } from 'react-native-ui-lib';
+import SplashScreen from 'react-native-splash-screen';
+import { clearRewardData, onSetClearState } from '../redux/reducer/points';
 
 
 
@@ -58,108 +60,7 @@ const PointsStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 var flashNotifictionData = {}
 
-const _PointsStack = () => {
-  return (
-    <PointsStack.Navigator
-      initialRouteName={"history"}
-      screenOptions={{ headerShown: false }}
-    >
-      <PointsStack.Screen name="history" component={History} />
-      <PointsStack.Screen name="rewardDetails" component={RewardDetails} />
-    </PointsStack.Navigator>
-  );
-};
 
-const _OffersStack = () => {
-  return (
-    <OffersStack.Navigator
-      initialRouteName={"offers"}
-      screenOptions={{ headerShown: false }}
-    >
-      <OffersStack.Screen name="offers" component={Offers} />
-      <OffersStack.Screen name="offersList" component={OffersList} />
-      <OffersStack.Screen name="offerFilter" component={OfferFilter} />
-
-    </OffersStack.Navigator>
-  );
-};
-
-const _BusinessStack = () => {
-  return (
-    <BusinessStack.Navigator
-      initialRouteName={"businesses"}
-      screenOptions={{ headerShown: false }}
-    >
-      <BusinessStack.Screen name="businesses" component={Business} />
-      <BusinessStack.Screen name="businessList" component={BusinessList} />
-      <BusinessStack.Screen name="businessInfo" component={BusinessInfo} />
-      <BusinessStack.Screen name="businessFilter" component={BusinessFilter} />
-    </BusinessStack.Navigator>
-  );
-};
-
-const Dashboard = (props) => {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarHideOnKeyboard: true,
-        tabBarActiveTintColor: Colors.primary600,
-        tabBarInactiveTintColor: Colors.gray500,
-        lazy: false,
-        tabBarStyle: {
-          height: Platform.OS == "android" ? getBottomSpace() + 90 : getBottomSpace() + 60,
-          paddingTop: 16,
-          paddingBottom: Platform.OS == "android" ? 30 : getBottomSpace(),
-          borderTopWidth: 0.5, borderTopColor: Colors.gray300
-        }
-      }}
-    // tabBar={(props) => <BottomTab {...props} />}
-    >
-      <Tab.Screen name="homeTab" component={Home} initialParams={props?.route?.params}
-        options={{
-          tabBarLabel: ({ focused }) => (
-            <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Home</Text>
-          ),
-          tabBarIcon: ({ color, size }) => (
-            <FastImage tintColor={color} source={Images.home} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
-          ),
-        }}
-      />
-      <Tab.Screen name="offersTab" component={_OffersStack} options={{
-        tabBarLabel: ({ focused }) => (
-          <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Offers</Text>
-        ),
-        tabBarIcon: ({ color, size }) => (
-          <FastImage tintColor={color} source={Images.offers} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
-        ),
-      }} />
-      <Tab.Screen name="businessTab" component={_BusinessStack} options={{
-        tabBarLabel: ({ focused }) => (
-          <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Businesses</Text>
-        ),
-        tabBarIcon: ({ color, size }) => (
-          <FastImage tintColor={color} source={Images.tab_business} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
-        ),
-      }} />
-      <Tab.Screen name="pointsTab" component={_PointsStack} options={{
-        tabBarLabel: ({ focused }) => (
-          <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Points</Text>
-        ),
-        tabBarIcon: ({ color, size }) => (
-          <FastImage tintColor={color} source={Images.points} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
-        ),
-      }}
-        listeners={({ navigation }) => ({
-          tabPress: (e) => {
-            navigation.reset({ index: 0, routes: [{ name: 'history' }] })
-          }
-        })
-        }
-      />
-    </Tab.Navigator >
-  );
-};
 
 const handlePressNotification = () => {
   const route = onGetRouteName(flashNotifictionData?.type)
@@ -180,7 +81,8 @@ const onCreateNotificationObj = ({ data }) => {
     thirdRow: data?.hubName,
     rewardID: data?.rewardID,
     notificationID: data?.notificationID,
-    hubID: data?.hubID
+    hubID: data?.hubID,
+    inAppNotification: true
   }
 }
 
@@ -207,8 +109,11 @@ export const FlashNotification = (data, onClose) => {
   )
 }
 
-export const App = ({ onShowInAppNotification }) => {
+export const App = ({ onShowInAppNotification, _activeNotification, activeNotification, passData, _passData }) => {
   const { userData, defaultHub } = useSelector((s) => s.user);
+
+  const clearState = useSelector((s) => s.points.clearState);
+
   let intialPage = userData ? "dashboard" : "landing";
   if (userData && (!defaultHub || isEmpty(defaultHub))) {
     intialPage = "hub";
@@ -217,6 +122,18 @@ export const App = ({ onShowInAppNotification }) => {
   const dispatch = useDispatch()
   const netInfo = useNetInfo();
 
+  useEffect(() => {
+    if (!activeNotification) {
+      SplashScreen.hide();
+    }
+  }, [])
+
+  useEffect(() => {
+    if (clearState) {
+      _passData({})
+      onSetClearState(false)
+    }
+  }, [clearState])
 
   const onReceiveInAppNotification = () => {
     firebase.messaging().onMessage(response => {
@@ -236,17 +153,11 @@ export const App = ({ onShowInAppNotification }) => {
     dispatch(onGetRouteNavigationData(navigationObj))
   }
 
-  const onInitialNotification = () => {
-    firebase
-      .messaging()
-      .getInitialNotification()
-      .then((remoteMessage) => {
-        remoteMessage !== null &&
-          onCreateNotificationObj(remoteMessage)
-        onPressNotification(remoteMessage)
-      });
-  }
-
+  useEffect(() => {
+    if (activeNotification) {
+      onPressNotification(passData)
+    }
+  }, [activeNotification, passData])
 
   const onForegroundNotification = () => {
     firebase.messaging().onNotificationOpenedApp(response => {
@@ -257,10 +168,110 @@ export const App = ({ onShowInAppNotification }) => {
   useEffect(() => {
     PushNotification.cancelAllLocalNotifications()
     dispatch(onGetInternetStatus(netInfo?.isConnected))
-    onInitialNotification()
     onReceiveInAppNotification()
     onForegroundNotification()
   }, [netInfo]) // in order to re-call the hooks whenever the netInfo status changed 
+
+
+  const _PointsStack = () => {
+    return (
+      <PointsStack.Navigator
+        initialRouteName={activeNotification ? "rewardDetails" : "history"}
+        screenOptions={{ headerShown: false }}
+      >
+        <PointsStack.Screen name="history" component={History} initialParams={{ _passData, passData }} />
+        <PointsStack.Screen name="rewardDetails" component={RewardDetails} initialParams={{ passData, activeNotification, _activeNotification, _passData }} />
+      </PointsStack.Navigator>
+    );
+  };
+
+  const _OffersStack = () => {
+    return (
+      <OffersStack.Navigator
+        initialRouteName={"offers"}
+        screenOptions={{ headerShown: false }}
+      >
+        <OffersStack.Screen name="offers" component={Offers} />
+        <OffersStack.Screen name="offersList" component={OffersList} />
+        <OffersStack.Screen name="offerFilter" component={OfferFilter} />
+
+      </OffersStack.Navigator>
+    );
+  };
+
+  const _BusinessStack = () => {
+    return (
+      <BusinessStack.Navigator
+        initialRouteName={"businesses"}
+        screenOptions={{ headerShown: false }}
+      >
+        <BusinessStack.Screen name="businesses" component={Business} />
+        <BusinessStack.Screen name="businessList" component={BusinessList} />
+        <BusinessStack.Screen name="businessInfo" component={BusinessInfo} />
+        <BusinessStack.Screen name="businessFilter" component={BusinessFilter} />
+      </BusinessStack.Navigator>
+    );
+  };
+
+  const Dashboard = useCallback((props) => {
+    return (
+      <Tab.Navigator
+        initialRouteName={activeNotification ? "pointsTab" : "homeTab"}
+        screenOptions={{
+          headerShown: false,
+          tabBarHideOnKeyboard: true,
+          tabBarActiveTintColor: Colors.primary600,
+          tabBarInactiveTintColor: Colors.gray500,
+          lazy: false,
+          tabBarStyle: {
+            height: Platform.OS == "android" ? getBottomSpace() + 90 : getBottomSpace() + 60,
+            paddingTop: 16,
+            paddingBottom: Platform.OS == "android" ? 30 : getBottomSpace(),
+            borderTopWidth: 0.5, borderTopColor: Colors.gray300
+          }
+        }}
+      // tabBar={(props) => <BottomTab {...props} />}
+      >
+        <Tab.Screen name="homeTab" component={Home} initialParams={props?.route?.params}
+          options={{
+            tabBarLabel: ({ focused }) => (
+              <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Home</Text>
+            ),
+            tabBarIcon: ({ color, size }) => (
+              <FastImage tintColor={color} source={Images.home} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
+            ),
+          }}
+        />
+        <Tab.Screen name="offersTab" component={_OffersStack} options={{
+          tabBarLabel: ({ focused }) => (
+            <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Offers</Text>
+          ),
+          tabBarIcon: ({ color, size }) => (
+            <FastImage tintColor={color} source={Images.offers} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
+          ),
+        }} />
+        <Tab.Screen name="businessTab" component={_BusinessStack} options={{
+          tabBarLabel: ({ focused }) => (
+            <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Businesses</Text>
+          ),
+          tabBarIcon: ({ color, size }) => (
+            <FastImage tintColor={color} source={Images.tab_business} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
+          ),
+        }} />
+        <Tab.Screen name="pointsTab" component={_PointsStack} options={{
+          tabBarLabel: ({ focused }) => (
+            <Text fs12 lh18 style={{ color: focused ? Colors.black : Colors.gray500 }} >Points</Text>
+          ),
+          tabBarIcon: ({ color, size }) => (
+            <FastImage tintColor={color} source={Images.points} style={{ height: size, width: size, resizeMode: 'contain', tintColor: color }} />
+          ),
+        }}
+        />
+      </Tab.Navigator >
+
+    );
+  }, []);
+
 
   return (
     <NavigationContainer>
@@ -275,7 +286,7 @@ export const App = ({ onShowInAppNotification }) => {
         <Stack.Screen name="onboarding" component={Onboarding} />
         <Stack.Screen name="hub" component={Hub} />
         <Stack.Screen name="addHub" component={AddHub} />
-        <Stack.Screen name="dashboard" component={Dashboard} initialParams={{ onShowInAppNotification }} />
+        <Stack.Screen name="dashboard" component={Dashboard} initialParams={{ onShowInAppNotification, activeNotification, _activeNotification, passData }} />
         <Stack.Screen name="account" component={Account} />
         <Stack.Screen name="personalDetails" component={personalDetails} />
         <Stack.Screen name="accountSettings" component={AccountSettings} />

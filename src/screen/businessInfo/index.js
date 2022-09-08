@@ -51,21 +51,27 @@ const BusinessInfo = () => {
   }, [id]);
 
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (source && source.length) {
-        navigation.navigate(source, { isRefresh: Math.floor(Math.random() * 900000), title })
-        return true
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        if (source && source.length) {
+          navigation.navigate(source, {
+            isRefresh: Math.floor(Math.random() * 900000),
+            title,
+          });
+          return true;
+        }
+        if (sourceFrom && sourceFrom.length) {
+          navigation.goBack();
+          return true;
+        }
       }
-      if (sourceFrom && sourceFrom.length) {
-        navigation.goBack()
-        return true
-      }
-    })
-    return () => backHandler.remove()
+    );
+    return () => backHandler.remove();
     // const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
     // })
     // return () => backHandler.remove()
-  }, [])
+  }, []);
 
   const fetchData = () => {
     let businessInfoUrl = `business/${id}`;
@@ -130,7 +136,15 @@ const BusinessInfo = () => {
 
   const CloseIcon = () => {
     return (
-      <Pressable onPress={() => source && source.length ? navigation.navigate(source, { isRefresh: Math.floor(Math.random() * 900000) }) : navigation.goBack()}>
+      <Pressable
+        onPress={() =>
+          source && source.length
+            ? navigation.navigate(source, {
+                isRefresh: Math.floor(Math.random() * 900000),
+              })
+            : navigation.goBack()
+        }
+      >
         <View style={styles.closeView}>
           <FastImage source={Images.x} style={styles.closeIcon} />
         </View>
@@ -141,18 +155,27 @@ const BusinessInfo = () => {
   const AvtarView = useCallback(() => {
     return (
       <View style={styles.avatarView}>
-        {Platform.OS === 'android' ?
+        {Platform.OS === "android" ? (
           <FastImage
-            source={businessInfo?.logo?.length > 0 ? { uri: businessInfo?.logo } : Images.defaultBusiness}
+            source={
+              businessInfo?.logo?.length > 0
+                ? { uri: businessInfo?.logo }
+                : Images.defaultBusiness
+            }
             style={styles.avatarImg}
             resizeMode={"stretch"}
           />
-          :
+        ) : (
           <FastImage
-            source={businessInfo?.logo?.length > 0 ? { uri: businessInfo?.logo } : Images.defaultBusiness}
+            source={
+              businessInfo?.logo?.length > 0
+                ? { uri: businessInfo?.logo }
+                : Images.defaultBusiness
+            }
             style={styles.avatarImg}
             resizeMode={"stretch"}
-          />}
+          />
+        )}
       </View>
     );
   }, [businessInfo]);
@@ -276,7 +299,11 @@ const BusinessInfo = () => {
                         <Text fs12 lh18 gray500 center style={{ fontWeight: '500', paddingTop: 3 }}> Directions</Text>
                     </View> */}
           {businessInfo?.contactDetails?.phoneNumber && (
-            <Pressable onPress={() => onPhoneCall(businessInfo?.contactDetails?.phoneNumber)}>
+            <Pressable
+              onPress={() =>
+                onPhoneCall(businessInfo?.contactDetails?.phoneNumber)
+              }
+            >
               <FastImage
                 source={Images.phone}
                 resizeMode={"contain"}
@@ -320,18 +347,20 @@ const BusinessInfo = () => {
           <Text fs16 lh24 primary700 style={{ fontWeight: "400" }}>
             {businessInfo?.contactDetails?.businessEmail}
           </Text>
-          {businessInfo?.socialLinks && Object.keys(businessInfo?.socialLinks).length > 0 && (<>
-            <Text
-              fs16SB
-              lh24
-              black
-              style={{ fontWeight: "600", marginTop: 24 }}
-            >
-              Social
-            </Text>
-            <SocialMediaView />
-          </>
-          )}
+          {businessInfo?.socialLinks &&
+            Object.keys(businessInfo?.socialLinks).length > 0 && (
+              <>
+                <Text
+                  fs16SB
+                  lh24
+                  black
+                  style={{ fontWeight: "600", marginTop: 24 }}
+                >
+                  Social
+                </Text>
+                <SocialMediaView />
+              </>
+            )}
         </View>
       </View>
     );
@@ -350,8 +379,19 @@ const BusinessInfo = () => {
         {businessInfo?.openHours &&
           Object.keys(businessInfo?.openHours).map((schedule) => {
             return (
-              <View style={{ paddingLeft: 24, marginTop: 6 }}>
-                <View style={{ flexDirection: "row" }}>
+              <View
+                style={{
+                  paddingLeft: 24,
+                  marginTop: 6,
+                  flex: 1,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    flex: 1,
+                  }}
+                >
                   <Text
                     fs16
                     lh24
@@ -359,30 +399,38 @@ const BusinessInfo = () => {
                     style={{
                       fontWeight: "400",
                       marginVertical: 1,
-                      flex:
-                        businessInfo?.openHours[schedule]?.status !== "closed"
-                          ? 0.5
-                          : 0.36,
+                      flex: 0.3,
                     }}
                   >
                     {capitalize(schedule)}
                   </Text>
-                  <Text
-                    fs16
-                    lh24
-                    black
-                    style={{ fontWeight: "400", marginVertical: 1 }}
+                  <View
+                    style={{
+                      flex: 0.6,
+                      alignSelf: "center",
+                      justifyContent: "center",
+                    }}
                   >
-                    {businessInfo?.openHours[schedule]?.status !== "closed"
-                      ? convert24hourTo12HourFormat(
-                        businessInfo?.openHours[schedule]?.startTime
-                      ) +
-                      " - " +
-                      convert24hourTo12HourFormat(
-                        businessInfo?.openHours[schedule]?.endTime
-                      )
-                      : capitalize(businessInfo?.openHours[schedule]?.status)}
-                  </Text>
+                    <Text
+                      fs16
+                      lh24
+                      black
+                      style={{
+                        fontWeight: "400",
+                        marginVertical: 1,
+                      }}
+                    >
+                      {businessInfo?.openHours[schedule]?.status !== "closed"
+                        ? convert24hourTo12HourFormat(
+                            businessInfo?.openHours[schedule]?.startTime
+                          ) +
+                          " - " +
+                          convert24hourTo12HourFormat(
+                            businessInfo?.openHours[schedule]?.endTime
+                          )
+                        : capitalize(businessInfo?.openHours[schedule]?.status)}
+                    </Text>
+                  </View>
                 </View>
               </View>
             );
@@ -466,17 +514,19 @@ const BusinessInfo = () => {
 
   const BannerImage = useCallback(() => {
     return businessInfo?.bannerImage?.length > 0 ? (
-      Platform.OS === 'android' ?
-        <FastImage
-          source={{ uri: businessInfo?.bannerImage }}
-          style={styles.bannerImage}
-          resizeMode={"stretch"}
-        /> :
+      Platform.OS === "android" ? (
         <FastImage
           source={{ uri: businessInfo?.bannerImage }}
           style={styles.bannerImage}
           resizeMode={"stretch"}
         />
+      ) : (
+        <FastImage
+          source={{ uri: businessInfo?.bannerImage }}
+          style={styles.bannerImage}
+          resizeMode={"stretch"}
+        />
+      )
     ) : (
       <FastImage
         source={Images.businessCover}
@@ -484,7 +534,7 @@ const BusinessInfo = () => {
         resizeMode={"stretch"}
       />
     );
-  }, [businessInfo?.bannerImage?.length])
+  }, [businessInfo?.bannerImage?.length]);
 
   const OfferCard = ({ item, businessDetails }) => {
     const getCardStyles = useMemo(() => {
@@ -616,8 +666,8 @@ const BusinessInfo = () => {
           No offers found
         </Text>
       </View>
-    )
-  }
+    );
+  };
 
   const Offers = useCallback(() => {
     return (
@@ -815,7 +865,6 @@ const styles = StyleSheet.create({
   loadMoreText: { fontWeight: "500", alignSelf: "center" },
   bottomSafearea: { flex: 0, backgroundColor: Colors.white },
 });
-
 
 // const BannerImage = memo(({ businessInfo }) => {
 //   return businessInfo?.bannerImage?.length > 0 ? (

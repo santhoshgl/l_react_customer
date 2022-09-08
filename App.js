@@ -10,21 +10,54 @@ import { Fonts, Colors } from '@constants'
 import Router, { FlashNotification } from './src/router';
 import store from './src/redux/store'
 import AppLoader from './src/component/AppLoader';
-
+import { firebase } from '@react-native-firebase/messaging';
+import { setLoading } from './src/redux/reducer/loading';
+import { cloneDeep } from "lodash";
 let persistor = persistStore(store);
 
 const App = () => {
   const [showInAppNotification, onShowInAppNotification] = useState(false)
+  const [activeNotification, _activeNotification] = useState(null)
+  const [passData, _passData] = useState(null)
   LogBox.ignoreAllLogs()
 
+
   useEffect(() => {
-    SplashScreen.hide();
+    onInitialNotification()
   }, [])
 
+
+  const onInitialNotification = () => {
+    firebase
+      .messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage !== null) {
+          _passData(remoteMessage);
+          _activeNotification(cloneDeep(true));
+
+        } else {
+          _passData("")
+          _activeNotification(false);
+        }
+
+        // onCreateNotificationObj(remoteMessage)
+        // onPressNotification(remoteMessage)
+      });
+  };
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Router onShowInAppNotification={onShowInAppNotification} />
+
+        {activeNotification === null ? null : (
+          <Router
+            onShowInAppNotification={onShowInAppNotification}
+            activeNotification={activeNotification}
+            _activeNotification={_activeNotification}
+            passData={passData}
+            _passData={_passData}
+          />
+        )}
         <AppLoader />
       </PersistGate>
       {showInAppNotification &&
