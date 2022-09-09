@@ -109,7 +109,7 @@ export const FlashNotification = (data, onClose) => {
   )
 }
 
-export const App = ({ onShowInAppNotification, _activeNotification, activeNotification, passData, _passData,  }) => {
+export const App = ({ onShowInAppNotification, _activeNotification, activeNotification, passData, _passData, }) => {
   const { userData, defaultHub } = useSelector((s) => s.user);
 
   const clearState = useSelector((s) => s.points.clearState);
@@ -130,7 +130,6 @@ export const App = ({ onShowInAppNotification, _activeNotification, activeNotifi
 
   useEffect(() => {
     if (clearState) {
-        console.log("Call1212121212")
       _passData({})
       onSetClearState(false)
     }
@@ -220,13 +219,13 @@ export const App = ({ onShowInAppNotification, _activeNotification, activeNotifi
           tabBarInactiveTintColor: Colors.gray500,
           lazy: false,
           tabBarStyle: {
-            height: Platform.OS == "android" ? getBottomSpace() + 90 : getBottomSpace() + 60,
+            height: Platform.OS == "android" ? getBottomSpace() + 90 : Platform.isPad ? 90 : getBottomSpace() + 60,
             paddingTop: 16,
-            paddingBottom: Platform.OS == "android" ? 30 : getBottomSpace(),
+            paddingBottom: Platform.OS == "android" ? 30 : (Platform.isPad ? 30 : getBottomSpace()),
             borderTopWidth: 0.5, borderTopColor: Colors.gray300
-          }
+          },
+          tabBarLabelPosition: 'below-icon'
         }}
-      // tabBar={(props) => <BottomTab {...props} />}
       >
         <Tab.Screen name="homeTab" component={Home} initialParams={props?.route?.params}
           options={{

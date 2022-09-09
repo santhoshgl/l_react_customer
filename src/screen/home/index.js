@@ -56,7 +56,7 @@ const Home = ({ navigation }) => {
   }, [defaultHub?.id])
 
   useEffect(() => {
-    if (onGetRefresh) {
+    if (onGetRefresh && defaultHub?.id) {
       dispatch(getFeaturedOffers(defaultHub?.id))
       dispatch(getFeaturedBusiness(defaultHub?.id))
       dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
@@ -72,7 +72,7 @@ const Home = ({ navigation }) => {
 
 
   useEffect(() => {
-    if (activeNotification && !onNotificationData?.isNavigate) {
+    if (activeNotification && !onNotificationData?.isNavigate && defaultHub?.id) {
       route?.params?._activeNotification(false)
       setRefresh(true)
       dispatch(getRewardWallet({ userID: userData?.id, hubID: defaultHub?.id }));
@@ -94,7 +94,7 @@ const Home = ({ navigation }) => {
 
 
   useEffect(() => {
-    if (requireRefresh) {
+    if (requireRefresh && route?.params?.passData?.data?.hubID) {
       dispatch(getRewardWallet({ userID: userData?.id, hubID: route?.params?.passData?.data?.hubID }));
       dispatch(getFeaturedOffers(route?.params?.passData?.data?.hubID))
       dispatch(getFeaturedBusiness(route?.params?.passData?.data?.hubID)).then(unwrapResult)
