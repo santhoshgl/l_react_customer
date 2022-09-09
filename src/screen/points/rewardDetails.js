@@ -24,10 +24,11 @@ const RewardDetails = ({ navigation, route }) => {
   const loading = useSelector(s => s.loading.loading)
   const _activeNotification = route?.params?._activeNotification
   const focus = useIsFocused()
+  const forgroundNotificationData = useSelector(s => s?.points?.forgroundNotification)
+
 
   useEffect(() => {
     if (route?.params?.fromNotificationList) {
-      console.log("fromNotificationList", route?.params)
       if (route?.params?.hubId !== undefined && defaultHub?.id !== route?.params?.hubId) {
         changeUserHub()
       } else {
@@ -43,8 +44,6 @@ const RewardDetails = ({ navigation, route }) => {
 
   useEffect(() => {
     if (route?.params?.fromHistroy) {
-      console.log("fromHistroy", route?.params)
-
       let obj = {
         fnc: '',
         rewardId: route?.params?.rewardId
@@ -54,12 +53,11 @@ const RewardDetails = ({ navigation, route }) => {
   }, [route?.params?.fromHistroy, focus])
 
   useEffect(() => {
-    if (navigationData?.inAppNotification &&  !route?.params?.fromNotificationList && !route?.params?.fromHistroy) {
+    if (navigationData?.inAppNotification && !route?.params?.fromNotificationList && !route?.params?.fromHistroy) {
       if (navigationData?.hubID && defaultHub?.id !== navigationData?.hubID) {
         changeUserHub()
       }
       else {
-        console.log('call wlse', navigationData)
         let obj = {
           fnc: _activeNotification,
           rewardId: navigationData?.rewardID
@@ -107,8 +105,6 @@ const RewardDetails = ({ navigation, route }) => {
 
   useEffect(() => {
     if (route?.params?.passData?.data?.rewardID?.length > 1 && !route?.params?.fromNotificationList && !route?.params?.fromHistroy) {
-      console.log("psuh ", route?.params)
-
       let obj = {
         fnc: _activeNotification,
         rewardId: route?.params?.passData?.data?.rewardID
@@ -157,6 +153,55 @@ const RewardDetails = ({ navigation, route }) => {
     }
   }, [route?.params?.passData?.data?.rewardID])
 
+  useEffect(() => {
+    if (forgroundNotificationData?.data?.rewardID?.length > 1 && !route?.params?.fromNotificationList && !route?.params?.fromHistroy) {
+      let obj = {
+        fnc: _activeNotification,
+        rewardId: forgroundNotificationData?.data?.rewardID
+      }
+      if (defaultHub?.id !== forgroundNotificationData?.data?.hubID) {
+        dispatch(getUser())
+          .then(unwrapResult)
+          .then((res) => {
+            var updatedUser = { ...res };
+            var hubs =
+              updatedUser?.hubs?.map((hub) => {
+                var temp = Object.assign({}, hub);
+                temp.default = forgroundNotificationData?.data?.hubID == temp?.id ? true : false;
+                return temp;
+              }) || [];
+            updatedUser["hubs"] = hubs;
+            dispatch(updateUser(updatedUser))
+              .then(unwrapResult)
+              .then((originalPromiseResult) => {
+                dispatch(getUser())
+                  .then(unwrapResult)
+                  .then((response) => {
+                    dispatch(onRewardInfo(obj)).then(unwrapResult)
+                      .then((res) => {
+                        SplashScreen.hide();
+                        dispatch(setLoading(false))
+                        dispatch(requireRefreshData(true))
+                        dispatch(onReadNotification(forgroundNotificationData?.data?.notificationID))
+                        route?.params?._activeNotification(false)
+                      })
+                  });
+              });
+          });
+      } else {
+        dispatch(onRewardInfo(obj)).then(unwrapResult)
+          .then((res) => {
+            SplashScreen.hide();
+            dispatch(setLoading(false))
+            dispatch(onReadNotification(forgroundNotificationData?.data?.notificationID))
+            route?.params?._passData('')
+          })
+      }
+    }
+  }, [forgroundNotificationData])
+
+
+  // console.log("forgroundNotificationData", forgroundNotificationData)
   const getCardStyles = useMemo(() => {
     let icon = Images.offers;
     let color = Colors.blue;
