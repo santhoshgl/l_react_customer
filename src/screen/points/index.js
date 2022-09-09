@@ -17,7 +17,6 @@ const History = ({ navigation }) => {
   const { userData, defaultHub } = useSelector((s) => s.user);
   const { walletData, rewards } = useSelector((s) => s.points);
   const scrollRef = useRef()
-
   const [rewardsData, _rewardsData] = useState([]);
   const [nextLink, _nextLink] = useState("");
   const [prevLink, _prevLink] = useState("");
@@ -45,6 +44,10 @@ const History = ({ navigation }) => {
       _rewardsData(rewards?.data);
       setNextLink(rewards?.links?.next);
       setPrevLink(rewards?.links?.prev);
+    } else {
+      _rewardsData([]);
+      _nextLink("");
+      _prevLink("");
     }
   }, [rewards])
 
@@ -91,10 +94,10 @@ const History = ({ navigation }) => {
   const referenceHandler = () => {
     _sortBy((prevState) => prevState == "latest" ? "oldest" : "latest")
   }
-  
-  useEffect(()=>{
-      route?.params?._passData(null)
-  },[route?.params])
+
+  useEffect(() => {
+    route?.params?._passData(null)
+  }, [route?.params])
 
 
   return (
