@@ -109,7 +109,7 @@ export const FlashNotification = (data, onClose) => {
   )
 }
 
-export const App = ({ onShowInAppNotification, _activeNotification, activeNotification, passData, _passData }) => {
+export const App = ({ onShowInAppNotification, _activeNotification, activeNotification, passData, _passData,  }) => {
   const { userData, defaultHub } = useSelector((s) => s.user);
 
   const clearState = useSelector((s) => s.points.clearState);
@@ -130,6 +130,7 @@ export const App = ({ onShowInAppNotification, _activeNotification, activeNotifi
 
   useEffect(() => {
     if (clearState) {
+        console.log("Call1212121212")
       _passData({})
       onSetClearState(false)
     }
@@ -153,23 +154,18 @@ export const App = ({ onShowInAppNotification, _activeNotification, activeNotifi
     dispatch(onGetRouteNavigationData(navigationObj))
   }
 
-  useEffect(() => {
-    if (activeNotification) {
-      onPressNotification(passData)
-    }
-  }, [activeNotification, passData])
+  // useEffect(() => {
+  //   if (activeNotification && !) {
+  //     console.log("app.js");
+  //     onPressNotification(passData)
+  //   }
+  // }, [activeNotification, passData])
 
-  const onForegroundNotification = () => {
-    firebase.messaging().onNotificationOpenedApp(response => {
-      response !== null && onPressNotification(response)
-    });
-  }
 
   useEffect(() => {
     PushNotification.cancelAllLocalNotifications()
     dispatch(onGetInternetStatus(netInfo?.isConnected))
     onReceiveInAppNotification()
-    onForegroundNotification()
   }, [netInfo]) // in order to re-call the hooks whenever the netInfo status changed 
 
 

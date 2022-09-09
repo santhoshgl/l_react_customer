@@ -85,7 +85,8 @@ const Home = ({ navigation }) => {
   }
 
   useEffect(() => {
-    if (onNotificationData?.isNavigate && !activeNotification) {
+    if (onNotificationData?.isNavigate) {
+      console.log("homeLog",onNotificationData);
       route?.params?.onShowInAppNotification(false)
       navigation.navigate(onNotificationData?.route)
     }

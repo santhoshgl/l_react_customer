@@ -49,6 +49,7 @@ export const onRewardInfo = createAsyncThunk('points/getRewardDetails', async (p
     dispatch(onGetRouteNavigationData(navigationObj))
     dispatch(setLoading(false))
     dispatch(clearPassData())
+    dispatch(forGroundNotification({}))
     return data?.data;
   } catch (error) {
     SplashScreen.hide();
@@ -61,10 +62,13 @@ export const onRewardInfo = createAsyncThunk('points/getRewardDetails', async (p
 
 export const pointsSlice = createSlice({
   name: 'points',
-  initialState: { walletData: [], rewards: {}, rewardDetails: {}, rewardData: {}, clearState: false },
+  initialState: { walletData: [], rewards: {}, rewardDetails: {}, rewardData: {}, clearState: false, forgroundNotification: {} },
   reducers: {
     clearRewardData: (state, { payload }) => {
       state.rewardData = {}
+    },
+    forGroundNotification: (state, { payload }) => {
+      state.forgroundNotification = payload
     },
     onSetClearState:(state, { payload }) => {
       state.clearState = false
@@ -85,7 +89,7 @@ export const pointsSlice = createSlice({
     },
     [getRewardDetails.fulfilled]: (state, { payload }) => {
       state.rewardDetails = payload
-      state.clearState= true
+      state.clearState = true
     },
     [onRewardInfo.pending]: (state, { payload }) => {
       state.rewardData = {}
@@ -96,6 +100,6 @@ export const pointsSlice = createSlice({
   }
 })
 
-export const {clearRewardData, onSetClearState , clearPassData} = pointsSlice.actions
+export const { clearRewardData, onSetClearState, clearPassData, forGroundNotification } = pointsSlice.actions
 
 export default pointsSlice.reducer
