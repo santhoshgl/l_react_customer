@@ -37,7 +37,7 @@ const Home = ({ navigation }) => {
   let activeNotification = route?.params?.activeNotification
 
   useEffect(() => {
-    if (!activeNotification) {
+    if (!activeNotification && userDeviceToken?.length > 1) {
       var pushNotificationTokens = []
       dispatch(getUser()).then(unwrapResult).then((res) => {
         pushNotificationTokens = [...res?.pushNotificationTokens || [], userDeviceToken]
