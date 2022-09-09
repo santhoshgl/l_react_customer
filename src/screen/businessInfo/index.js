@@ -45,6 +45,7 @@ const BusinessInfo = () => {
   const hubId = useSelector((s) => s?.user?.defaultHub?.id);
   const [offerLoading, setOfferLoading] = useState(false);
   const [offerList, setOfferList] = useState([]);
+  const [isDisibleTouch, setDisibleTouch] = useState(true)
 
   useEffect(() => {
     fetchData();
@@ -80,6 +81,7 @@ const BusinessInfo = () => {
     apiRequest
       .get(businessInfoUrl)
       .then((res) => {
+        setDisibleTouch(false)
         apiRequest.get(offerListUrl).then((res) => {
           setOfferData(cloneDeep(res?.data) || []);
           setOfferList(cloneDeep(res?.data.splice(0, 3)));
@@ -443,7 +445,7 @@ const BusinessInfo = () => {
     return (
       <View style={styles.followView}>
         <TouchableOpacity
-          disabled={businessInfo?.following}
+          disabled={isDisibleTouch || businessInfo?.following}
           activeOpacity={0.7}
           style={[
             styles.follow,
