@@ -144,7 +144,7 @@ workflows:
         - android
       vars:
         KEYSTORE_PATH: /tmp/.keystore
-        APP_ENV: dev
+        APP_ENV: prod
       node: 16.14.2
     triggering:
       events:
