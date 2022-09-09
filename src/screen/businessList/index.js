@@ -169,8 +169,6 @@ const BusinessList = ({ navigation, route }) => {
 
   const moveToTop = () => flatListRef?.current?.scrollToIndex({ index: 0 });
 
-  const isFilterApplied = () => filter?.sortBy == 'oldest' || filter?.category;
-
   const _handleRefresh = () => {
     fetchData(search, filter);
   }
@@ -197,7 +195,7 @@ const BusinessList = ({ navigation, route }) => {
           />
           <Pressable hitSlop={10} onPress={() => onFilterButtonClick()} >
             <FastImage source={Images.filter} style={{ height: 24, width: 24, marginLeft: 24 }} />
-            {isFilterApplied() ?
+            {(filter?.sortBy == "oldest" || filter?.category?.length > 0) ?
               <View style={{ backgroundColor: Colors?.primary600, height: 8, width: 8, borderRadius: 8, position: 'absolute', right: 0 }}></View>
               : null
             }

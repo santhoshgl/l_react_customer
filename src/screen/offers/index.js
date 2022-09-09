@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
-import { SafeAreaView, Pressable, FlatList, Text, ActivityIndicator, RefreshControl, Keyboard } from 'react-native';
-import { View } from 'react-native-ui-lib';
+import { SafeAreaView, Pressable, FlatList, ActivityIndicator, RefreshControl, Keyboard } from 'react-native';
+import { View, Text } from 'react-native-ui-lib';
 import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import Config from "react-native-config";
