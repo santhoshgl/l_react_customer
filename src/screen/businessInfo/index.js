@@ -45,7 +45,7 @@ const BusinessInfo = () => {
   const hubId = useSelector((s) => s?.user?.defaultHub?.id);
   const [offerLoading, setOfferLoading] = useState(false);
   const [offerList, setOfferList] = useState([]);
-  const [isDisibleTouch, setDisibleTouch] = useState(true)
+  const [isDisibleTouch, setDisibleTouch] = useState(true);
 
   useEffect(() => {
     fetchData();
@@ -81,7 +81,7 @@ const BusinessInfo = () => {
     apiRequest
       .get(businessInfoUrl)
       .then((res) => {
-        setDisibleTouch(false)
+        setDisibleTouch(false);
         apiRequest.get(offerListUrl).then((res) => {
           setOfferData(cloneDeep(res?.data) || []);
           setOfferList(cloneDeep(res?.data.splice(0, 3)));
@@ -165,7 +165,6 @@ const BusinessInfo = () => {
                 : Images.defaultBusiness
             }
             style={styles.avatarImg}
-            resizeMode={"stretch"}
           />
         ) : (
           <FastImage
@@ -175,7 +174,6 @@ const BusinessInfo = () => {
                 : Images.defaultBusiness
             }
             style={styles.avatarImg}
-            resizeMode={"stretch"}
           />
         )}
       </View>
@@ -332,7 +330,8 @@ const BusinessInfo = () => {
               </Text>
               <Text fs16 lh24 black style={{ fontWeight: "400", marginTop: 8 }}>
                 {businessInfo?.addressLine}, {businessInfo?.addressLine2 + "\n"}
-                {businessInfo?.city}, {businessInfo?.state}, {businessInfo?.zipCode}
+                {businessInfo?.city}, {businessInfo?.state},{" "}
+                {businessInfo?.zipCode}
               </Text>
             </>
           )}
@@ -520,21 +519,15 @@ const BusinessInfo = () => {
         <FastImage
           source={{ uri: businessInfo?.bannerImage }}
           style={styles.bannerImage}
-          resizeMode={"stretch"}
         />
       ) : (
         <FastImage
           source={{ uri: businessInfo?.bannerImage }}
           style={styles.bannerImage}
-          resizeMode={"stretch"}
         />
       )
     ) : (
-      <FastImage
-        source={Images.businessCover}
-        style={styles.bannerImage}
-        resizeMode={"stretch"}
-      />
+      <FastImage source={Images.businessCover} style={styles.bannerImage} />
     );
   }, [businessInfo?.bannerImage?.length]);
 
