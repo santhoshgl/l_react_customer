@@ -14,12 +14,19 @@ const persistedReducer = persistReducer(persistConfig, RootState)
 
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
+  middleware: (getDefaultMiddleware) => {
+    const middlewares = getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+      immutableCheck: false
+    })
+    if (__DEV__) {
+      const createDebugger = require("redux-flipper").default;
+      middlewares.push(createDebugger());
+    }
+    return middlewares
+  }
 })
 
 export default store;

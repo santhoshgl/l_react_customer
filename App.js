@@ -23,7 +23,7 @@ const App = () => {
   LogBox.ignoreAllLogs();
 
   useEffect(() => {
-  onInitialNotification();
+    onInitialNotification();
     onForegroundNotification();
   }, []);
 
@@ -54,7 +54,10 @@ const App = () => {
   };
 
   const onPressNotification = (notificationDetails) => {
-    const route = "rewardDetails";
+    const route =
+      notificationDetails?.data?.type === "offer"
+        ? "businessInfo"
+        : "rewardDetails";
     const navigationData = {
       ...notificationDetails?.data,
       inAppNotification: true,

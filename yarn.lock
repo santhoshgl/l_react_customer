@@ -2735,6 +2735,11 @@
   "resolved" "https://registry.npmjs.org/csstype/-/csstype-3.1.0.tgz"
   "version" "3.1.0"
 
+"cycle@^1.0.3":
+  "integrity" "sha512-TVF6svNzeQCOpjCqsy0/CSy8VgObG3wXusJ73xW2GbG5rGx7lC8zxDSURicsXI2UsGdi2L0QNRCi745/wUDvsA=="
+  "resolved" "https://registry.npmjs.org/cycle/-/cycle-1.0.3.tgz"
+  "version" "1.0.3"
+
 "data-urls@^2.0.0":
   "integrity" "sha512-X5eWTSXO/BJmpdIKCRuKUgSCgAN0OwliVK3yPKbwIWU1Tdw5BRajxlzMidvh+gwko9AfQ9zIj52pzF91Q3YAvQ=="
   "resolved" "https://registry.npmjs.org/data-urls/-/data-urls-2.0.0.tgz"
@@ -2744,7 +2749,7 @@
     "whatwg-mimetype" "^2.3.0"
     "whatwg-url" "^8.0.0"
 
-"dayjs@^1.8.15":
+"dayjs@^1.8.15", "dayjs@^1.8.29":
   "integrity" "sha512-CAdX5Q3YW3Gclyo5Vpqkgpj8fSdLQcRuzfX6mC6Phy0nfJ0eGYOeS7m4mt2plDWLAtA4TqTakvbboHvUxfe4iA=="
   "resolved" "https://registry.npmjs.org/dayjs/-/dayjs-1.11.5.tgz"
   "version" "1.11.5"
@@ -6311,6 +6316,11 @@
     "prop-types" "^15.8.1"
     "react-native-iphone-x-helper" "^1.3.1"
 
+"react-native-flipper@^0.164.0", "react-native-flipper@>=0.100.0":
+  "integrity" "sha512-iJhIe3rqx6okuzBp4AJsTa2b8VRAOGzoLRFx/4HGbaGvu8AurZjz8TTQkhJsRma8dsHN2b6KKZPvGGW3wdWzvA=="
+  "resolved" "https://registry.npmjs.org/react-native-flipper/-/react-native-flipper-0.164.0.tgz"
+  "version" "0.164.0"
+
 "react-native-gesture-handler@*", "react-native-gesture-handler@^2.4.2", "react-native-gesture-handler@>=2.5.0":
   "integrity" "sha512-IwdYdt5FKjjbRSrSqh8hoNctlYZl5DFnqSJ6buKtrl4A4gyzkrtW6WcmOFl5LnCa6Bcw+znSD77O6UiZ8qda7g=="
   "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.6.0.tgz"
@@ -6470,7 +6480,7 @@
     "semver" "^5.5.0"
     "url-parse" "^1.2.0"
 
-"react-native@*", "react-native@>= 0.62", "react-native@>=0.33", "react-native@>=0.42.0", "react-native@>=0.50.0", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.58.4", "react-native@>=0.59", "react-native@>=0.59.0", "react-native@>=0.60.0", "react-native@>=0.63.4", "react-native@>=0.64.1", "react-native@0.68.2":
+"react-native@*", "react-native@>= 0.62", "react-native@>=0.33", "react-native@>=0.42.0", "react-native@>=0.50.0", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.58.4", "react-native@>=0.59", "react-native@>=0.59.0", "react-native@>=0.60.0", "react-native@>=0.63.0", "react-native@>=0.63.4", "react-native@>=0.64.1", "react-native@>0.62.0", "react-native@0.68.2":
   "integrity" "sha512-qNMz+mdIirCEmlrhapAtAG+SWVx6MAiSfCbFNhfHqiqu1xw1OKXdzIrjaBEPihRC2pcORCoCHduHGQe/Pz9Yuw=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.68.2.tgz"
   "version" "0.68.2"
@@ -6606,6 +6616,14 @@
     "esprima" "~4.0.0"
     "source-map" "~0.6.1"
     "tslib" "^2.0.1"
+
+"redux-flipper@^2.0.2":
+  "integrity" "sha512-X6OD3+Ok8g0SunzrwS5OtbE735eBDxLz3uuK4fdJSwbAzskqOS3SWc+rKuOpqmLkt8pN+Szp7Nof9Etm75B1Rg=="
+  "resolved" "https://registry.npmjs.org/redux-flipper/-/redux-flipper-2.0.2.tgz"
+  "version" "2.0.2"
+  dependencies:
+    "cycle" "^1.0.3"
+    "dayjs" "^1.8.29"
 
 "redux-persist-filesystem-storage@^4.1.0":
   "integrity" "sha512-ufwl883C68aoOzOBc4so5cx0ka4atcXp5VW4S0o/MyykxwgKB976NuNYp723zx/3aAAk3llFMfdbDnhcroju2Q=="

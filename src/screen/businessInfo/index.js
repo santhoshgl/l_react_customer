@@ -26,14 +26,22 @@ import apiRequest from "@services/networkProvider";
 import images from "../../constants/images";
 import { onPhoneCall } from "../../services/PhoneCallServices";
 import ListSkeleton from "../../component/listSkeleton";
+import {
+  onGetRouteNavigationData,
+  onReadNotification,
+} from "../../redux/reducer/user";
 
 const BusinessInfo = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
-  const { id } = route?.params?.business;
-  const { source, title } = route?.params;
-  const { sourceFrom } = route?.params;
+  const navigationData = useSelector(
+    (s) => s?.user?.routeNavigationData?.navigationData
+  );
+  const { id } = route?.params?.business || {};
+  const { source, title, notificationID, notificationRead } =
+    route?.params || {};
+  const { sourceFrom } = route?.params || {};
   const [businessInfo, setBusinessInfo] = useState();
   const [offerData, setOfferData] = useState([]);
   const [lengthMore, setLengthMore] = useState(false);
@@ -49,7 +57,16 @@ const BusinessInfo = () => {
 
   useEffect(() => {
     fetchData();
+    if (notificationID && !notificationRead) {
+      dispatch(onReadNotification(notificationID));
+    }
   }, [id]);
+
+  useEffect(() => {
+    if (navigationData?.notificationID) {
+      dispatch(onReadNotification(navigationData.notificationID));
+    }
+  }, [navigationData]);
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -75,13 +92,16 @@ const BusinessInfo = () => {
   }, []);
 
   const fetchData = () => {
-    let businessInfoUrl = `business/${id}`;
-    let offerListUrl = `business/${id}/offers?active=true`;
+    const business_id = id ? id : navigationData?.businessID;
+    let businessInfoUrl = `business/${business_id}`;
+    let offerListUrl = `business/${business_id}/offers?active=true`;
     setOfferLoading(true);
     apiRequest
       .get(businessInfoUrl)
       .then((res) => {
         setDisibleTouch(false);
+        const navigationObj = { isNavigate: false };
+        dispatch(onGetRouteNavigationData(navigationObj));
         apiRequest.get(offerListUrl).then((res) => {
           setOfferData(cloneDeep(res?.data) || []);
           setOfferList(cloneDeep(res?.data.splice(0, 3)));
