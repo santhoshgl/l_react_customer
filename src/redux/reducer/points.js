@@ -1,105 +1,128 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import apiRequest from '@services/networkProvider';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import apiRequest from "@services/networkProvider";
 import { showMessage } from "react-native-flash-message";
-import SplashScreen from 'react-native-splash-screen';
+import SplashScreen from "react-native-splash-screen";
 import { setLoading } from "./loading";
-import { onGetRouteNavigationData } from './user';
+import { onGetRouteNavigationData } from "./user";
 
-
-export const getRewardWallet = createAsyncThunk('points/getRewardWallet', async (params, { dispatch }) => {
-  try {
-    const data = await apiRequest.get(`rewardWallet?id=${params?.userID}&hubID=${params?.hubID}&userType=customer`)
-    return data?.data;
-  } catch (error) {
-    // showMessage({ message: error?.message, type: 'danger' })
-    throw (error)
-  }
-})
-
-export const getRewards = createAsyncThunk('points/getRewards', async (params, { dispatch }) => {
-  try {
-    let url = `rewards?customerID=${params?.userID}&hubID=${params?.hubID}&sortBy=${params?.sortBy}`;
-    if (params?.url) {
-      url = params?.url
+export const getRewardWallet = createAsyncThunk(
+  "points/getRewardWallet",
+  async (params, { dispatch }) => {
+    try {
+      const data = await apiRequest.get(
+        `rewardWallet?id=${params?.userID}&hubID=${params?.hubID}&userType=customer`
+      );
+      return data?.data;
+    } catch (error) {
+      // showMessage({ message: error?.message, type: 'danger' })
+      throw error;
     }
-    const data = await apiRequest.get(url)
-    return data;
-  } catch (error) {
-    showMessage({ message: error?.message, type: 'danger' })
-    throw (error)
   }
-})
+);
 
-export const getRewardDetails = createAsyncThunk('points/getRewardDetails', async (rewardID, { dispatch }) => {
-  try {
-    const data = await apiRequest.get(`rewards/${rewardID}`)
-    return data?.data;
-  } catch (error) {
-    showMessage({ message: error?.message, type: 'danger' })
-    throw (error)
+export const getRewards = createAsyncThunk(
+  "points/getRewards",
+  async (params, { dispatch }) => {
+    try {
+      let url = `rewards?customerID=${params?.userID}&hubID=${params?.hubID}&sortBy=${params?.sortBy}`;
+      if (params?.url) {
+        url = params?.url;
+      }
+      const data = await apiRequest.get(url);
+      return data;
+    } catch (error) {
+      showMessage({ message: error?.message, type: "danger" });
+      throw error;
+    }
   }
-})
+);
 
-
-export const onRewardInfo = createAsyncThunk('points/getRewardDetails', async (params, { dispatch }) => {
-  try {
-    dispatch(setLoading(true))
-    const data = await apiRequest.get(`rewards/${params?.rewardId}`)
-    const navigationObj = { isNavigate: false }
-    dispatch(onGetRouteNavigationData(navigationObj))
-    dispatch(setLoading(false))
-    dispatch(clearPassData())
-    dispatch(forGroundNotification({}))
-    return data?.data;
-  } catch (error) {
-    SplashScreen.hide();
-    showMessage({ message: error?.message, type: 'danger' })
-    throw (error)
+export const getRewardDetails = createAsyncThunk(
+  "points/getRewardDetails",
+  async (rewardID, { dispatch }) => {
+    try {
+      const data = await apiRequest.get(`rewards/${rewardID}`);
+      return data?.data;
+    } catch (error) {
+      showMessage({ message: error?.message, type: "danger" });
+      throw error;
+    }
   }
-})
+);
 
-
+export const onRewardInfo = createAsyncThunk(
+  "points/getRewardDetails",
+  async (params, { dispatch }) => {
+    try {
+      dispatch(setLoading(true));
+      const data = await apiRequest.get(`rewards/${params?.rewardId}`);
+      const navigationObj = { isNavigate: false };
+      dispatch(onGetRouteNavigationData(navigationObj));
+      dispatch(clearPassData());
+      dispatch(forGroundNotification({}));
+      return data?.data;
+    } catch (error) {
+      SplashScreen.hide();
+      showMessage({ message: error?.message, type: "danger" });
+      throw error;
+    } finally {
+      dispatch(setLoading(false));
+    }
+  }
+);
 
 export const pointsSlice = createSlice({
-  name: 'points',
-  initialState: { walletData: [], rewards: {}, rewardDetails: {}, rewardData: {}, clearState: false, forgroundNotification: {} },
+  name: "points",
+  initialState: {
+    walletData: [],
+    rewards: {},
+    rewardDetails: {},
+    rewardData: {},
+    clearState: false,
+    forgroundNotification: {},
+  },
   reducers: {
     clearRewardData: (state, { payload }) => {
-      state.rewardData = {}
+      state.rewardData = {};
     },
     forGroundNotification: (state, { payload }) => {
-      state.forgroundNotification = payload
+      state.forgroundNotification = payload;
     },
-    onSetClearState:(state, { payload }) => {
-      state.clearState = false
+    onSetClearState: (state, { payload }) => {
+      state.clearState = false;
     },
-    clearPassData:(state, { payload }) => {
-      state.clearState = true
+    clearPassData: (state, { payload }) => {
+      state.clearState = true;
     },
   },
   extraReducers: {
     [getRewardWallet.fulfilled]: (state, { payload }) => {
-      state.walletData = payload
+      state.walletData = payload;
     },
     [getRewards.fulfilled]: (state, { payload }) => {
-      state.rewards = payload
+      state.rewards = payload;
     },
     [getRewardDetails.pending]: (state, { payload }) => {
-      state.rewardDetails = {}
+      state.rewardDetails = {};
     },
     [getRewardDetails.fulfilled]: (state, { payload }) => {
-      state.rewardDetails = payload
-      state.clearState = true
+      state.rewardDetails = payload;
+      state.clearState = true;
     },
     [onRewardInfo.pending]: (state, { payload }) => {
-      state.rewardData = {}
+      state.rewardData = {};
     },
     [onRewardInfo.fulfilled]: (state, { payload }) => {
-      state.rewardData = payload
-    }
-  }
-})
+      state.rewardData = payload;
+    },
+  },
+});
 
-export const { clearRewardData, onSetClearState, clearPassData, forGroundNotification } = pointsSlice.actions
+export const {
+  clearRewardData,
+  onSetClearState,
+  clearPassData,
+  forGroundNotification,
+} = pointsSlice.actions;
 
-export default pointsSlice.reducer
+export default pointsSlice.reducer;
