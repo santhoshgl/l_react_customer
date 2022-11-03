@@ -63,21 +63,18 @@ const InviteFriends = ({ navigation }) => {
           </View>
           <View marginH-16>
             <Text beb30 lh38 black flex numberOfLines={1} marginT-24 marginB-13>
-              {" "}
               Share Lealzy with friends
               <Text primary600 beb32>
                 {"."}
-              </Text>{" "}
+              </Text>
             </Text>
             <Text fs16 black lh24 marginB-13>
-              {" "}
-              Invite a friend to join in on the fun and earn points together!{" "}
+              Invite a friend to join in on the fun and earn points together!
             </Text>
           </View>
           <View marginH-16>
             <Text fs16 lh20 black marginT-24>
-              {" "}
-              Send invite{" "}
+              Send invite
             </Text>
             <Button
               onPress={() => shareLinkHandler()}
@@ -92,8 +89,7 @@ const InviteFriends = ({ navigation }) => {
           </View>
           <View marginH-16 marginV-24>
             <Text fs16 lh20 black>
-              {" "}
-              Or copy link{" "}
+              Or copy link
             </Text>
             <Button style={styles.copyBtn} marginT-8>
               <FastImage
@@ -108,8 +104,7 @@ const InviteFriends = ({ navigation }) => {
                 lh24
                 gray500
               >
-                {" "}
-                {shareLink}{" "}
+                {shareLink}
               </Text>
               <Text
                 onPress={() => textCopyHandler()}
@@ -118,8 +113,7 @@ const InviteFriends = ({ navigation }) => {
                 lh24
                 primary700
               >
-                {" "}
-                Copy{" "}
+                Copy
               </Text>
             </Button>
           </View>
