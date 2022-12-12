@@ -7,16 +7,19 @@ on:
 
 env:
   PROJECT_ID: pre-prod-286801
-  GKE_CLUSTER: pre-prod # Add your cluster name here..
-  GKE_ZONE: us-west1-b # Add your cluster zone here.
+  GKE_CLUSTER: pre-prod   # Add your cluster name here..
+  GKE_ZONE: us-west1-b   # Add your cluster zone here.
   DEPLOYMENT_NAME: APP_NAME # Add your deployment name here.
-  IMAGE: customers-ui
-  APP_NAME: customers-ui
+  IMAGE: customers
+  APP_NAME: customers
   PROJECT_NAME: lealzy
+  REPO_NAME: gitlab.com/cilalabs/$PROJECT_NAME/services/$APP_NAME
   GCR_REGISTRY_NAME: us-west1-docker.pkg.dev
-  APP_ENVIRONMENT: stage
-  DOCKER_IMAGE: us-west1-docker.pkg.dev/pre-prod-286801/$PROJECT_NAME/$APP_NAME
+  APP_ENVIRONMENT: review
+  DOCKER_IMAGE: us-west1-docker.pkg.dev/pre-prod-286801/$PROJECT_NAME/$APP_NAME-ui
   SOPS_KMS: projects/pre-prod-286801/locations/global/keyRings/sops/cryptoKeys/sops-key
+  
+  
 
 jobs:
   setup-build-publish-deploy:
@@ -25,46 +28,60 @@ jobs:
     environment: pre-prod
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
 
-      # Setup gcloud CLI
-      - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
-        with:
-          service_account_key: ${{ secrets.GCLOUD_SERVICE_KEY_PRE_PROD }}
-          project_id: ${{ secrets.GKE_PROJECT_PRE_PROD }}
+    # Setup gcloud CLI
+    - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
+      with:
+        service_account_key: ${{ secrets.GCLOUD_SERVICE_KEY_PRE_PROD }}
+        project_id: ${{ secrets.GKE_PROJECT_PRE_PROD }}
 
-      # Configure Docker to use the gcloud command-line tool as a credential
-      # helper for authentication
-      - run: |-
-          gcloud --quiet auth configure-docker
-      # Get the GKE credentials so we can deploy to the cluster
-      - uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
-        with:
-          cluster_name: ${{ env.GKE_CLUSTER }}
-          location: ${{ env.GKE_ZONE }}
-          credentials: ${{ secrets.GCLOUD_SERVICE_KEY_PRE_PROD }}
+    # Configure Docker to use the gcloud command-line tool as a credential
+    # helper for authentication
+    - run: |-
+        gcloud --quiet auth configure-docker
+    # Get the GKE credentials so we can deploy to the cluster
+    - uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_ZONE }}
+        credentials: ${{ secrets.GCLOUD_SERVICE_KEY_PRE_PROD }}
+        
+    - name: Sops Binary Installer
+      uses: mdgreenwald/mozilla-sops-action@v1.2.0
+      with:
+        version: 'latest' # default is latest stable
+        id: install
+        
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v0'
+      with:
+        credentials_json: '${{ secrets.GCLOUD_SERVICE_KEY_PRE_PROD }}'
 
-      # Build the Docker image
-      - name: Build
-        run: |-
-          docker build \
-            --tag "us-west1-docker.pkg.dev/$PROJECT_ID/$PROJECT_NAME/$IMAGE:$GITHUB_SHA" \
-            --build-arg GITHUB_SHA="$GITHUB_SHA" \
-            --build-arg GITHUB_REF="$GITHUB_REF" \
-            .
-      # Push the Docker image to Google Container Registry
-      - name: Publish
-        run: |-
-          gcloud auth configure-docker us-west1-docker.pkg.dev
-          docker push "us-west1-docker.pkg.dev/$PROJECT_ID/$PROJECT_NAME/$IMAGE:$GITHUB_SHA"
-
-      - name: Deploy
-        run: |-
+    # Build the Docker image
+    - name: Build
+      run: |-
+        echo "${{ secrets.GCLOUD_SERVICE_KEY_PRE_PROD }}" > /tmp/key.json
+        sops --kms ${SOPS_KMS} -d docker/env.$APP_ENVIRONMENT > .env
+        docker build \
+          --tag "us-west1-docker.pkg.dev/$PROJECT_ID/$PROJECT_NAME/$IMAGE-ui:$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
+    # Push the Docker image to Google Container Registry
+    - name: Publish
+      run: |-
+        gcloud auth configure-docker us-west1-docker.pkg.dev
+        docker push "us-west1-docker.pkg.dev/$PROJECT_ID/$PROJECT_NAME/$IMAGE-ui:$GITHUB_SHA"
+        
+    - name: Deploy
+      run: |-
           curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.24.7/2022-10-31/bin/linux/amd64/kubectl
           openssl sha1 -sha256 kubectl
           chmod +x ./kubectl
           mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
           echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
           kubectl version
-          kubectl set image deployment/customers-ui customers-ui=us-west1-docker.pkg.dev/$PROJECT_ID/$PROJECT_NAME/$IMAGE:$GITHUB_SHA --namespace $PROJECT_NAME
+          kubectl set image deployment/customers-ui customers-ui=us-west1-docker.pkg.dev/$PROJECT_ID/$PROJECT_NAME/$IMAGE-ui:$GITHUB_SHA --namespace $PROJECT_NAME
