@@ -2,7 +2,7 @@ workflows:
   build-apk-android-dev:
     name: build android apk for dev environment
     max_build_duration: 120
-    instance_type: mac_mini
+    instance_type: mac_pro
     environment:
       groups:
         - android-customers-app
@@ -77,7 +77,7 @@ workflows:
   build-ios-ipa-dev:
     name: build ios ipa for dev environment
     max_build_duration: 120
-    instance_type: mac_mini
+    instance_type: mac_pro
     environment:
       groups:
         - android-customers-app
@@ -136,7 +136,7 @@ workflows:
   build-apk-android-prod:
     name: build android apk for prod environment
     max_build_duration: 120
-    instance_type: mac_mini
+    instance_type: mac_pro
     environment:
       groups:
         - prod-creds
@@ -228,7 +228,7 @@ workflows:
   build-ios-ipa-prod:
     name: build ios ipa for prod environment
     max_build_duration: 120
-    instance_type: mac_mini
+    instance_type: mac_pro
     environment:
       groups:
         - prod-creds
